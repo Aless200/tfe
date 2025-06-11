@@ -9,6 +9,8 @@ use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -68,5 +70,39 @@ class UserAdminController extends AbstractController
         $this->addFlash('admin_success', 'L\'utilisateur a été anonymisé avec succès.');
 
         return $this->redirectToRoute('app_user_admin');
+    }
+
+    #[Route('/admin/user/export/{id}', name: 'app_user_export')]
+    public function exportUserData(User $user): Response
+    {
+        // Création des données utilisateur au format CSV
+        $userData = [
+            ['ID', $user->getId()],
+            ['Email', $user->getEmail()],
+            ['Prénom', $user->getFirstName()],
+            ['Nom', $user->getLastName()],
+            ['Téléphone', $user->getPhoneNumber()],
+            ['Roles', implode(', ', $user->getRoles())],
+            ['Date de création', $user->getCreatedAt() ? $user->getCreatedAt()->format('Y-m-d H:i:s') : ''],
+            ['Statut', $user->isDisabled() ? 'Désactivé' : 'Activé'],
+            ['Anonymisé', $user->isAnonymized() ? 'Oui' : 'Non'],
+        ];
+
+        // Conversion en CSV
+        $csvData = "Propriété,Valeur\n"; // Ajout de l'en-tête
+        foreach ($userData as $row) {
+            $csvData .= '"' . str_replace('"', '""', $row[0]) . '","' . str_replace('"', '""', $row[1]) . '"' . "\n";
+        }
+
+        // Création de la réponse avec le fichier CSV
+        $response = new Response($csvData);
+        $response->headers->set('Content-Type', 'text/csv');
+        $disposition = $response->headers->makeDisposition(
+            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+            'donnees_utilisateur_' . $user->getId() . '_' . date('Y-m-d') . '.csv'
+        );
+        $response->headers->set('Content-Disposition', $disposition);
+
+        return $response;
     }
 }
