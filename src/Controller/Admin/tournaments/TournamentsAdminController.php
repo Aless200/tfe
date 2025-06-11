@@ -393,15 +393,15 @@ class TournamentsAdminController extends AbstractController
 
         return $this->redirectToRoute('app_admin_showTournament', ['id' => $id]);
     }
-    private function createByeTeam(EntityManagerInterface $manager): Team
-    {
-        $byeTeam = new Team();
-        $byeTeam->setTeamName('BYE (Exempt)')
-            ->setIsBye(true);
-
-        $manager->persist($byeTeam);
-        return $byeTeam;
-    }
+//    private function createByeTeam(EntityManagerInterface $manager): Team
+//    {
+//        $byeTeam = new Team();
+//        $byeTeam->setTeamName('BYE (Exempt)')
+//            ->setIsBye(true);
+//
+//        $manager->persist($byeTeam);
+//        return $byeTeam;
+//    }
 
     private function getRoundFromSession(SessionInterface $session, int $tournamentId): int
     {
@@ -681,5 +681,70 @@ class TournamentsAdminController extends AbstractController
             'isDoublette' => $isDoublette
         ]);
     }
+
+    #[Route('/admin/add-bye-teams/{id}', name: 'app_admin_add_bye_teams')]
+    public function addByeTeams(int $id, TournamentRepository $repository, EntityManagerInterface $manager): Response
+    {
+        $tournament = $repository->find($id);
+        if (!$tournament) {
+            throw $this->createNotFoundException("Tournoi introuvable !");
+        }
+
+        $teams = $tournament->getTeams()->toArray();
+        $teamCount = count($teams);
+        $byeCount = $this->calculateByeTeamsNeeded($teamCount);
+
+        if ($byeCount <= 0) {
+            $this->addFlash('admin_info', "Aucune équipe BYE nécessaire (nombre d'équipes valide).");
+            return $this->redirectToRoute('app_admin_showTournament', ['id' => $id]);
+        }
+
+        for ($i = 1; $i <= $byeCount; $i++) {
+            $byeTeam = new Team();
+            $byeTeam->setTeamName('BYE-' . $i)
+                ->setIsBye(true)
+                ->setTournament($tournament)
+                ->setRound(1);
+            $manager->persist($byeTeam);
+            $tournament->addTeam($byeTeam);
+        }
+
+        $manager->flush();
+        $this->addFlash('admin_success', "$byeCount équipe(s) BYE ajoutée(s) avec succès.");
+
+        return $this->redirectToRoute('app_admin_showTournament', ['id' => $id]);
+    }
+
+    private function calculateByeTeamsNeeded(int $teamCount): int
+    {
+        // Définir les limites
+        $minTeams = 4;
+        $maxTeams = 16;
+
+        // Si le nombre d'équipes est inférieur au minimum, ajuster à 4
+        if ($teamCount < $minTeams) {
+            return $minTeams - $teamCount;
+        }
+
+        // Si le nombre d'équipes est déjà dans la plage souhaitée, aucune équipe BYE n'est nécessaire
+        if ($teamCount >= $minTeams && $teamCount <= $maxTeams) {
+            // Trouver la prochaine puissance de deux supérieure ou égale au nombre d'équipes
+            $nextPowerOfTwo = 1;
+            while ($nextPowerOfTwo < $teamCount) {
+                $nextPowerOfTwo <<= 1;
+            }
+
+            // Calculer le nombre d'équipes BYE nécessaires
+            $byeCount = $nextPowerOfTwo - $teamCount;
+
+            // Si le nombre d'équipes est déjà une puissance de deux, pas besoin d'ajouter des BYE
+            return $byeCount > 0 ? $byeCount : 0;
+        }
+
+        // Si le nombre d'équipes dépasse le maximum, on ne peut pas ajouter d'équipes BYE
+        return 0;
+    }
+
+
 
 }

@@ -15,10 +15,16 @@
                     <!-- Bouton Mélanger les équipes -->
                     <div class="flex justify-center mb-6">
                         {% if not isShuffled %}
-                            <a href="{{ path('app_admin_shuffleTeams', {'id': tournamentId}) }}"
-                               class="bg-[#0d079f] text-white py-2 px-4 rounded-lg shadow-md hover:bg-[#0a0580] transition-colors duration-200">
-                                Mélanger les équipes
-                            </a>
+                            <div class="mb-4">
+                                <a href="{{ path('app_admin_add_bye_teams', {id: tournamentId}) }}"
+                                   class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded">
+                                    Ajouter équipes BYE
+                                </a>
+                                <a href="{{ path('app_admin_shuffleTeams', {id: tournamentId}) }}"
+                                   class="ml-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
+                                    Effectuer le tirage au sort
+                                </a>
+                            </div>
                         {% else %}
                             <button class="bg-gray-400 text-white py-2 px-4 rounded-lg shadow-md cursor-not-allowed"
                                     disabled>Équipes mélangées
