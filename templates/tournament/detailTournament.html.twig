@@ -1,0 +1,230 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ tournament.name }} - Détails du tournoi{% endblock %}
+
+{% block body %}
+    <div class="w-full bg-[#0d079f]">
+        <!-- Top white line -->
+{#        <div class="h-2 w-full bg-white"></div>#}
+
+        <!-- Main content section between the white lines -->
+        <div class="relative flex items-center justify-between px-4 py-2">
+            <!-- Logo circle -->
+            <div class="flex items-center">
+                <div class="relative z-10 h-24 w-24 overflow-hidden rounded-full border-4 border-white">
+                    <img src="{{ asset('images/bouleHeader.png') }}" alt="boule de pétanque" class="h-full w-full object-cover"/>
+                </div>
+
+                <!-- Title -->
+                <h1 class="ml-4 text-3xl font-bold text-white">Détails du tournoi</h1>
+            </div>
+
+            <!-- Social icons -->
+            <div class="flex items-center gap-4">
+                <!-- Facebook icon -->
+                <a href="#" class="text-white hover:text-gray-200 transition-colors duration-200">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z" />
+                    </svg>
+                </a>
+                <!-- Mail icon -->
+                <a href="{{ path('app_contact') }}" class="text-white hover:text-gray-200 transition-colors duration-200">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+
+        <!-- Bottom white line -->
+{#        <div class="h-2 w-full bg-white"></div>#}
+    </div>
+
+    <main class="container mx-auto px-4 py-8">
+        <!-- Breadcrumb navigation -->
+        <nav class="flex mb-6" aria-label="Breadcrumb">
+            <ol class="inline-flex items-center space-x-1 md:space-x-3">
+                <li class="inline-flex items-center">
+                    <a href="{{ path('app_home') }}" class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-[#0d079f]">
+                        <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
+                        </svg>
+                        Accueil
+                    </a>
+                </li>
+                <li>
+                    <div class="flex items-center">
+                        <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                        <a href="{{ path('app_tournament') }}" class="ml-1 text-sm font-medium text-gray-700 hover:text-[#0d079f] md:ml-2">Tournois</a>
+                    </div>
+                </li>
+                <li aria-current="page">
+                    <div class="flex items-center">
+                        <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                        <span class="ml-1 text-sm font-medium text-gray-500 md:ml-2">{{ tournament.name }}</span>
+                    </div>
+                </li>
+            </ol>
+        </nav>
+
+        <!-- Tournament Details Card -->
+        <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+            <!-- Tournament Header with Image Background -->
+            <div class="relative h-64 md:h-80">
+                <div class="absolute inset-0">
+                    <img src="{{ asset('images/tournamentPoster/' ~ tournament.imageTournament) }}"
+                         alt="{{ tournament.name }}"
+                         class="w-full h-full object-cover"
+                    />
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                </div>
+
+                <div class="absolute bottom-0 left-0 p-6 w-full">
+                    <div class="flex flex-wrap items-center justify-between">
+                        <h1 class="text-3xl md:text-4xl font-bold text-white mb-2">{{ tournament.name }}</h1>
+                        <div class="bg-[#0d079f] text-white px-4 py-2 rounded-full font-bold text-lg">
+                            {{ tournament.price }}€
+                        </div>
+                    </div>
+
+                    <div class="flex items-center text-white mt-2">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <span class="text-lg">{{ tournament.dateTournament|date("d/m/Y H") }}h</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tournament Details -->
+            <div class="p-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Left Column - Tournament Info -->
+                    <div class="space-y-6">
+                        <h2 class="text-2xl font-bold text-gray-800 border-b border-gray-200 pb-2">Informations</h2>
+
+                        <div class="space-y-4">
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0 h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
+                                    <svg class="w-6 h-6 text-[#0d079f]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                                    </svg>
+                                </div>
+                                <div class="ml-4 w-full">
+                                    <h3 class="text-lg font-medium text-gray-900">Équipes</h3>
+                                    <p class="text-gray-600">Maximum {{ tournament.teamsMax }} équipes</p>
+                                    <p class="text-sm text-gray-500">{{ tournament.teams|length }} équipes inscrites</p>
+                                    <div class="w-full bg-gray-200 rounded-full h-2.5 mt-2">
+                                        <div class="bg-[#0d079f] h-2.5 rounded-full"
+                                             style="width: {{ (tournament.teams|length / tournament.teamsMax) * 100 }}%"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0 h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
+                                    <svg class="w-6 h-6 text-[#0d079f]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path>
+                                    </svg>
+                                </div>
+                                <div class="ml-4">
+                                    <h3 class="text-lg font-medium text-gray-900">Terrains</h3>
+                                    <p class="text-gray-600">{{ tournament.groundMax }} terrains disponibles</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0 h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
+                                    <svg class="w-6 h-6 text-[#0d079f]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                    </svg>
+                                </div>
+                                <div class="ml-4">
+                                    <h3 class="text-lg font-medium text-gray-900">Adresse</h3>
+                                    <p class="text-gray-600">{{ tournament.adresse }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Carte Google Maps -->
+                        <div class="mt-8 bg-white rounded-xl shadow-lg overflow-hidden">
+                            <div class="aspect-w-16 aspect-h-9">
+                                <iframe
+                                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d804.910758485789!2d5.369375601244728!3d50.293092930020286!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47c04b005ab1ad1f%3A0x68e8da3e2a7e9259!2sTTC%20Noiseux!5e1!3m2!1sfr!2sbe!4v1747337924099!5m2!1sfr!2sbe"
+                                        width="100%"
+                                        height="100%"
+                                        style="border:0;"
+                                        allowfullscreen=""
+                                        loading="lazy"
+                                        class="rounded-lg">
+                                </iframe>
+                            </div>
+                            <div class="p-4 bg-white">
+                                <a href="https://maps.app.goo.gl/EC5monbTcbekyw4UA" target="_blank" class="text-[#0d079f] hover:text-[#0a0580] text-sm font-medium flex items-center justify-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                    </svg>
+                                    Voir sur Google Maps
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column - Additional Info & Actions -->
+                    <div class="space-y-6">
+                        <h2 class="text-2xl font-bold text-gray-800 border-b border-gray-200 pb-2">Détails</h2>
+
+                        <div class="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                            <div class="flex justify-between items-center mb-4">
+                                <h3 class="text-lg font-medium text-gray-900">Dates importantes</h3>
+                                <span class="text-xs text-gray-500">Créé le {{ tournament.createdAt|date("d/m/Y") }}</span>
+                            </div>
+
+                            <div class="space-y-3">
+                                <div class="flex items-center">
+                                    <svg class="w-5 h-5 mr-2 text-[#0d079f]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                    </svg>
+                                    <span class="text-lg"><strong>{{ tournament.dateTournament|date("d/m/Y H") }}h</strong></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Call to Action -->
+                        <div class="mt-8 space-y-4">
+                            {% if tournament.teams|length >= tournament.teamsMax %}
+                                <button class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-gray-400 cursor-not-allowed md:py-4 md:text-lg md:px-10"
+                                        disabled>
+                                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                    </svg>
+                                    Tournoi complet
+                                </button>
+                            {% else %}
+                                <a href="{{ path('app_create_team', {'slug': tournament.slug}) }}"
+                                   class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-[#0d079f] hover:bg-[#0a0580] md:py-4 md:text-lg md:px-10 transition-colors duration-200">
+                                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                    </svg>
+                                    S'inscrire au tournoi
+                                </a>
+                            {% endif %}
+
+                            <a href="{{ path('app_tournament') }}"
+                               class="w-full flex items-center justify-center px-8 py-3 border border-gray-300 text-base font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 md:py-4 md:text-lg md:px-10 transition-colors duration-200">
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 17l-5-5m0 0l5-5m-5 5h12"></path>
+                                </svg>
+                                Retour aux tournois
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}

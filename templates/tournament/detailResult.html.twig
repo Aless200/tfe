@@ -1,0 +1,137 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Matchs du tournoi{% endblock %}
+
+{% block body %}
+    <div class="w-full bg-[#0d079f]">
+        <!-- Top white line -->
+        {#        <div class="h-2 w-full bg-white"></div>#}
+
+        <!-- Main content section between the white lines -->
+        <div class="relative flex items-center justify-between px-4 py-2">
+            <!-- Logo circle -->
+            <div class="flex items-center">
+                <div class="relative z-10 h-24 w-24 overflow-hidden rounded-full border-4 border-white p-2">
+                    <img src="{{ asset('images/bouleHeader.png') }}" alt="boule de pétanque" class="h-full w-full object-cover mt-1"/>
+                </div>
+
+                <!-- Title -->
+                <h1 class="ml-4 text-3xl font-bold text-white">Matchs du tournoi</h1>
+            </div>
+
+            <!-- Social icons -->
+            <div class="flex items-center gap-4">
+                <!-- Facebook icon -->
+                <a href="#" class="text-white hover:text-gray-200 transition-colors duration-200">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z" />
+                    </svg>
+                </a>
+                <!-- Mail icon -->
+                <a href="{{ path('app_contact') }}" class="text-white hover:text-gray-200 transition-colors duration-200">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+
+        <!-- Bottom white line -->
+        {#        <div class="h-2 w-full bg-white"></div>#}
+    </div>
+
+    <main class="min-h-[calc(100vh-120px)] bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+        <!-- Éléments décoratifs -->
+        <div class="absolute inset-0 overflow-hidden pointer-events-none z-0">
+            <div class="absolute -top-20 -left-20 w-64 h-64 rounded-full bg-[#0d079f]/20"></div>
+            <div class="absolute top-1/3 right-10 w-96 h-96 rounded-full bg-[#0d079f]/30"></div>
+            <div class="absolute bottom-10 left-1/4 w-72 h-72 rounded-full bg-[#0d079f]/20"></div>
+
+            <!-- Silhouettes de boules de pétanque -->
+            <div class="absolute top-20 right-20 w-16 h-16 rounded-full border-2 border-gray-400/25"></div>
+            <div class="absolute bottom-40 left-20 w-12 h-12 rounded-full border-2 border-gray-400/25"></div>
+            <div class="absolute top-1/2 left-1/3 w-10 h-10 rounded-full border-2 border-gray-400/25"></div>
+        </div>
+
+        <div class="max-w-7xl mx-auto relative z-10">
+            {% if gamesByRound is not empty %}
+                <!-- Intro section -->
+                <div class="mb-8 text-center">
+                    <h2 class="text-4xl font-extrabold text-gray-900 mb-4">Résultats des matchs</h2>
+                    <p class="text-xl text-gray-600 max-w-3xl mx-auto">Suivez l'évolution du tournoi tour par tour et découvrez les résultats de chaque match.</p>
+                </div>
+
+                {% for roundT, games in gamesByRound|sort|reverse %}
+                    <div class="mb-10">
+                        <div class="flex items-center mb-4">
+                            <div class="flex items-center">
+                                <div class="h-10 w-10 rounded-full bg-[#0d079f] flex items-center justify-center mr-3 shadow-md">
+                                    <span class="text-white font-bold">{{ roundT + 1 }}</span>
+                                </div>
+                                <h3 class="text-2xl font-semibold text-gray-800">Matchs du Tour {{ roundT + 1 }}</h3>
+                            </div>
+                        </div>
+
+                        <div class="overflow-hidden shadow-lg sm:rounded-xl border border-gray-100 bg-white">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gradient-to-r from-[#0d079f]/5 to-white">
+                                <tr>
+                                    <th class="px-3 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Équipe A</th>
+                                    <th class="px-3 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Équipe B</th>
+                                    <th class="px-3 py-3 text-center text-xs font-medium text-gray-700 uppercase tracking-wider">Score</th>
+                                </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-100">
+                                {% for game in games %}
+                                    {% set team1Win = game.scoreTeam1 > game.scoreTeam2 %}
+                                    {% set team2Win = game.scoreTeam2 > game.scoreTeam1 %}
+                                    <tr class="hover:bg-gray-50 transition-colors duration-150">
+                                        <td class="px-3 py-4 text-sm whitespace-nowrap {% if team1Win %}font-bold text-green-600{% elseif team2Win %}text-red-500 opacity-75{% endif %}">
+                                            {{ game.team1.teamName }}
+                                            {% if team1Win %}
+                                                <span class="ml-2 text-xs">🏆</span>
+                                            {% elseif team2Win %}
+                                                <span class="ml-2 text-xs">❌</span>
+                                            {% endif %}
+                                        </td>
+                                        <td class="px-3 py-4 text-sm whitespace-nowrap {% if team2Win %}font-bold text-green-600{% elseif team1Win %}text-red-500 opacity-75{% endif %}">
+                                            {{ game.team2.teamName }}
+                                            {% if team2Win %}
+                                                <span class="ml-2 text-xs">🏆</span>
+                                            {% elseif team1Win %}
+                                                <span class="ml-2 text-xs">❌</span>
+                                            {% endif %}
+                                        </td>
+                                        <td class="px-3 py-4 text-center">
+                                            <span class="inline-flex items-center justify-center min-w-[80px] bg-gray-100 text-gray-800 py-1 px-3 rounded-full text-sm font-medium">
+                                                {{ game.scoreTeam1 }} - {{ game.scoreTeam2 }}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <!-- Intro section pour le cas vide -->
+                <div class="mb-8 text-center">
+                    <h2 class="text-4xl font-extrabold text-gray-900 mb-4">Matchs du tournoi</h2>
+                    <p class="text-xl text-gray-600 max-w-3xl mx-auto">Les matchs du tournoi apparaîtront ici une fois qu'ils auront été programmés.</p>
+                </div>
+
+                <div class="bg-white rounded-xl overflow-hidden shadow-lg border border-gray-100 p-8 text-center">
+                    <div class="flex flex-col items-center justify-center">
+                        <div class="h-20 w-20 rounded-full bg-gray-100 flex items-center justify-center mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                            </svg>
+                        </div>
+                        <p class="text-gray-500 text-lg">Aucun match enregistré pour le moment.</p>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </main>
+{% endblock %}

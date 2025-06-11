@@ -1,0 +1,93 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Les actualités{% endblock %}
+
+{% block body %}
+    <div class="flex">
+        <div class="w-64 h-screen bg-gray-100"></div>
+        <div class="flex-1 p-6 overflow-hidden">
+            <h1 class="text-2xl font-bold mb-6 text-gray-800">Les actualités</h1>
+            <div class="w-full overflow-hidden shadow-md sm:rounded-lg">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Image</th>
+                        <th class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            {{ knp_pagination_sortable(news, 'Titre', 'title') }}
+                        </th>
+                        <th class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Contenu</th>
+                        <th class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            {{ knp_pagination_sortable(news, 'Date', 'createdAt') }}
+                        </th>
+                        <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            {{ knp_pagination_sortable(news, 'Visible', 'published') }}
+                        </th>
+                        <th class="px-3 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                    {% for n in news %}
+                        <tr class="hover:bg-gray-100">
+                            <td class="px-3 py-4">
+                                <img class="h-10 w-20 object-cover rounded" src="{{ asset('images/news/' ~ n.image) }}" alt="{{ n.title }}">
+                            </td>
+                            <td class="px-3 py-4 text-sm font-medium text-gray-900 truncate max-w-[200px]" title="{{ n.title }}">
+                                {{ n.title }}
+                            </td>
+                            <td class="px-3 py-4 text-sm text-gray-500 max-w-[250px] line-clamp-3" title="{{ n.content }}">
+                                {{ n.content|u.truncate(100, '...') }}
+                            </td>
+                            <td class="px-3 py-4 text-sm text-gray-500">
+                                {{ n.createdAt ? n.createdAt|date('d-m-Y') }}
+                            </td>
+                            <td class="px-3 py-4 text-center">
+                                <turbo-frame id="news-status-{{ n.id }}">
+                                    <a href="{{ path('app_eyesnews_admin', { id: n.id }) }}" data-turbo-frame="news-status-{{ n.id }}">
+                                        {% if n.published %}
+                                            <span class="flex h-8 w-8 items-center justify-center rounded-full bg-green-100 mx-auto">
+                                                <svg class="h-5 w-5 text-green-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                    <path stroke="currentColor" stroke-width="2" d="M21 12c0 1.2-4.03 6-9 6s-9-4.8-9-6c0-1.2 4.03-6 9-6s9 4.8 9 6Z"/>
+                                                    <path stroke="currentColor" stroke-width="2" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
+                                                </svg>
+                                            </span>
+                                        {% else %}
+                                            <span class="flex h-8 w-8 items-center justify-center rounded-full bg-red-100 mx-auto">
+                                                <svg class="h-5 w-5 text-red-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                    <path stroke="currentColor" stroke-width="2" d="M21 12c0 1.2-4.03 6-9 6s-9-4.8-9-6c0-1.2 4.03-6 9-6s9 4.8 9 6Z"/>
+                                                    <path stroke="currentColor" stroke-width="2" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
+                                                </svg>
+                                            </span>
+                                        {% endif %}
+                                    </a>
+                                </turbo-frame>
+                            </td>
+                            <td class="px-3 py-4 text-right text-sm font-medium">
+                                <div class="inline-flex items-center space-x-3">
+                                    <a href="{{ path('app_editnews_admin', { id: n.id, page: app.request.query.get('page', 1) }) }}"
+                                       class="text-indigo-600 hover:text-indigo-900"
+                                       title="Modifier">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M17.414 2.586a2 2 0 010 2.828L8.707 14.121l-4.243.707.707-4.243L14.586 2.586a2 2 0 012.828 0z" />
+                                        </svg>
+                                    </a>
+{#                                    <a href=""#}
+{#                                       class="text-red-600 hover:text-red-900"#}
+{#                                       title="Supprimer"#}
+{#                                       onclick="return confirm('Confirmer la suppression ?');">#}
+{#                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">#}
+{#                                            <path fill-rule="evenodd" d="M6 2a1 1 0 011-1h6a1 1 0 011 1v1h3a1 1 0 110 2h-1v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5H3a1 1 0 110-2h3V2zm2 4a1 1 0 112 0v7a1 1 0 11-2 0V6zm4 0a1 1 0 112 0v7a1 1 0 11-2 0V6z" clip-rule="evenodd" />#}
+{#                                        </svg>#}
+{#                                    </a>#}
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="mt-6 flex justify-center">
+                {{ knp_pagination_render(news, 'admin/partials/pagination.html.twig') }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

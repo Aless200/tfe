@@ -1,0 +1,300 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Tournoi{% endblock %}
+
+{% block body %}
+    <main>
+        <section>
+            <div class="flex">
+                <div class="w-64 h-screen bg-gray-100">
+                    <!-- Sidebar content here -->
+                </div>
+                <div class="flex-1 p-6 overflow-hidden">
+                    <h1 class="text-2xl font-bold mb-4">Tournoi de Pétanque</h1>
+
+                    <!-- Bouton Mélanger les équipes -->
+                    <div class="flex justify-center mb-6">
+                        {% if not isShuffled %}
+                            <a href="{{ path('app_admin_shuffleTeams', {'id': tournamentId}) }}"
+                               class="bg-[#0d079f] text-white py-2 px-4 rounded-lg shadow-md hover:bg-[#0a0580] transition-colors duration-200">
+                                Mélanger les équipes
+                            </a>
+                        {% else %}
+                            <button class="bg-gray-400 text-white py-2 px-4 rounded-lg shadow-md cursor-not-allowed"
+                                    disabled>Équipes mélangées
+                            </button>
+                        {% endif %}
+                    </div>
+
+                    <!-- Tableaux des matchs par tour -->
+                    {% for currentRound, roundMatches in matchesByRound %}
+                        <div class="mb-8">
+                            <div class="flex items-center mb-4">
+                                <div class="h-8 w-8 rounded-full bg-[#0d079f] flex items-center justify-center text-white font-bold text-sm mr-3">
+                                    {{ currentRound }}
+                                </div>
+                                <h2 class="text-xl font-semibold text-gray-800">Tour {{ currentRound }}</h2>
+                            </div>
+
+                            <div class="w-full overflow-hidden shadow-md sm:rounded-lg">
+                                <table class="min-w-full divide-y divide-gray-200">
+                                    <thead class="bg-gray-50">
+                                    <tr>
+                                        <th scope="col" class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Équipe A</th>
+                                        <th scope="col" class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Équipe B</th>
+                                        <th scope="col" class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Score A</th>
+                                        <th scope="col" class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Score B</th>
+                                        <th scope="col" class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="match-table-body-{{ currentRound }}" class="bg-white divide-y divide-gray-200">
+                                    {% for match in roundMatches %}
+                                        <tr class="hover:bg-gray-100" id="match-row-{{ match.id }}">
+                                            <td class="px-3 py-4 text-sm font-medium" data-team-id="{{ match.team1.id }}">
+                                                {{ match.team1.teamName }}
+                                            </td>
+                                            <td class="px-3 py-4 text-sm font-medium" data-team-id="{{ match.team2.id }}">
+                                                {{ match.team2.teamName }}
+                                            </td>
+                                            <td class="px-3 py-4">
+                                                <input type="number" name="scoreTeam1" class="score-input w-full px-2 py-1 rounded border focus:ring-[#0d079f] focus:border-[#0d079f]" min="0" max="13" value="{{ match.scoreTeam1 ?? '' }}" {{ match.scoreTeam1 is not null ? 'readonly' : '' }}>
+                                            </td>
+                                            <td class="px-3 py-4">
+                                                <input type="number" name="scoreTeam2" class="score-input w-full px-2 py-1 rounded border focus:ring-[#0d079f] focus:border-[#0d079f]" min="0" max="13" value="{{ match.scoreTeam2 ?? '' }}" {{ match.scoreTeam2 is not null ? 'readonly' : '' }}>
+                                            </td>
+                                            <td class="px-3 py-4 text-center">
+                                                <form id="match-form-{{ match.id }}" class="score-form" action="{{ path('app_admin_update_score') }}" method="POST" data-match-id="{{ match.id }}">
+                                                    <input type="hidden" name="_token" value="{{ csrf_token('update_score') }}">
+                                                    <input type="hidden" name="gameId" value="{{ match.id }}">
+                                                    <input type="hidden" name="tournamentId" value="{{ tournamentId }}">
+                                                    <input type="hidden" name="round" value="{{ match.roundT }}">
+                                                    <input type="hidden" name="team1Id" value="{{ match.team1.id }}">
+                                                    <input type="hidden" name="team2Id" value="{{ match.team2.id }}">
+                                                    <button type="submit" class="save-btn inline-flex items-center justify-center px-3 py-1.5 rounded-md text-sm font-medium transition-colors duration-200
+                                                        {% if match.scoreTeam1 is not null and match.scoreTeam2 is not null %}
+                                                            bg-gray-200 text-gray-700 cursor-not-allowed
+                                                        {% else %}
+                                                            bg-green-500 hover:bg-green-600 text-white
+                                                        {% endif %}"
+                                                            {{ (match.scoreTeam1 is not null and match.scoreTeam2 is not null) ? 'disabled' : '' }}>
+                                                        {% if match.scoreTeam1 is not null and match.scoreTeam2 is not null %}
+                                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                                            </svg>
+                                                            Terminé
+                                                        {% else %}
+                                                            Enregistrer
+                                                        {% endif %}
+                                                    </button>
+                                                    {% if match.scoreTeam1 is null or match.scoreTeam2 is null %}
+                                                        <button type="button" class="edit-btn inline-flex items-center justify-center px-3 py-1.5 ml-2 rounded-md text-sm font-medium bg-blue-500 hover:bg-blue-600 text-white transition-colors duration-200" onclick="enableScoreEdit('{{ match.id }}')">
+                                                            Modifier
+                                                        </button>
+                                                    {% endif %}
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    {% endfor %}
+
+                    <!-- Bouton Tour Suivant (caché par défaut, affiché via JS) -->
+                    <div id="next-round-container" class="flex justify-center mt-8 {% if allMatches|filter(m => m.scoreTeam1 is null or m.scoreTeam2 is null)|length > 0 or currentRound >= 4 %}hidden{% endif %}">
+                        <a href="{{ path('app_admin_next_round', {'id': tournamentId}) }}" data-turbo="true" class="inline-flex items-center px-4 py-2 bg-[#0d079f] text-white font-medium rounded-lg shadow-md hover:bg-[#0a0580] transition-colors duration-200">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7" />
+                            </svg>
+                            Tour Suivant
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Notification d'erreur -->
+    <div id="error-message" class="fixed top-4 right-4 bg-red-500 text-white px-4 py-2 rounded shadow-lg hidden z-50"></div>
+
+    <script>
+        function enableScoreEdit(matchId) {
+            const row = document.getElementById(`match-row-${matchId}`);
+            if (!row) {
+                console.error(`Row with id match-row-${matchId} not found`);
+                return;
+            }
+
+            const inputs = row.querySelectorAll('input[type="number"]');
+            inputs.forEach(input => {
+                input.readOnly = false;
+                input.focus();
+            });
+
+            const saveBtn = row.querySelector('.save-btn');
+            if (saveBtn) {
+                saveBtn.disabled = false;
+                saveBtn.innerHTML = 'Enregistrer';
+                saveBtn.classList.remove('bg-gray-200', 'text-gray-700', 'cursor-not-allowed');
+                saveBtn.classList.add('bg-green-500', 'hover:bg-green-600', 'text-white');
+            }
+        }
+
+        function checkAllMatchesCompleted() {
+            const scoreInputs = document.querySelectorAll('.score-input');
+            let allCompleted = true;
+
+            scoreInputs.forEach(input => {
+                if (input.value === '') {
+                    allCompleted = false;
+                }
+            });
+
+            const nextRoundContainer = document.getElementById('next-round-container');
+            const currentRound = {{ currentRound ?? 1 }};
+
+            if (allCompleted && currentRound < 4) {
+                if (nextRoundContainer) {
+                    nextRoundContainer.classList.remove('hidden');
+                    console.log('Tous les matchs sont terminés - Affichage du bouton Tour Suivant');
+                }
+            } else {
+                if (nextRoundContainer) {
+                    nextRoundContainer.classList.add('hidden');
+                    console.log('Matchs non terminés - Masquage du bouton Tour Suivant');
+                }
+            }
+        }
+
+        document.querySelectorAll('.score-form').forEach(form => {
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                const matchId = form.dataset.matchId;
+                const row = document.getElementById(`match-row-${matchId}`);
+                const scoreInputs = row.querySelectorAll('input[type="number"]');
+
+                if (scoreInputs.length !== 2) {
+                    showError("Erreur: Impossible de trouver les champs de score");
+                    return;
+                }
+
+                const score1 = scoreInputs[0].value;
+                const score2 = scoreInputs[1].value;
+
+                // Validation
+                if (score1 === "" || score2 === "") {
+                    showError("Les scores ne peuvent pas être vides");
+                    return;
+                }
+                if (isNaN(score1) || isNaN(score2)) {
+                    showError("Les scores doivent être des nombres");
+                    return;
+                }
+                if (score1 < 0 || score2 < 0) {
+                    showError("Les scores ne peuvent pas être négatifs");
+                    return;
+                }
+                if (parseInt(score1) === parseInt(score2)) {
+                    showError("Les scores ne peuvent pas être égaux en pétanque");
+                    return;
+                }
+                if ((score1 == 13 && score2 > 11) || (score2 == 13 && score1 > 11)) {
+                    showError("Score invalide - en pétanque, quand une équipe atteint 13, l'autre ne peut pas dépasser 11");
+                    return;
+                }
+
+                const saveBtn = form.querySelector('.save-btn');
+                saveBtn.disabled = true;
+                saveBtn.innerHTML = '<svg class="animate-spin h-4 w-4 mr-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Chargement...';
+
+                try {
+                    const formData = new FormData(form);
+                    formData.append('scoreTeam1', score1);
+                    formData.append('scoreTeam2', score2);
+
+                    const response = await fetch(form.action, {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'Accept': 'application/json',
+                            'X-Requested-With': 'XMLHttpRequest'
+                        }
+                    });
+
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        throw new Error(errorData.message || `Erreur HTTP: ${response.status}`);
+                    }
+
+                    const data = await response.json();
+
+                    if (data.status === 'success') {
+                        // Mettre à jour l'interface
+                        scoreInputs.forEach(input => {
+                            input.readOnly = true;
+                            input.classList.add('bg-gray-100');
+                        });
+
+                        saveBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg> Terminé';
+                        saveBtn.classList.remove('bg-green-500', 'hover:bg-green-600');
+                        saveBtn.classList.add('bg-gray-200', 'text-gray-700', 'cursor-not-allowed');
+
+                        // Vérifier si tous les matchs sont terminés après un léger délai
+                        setTimeout(checkAllMatchesCompleted, 300);
+
+                        // Notification de succès
+                        showSuccess(data.message || 'Scores enregistrés');
+                    } else {
+                        throw new Error(data.message || 'Erreur lors de l\'enregistrement');
+                    }
+                } catch (error) {
+                    console.error('Erreur:', error);
+                    saveBtn.disabled = false;
+                    saveBtn.innerHTML = 'Enregistrer';
+                    saveBtn.classList.add('bg-green-500', 'hover:bg-green-600', 'text-white');
+                    saveBtn.classList.remove('bg-gray-200', 'text-gray-700', 'cursor-not-allowed');
+                    showError(error.message);
+                }
+            });
+        });
+
+        // Vérification initiale au chargement
+        document.addEventListener('DOMContentLoaded', function() {
+            // Double vérification avec des délais différents
+            setTimeout(checkAllMatchesCompleted, 100);
+            setTimeout(checkAllMatchesCompleted, 500);
+
+            // Vérification finale après que tout soit chargé
+            setTimeout(checkAllMatchesCompleted, 1000);
+        });
+
+        function showSuccess(message) {
+            const successDiv = document.createElement('div');
+            successDiv.className = 'fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded shadow-lg z-50 flex items-center';
+            successDiv.innerHTML = `
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+            ${message}
+        `;
+            document.body.appendChild(successDiv);
+            setTimeout(() => successDiv.remove(), 3000);
+        }
+
+        function showError(message) {
+            const errorDiv = document.getElementById('error-message');
+            errorDiv.innerHTML = `
+            <div class="flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                ${message.includes('Erreur HTTP: 400') ? 'Données invalides' : message}
+            </div>
+        `;
+            errorDiv.classList.remove('hidden');
+            setTimeout(() => errorDiv.classList.add('hidden'), 5000);
+        }
+    </script>
+{% endblock %}

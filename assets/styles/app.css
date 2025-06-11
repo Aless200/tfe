@@ -1,3 +1,90 @@
-body {
-    background-color: skyblue;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+.backgroundImg {
+    background-image: url('../images/bannerProfile.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+h1, h2, h3, h4, p, a, span {
+    font-family: Calibri;
+}
+
+/* Styles pour la navigation */
+.nav-link {
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+/* Supprime l'effet de survol bleu sur desktop */
+@media (min-width: 768px) {
+    .nav-link:hover {
+        color: #374151 !important;
+    }
+}
+
+/* Ligne bleue sous l'élément actif */
+.nav-link.active {
+    position: relative;
+}
+
+.nav-link.active::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    height: 2px;
+    background-color: #3b82f6;
+    border-radius: 1px;
+}
+
+/* Pour mobile - ajuste la position */
+@media (max-width: 767px) {
+    .nav-link.active::after {
+        bottom: 0;
+        left: 12px;
+        right: 12px;
+        width: auto;
+        transform: none;
+    }
+}
+
+/* Animation de défilement vertical améliorée */
+.gallery-scroll-animation {
+    animation: scrollGallery 25s linear infinite;
+}
+
+@keyframes scrollGallery {
+    0% {
+        transform: translateY(0);
+    }
+    100% {
+        transform: translateY(-50%);
+    }
+}
+
+/* Pause au survol avec transition douce */
+.gallery-scroll-animation:hover {
+    animation-play-state: paused;
+}
+
+/* Effet de transition pour les images au survol */
+.gallery-scroll-animation > div:hover {
+    z-index: 5;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+}
+
+/* Masquer la scrollbar pour le carrousel horizontal */
+.scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
 }

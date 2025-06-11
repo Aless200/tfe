@@ -1,0 +1,188 @@
+<aside class="w-64 bg-white border-r border-gray-200 shadow-sm fixed h-full z-10 overflow-y-auto">
+    <!-- En-tête de la sidebar -->
+    <div class="bg-[#0d079f] text-white p-4">
+        <div class="flex items-center justify-between">
+            <h2 class="text-xl font-bold">Administration</h2>
+            <a href="{{ path('app_home') }}" class="p-2 rounded-full hover:bg-[#0a0580] transition-colors duration-200" title="Retour au site">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                </svg>
+            </a>
+        </div>
+        <div class="mt-2 text-sm text-gray-100 opacity-80">
+            Panneau de gestion
+        </div>
+    </div>
+
+    <!-- Profil admin -->
+    <div class="p-4 border-b border-gray-200">
+        <div class="flex items-center space-x-3">
+            <div class="flex-shrink-0">
+                <div class="h-10 w-10 rounded-full bg-[#0d079f]/10 flex items-center justify-center">
+                    <svg class="h-6 w-6 text-[#0d079f]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                </div>
+            </div>
+            <div>
+                <p class="text-sm font-medium text-gray-700">{{ app.user.firstName }} {{ app.user.lastName }}</p>
+                <p class="text-xs text-gray-500">{{ app.user.roles[0]|replace({'ROLE_': '', '_': ' '})|title }}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="p-4 space-y-1">
+        <!-- Gestion utilisateurs -->
+        <div class="mb-2">
+            <button type="button" class="flex items-center p-2 w-full text-base font-medium text-gray-700 rounded-lg transition duration-200 group hover:bg-[#0d079f]/10" aria-controls="dropdown-pages" data-collapse-toggle="dropdown-pages">
+                <span class="flex-shrink-0 w-6 h-6 flex items-center justify-center rounded-md bg-[#0d079f]/10 text-[#0d079f] transition duration-200 group-hover:bg-[#0d079f] group-hover:text-white">
+                    <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M12 6a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7Zm-1.5 8a4 4 0 0 0-4 4 2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 4 4 0 0 0-4-4h-3Zm6.82-3.096a5.51 5.51 0 0 0-2.797-6.293 3.5 3.5 0 1 1 2.796 6.292ZM19.5 18h.5a2 2 0 0 0 2-2 4 4 0 0 0-4-4h-1.1a5.503 5.503 0 0 1-.471.762A5.998 5.998 0 0 1 19.5 18ZM4 7.5a3.5 3.5 0 0 1 5.477-2.889 5.5 5.5 0 0 0-2.796 6.293A3.501 3.501 0 0 1 4 7.5ZM7.1 12H6a4 4 0 0 0-4 4 2 2 0 0 0 2 2h.5a5.998 5.998 0 0 1 3.071-5.238A5.505 5.505 0 0 1 7.1 12Z" clip-rule="evenodd"/>
+                    </svg>
+                </span>
+                <span class="flex-1 ml-3 text-left whitespace-nowrap">Gestion utilisateurs</span>
+                <svg class="w-5 h-5 text-gray-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                </svg>
+            </button>
+            <ul id="dropdown-pages" class="hidden py-2 space-y-1 pl-10">
+                <li>
+                    <a href="{{ path('app_user_admin') }}" class="flex items-center p-2 text-sm font-medium text-gray-700 rounded-lg transition duration-200 hover:bg-[#0d079f]/5 hover:text-[#0d079f]">
+                        <span class="w-2 h-2 mr-2 bg-[#0d079f] rounded-full"></span>
+                        Les utilisateurs
+                    </a>
+                </li>
+                {% if is_granted("ROLE_SUPER_ADMIN") %}
+                    <li>
+                        <a href="{{ path('app_team_admin') }}" class="flex items-center p-2 text-sm font-medium text-gray-700 rounded-lg transition duration-200 hover:bg-[#0d079f]/5 hover:text-[#0d079f]">
+                            <span class="w-2 h-2 mr-2 bg-[#0d079f] rounded-full"></span>
+                            L'équipe
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+
+        <!-- Gestion actualités -->
+        <div class="mb-2">
+            <button type="button" class="flex items-center p-2 w-full text-base font-medium text-gray-700 rounded-lg transition duration-200 group hover:bg-[#0d079f]/10" aria-controls="dropdown-sales" data-collapse-toggle="dropdown-sales">
+                <span class="flex-shrink-0 w-6 h-6 flex items-center justify-center rounded-md bg-[#0d079f]/10 text-[#0d079f] transition duration-200 group-hover:bg-[#0d079f] group-hover:text-white">
+                    <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                        <path fill-rule="evenodd" d="M5 3a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11.5c.07 0 .14-.007.207-.021.095.014.193.021.293.021h2a2 2 0 0 0 2-2V7a1 1 0 0 0-1-1h-1a1 1 0 1 0 0 2v11h-2V5a2 2 0 0 0-2-2H5Zm7 4a1 1 0 0 1 1-1h.5a1 1 0 1 1 0 2H13a1 1 0 0 1-1-1Zm0 3a1 1 0 0 1 1-1h.5a1 1 0 1 1 0 2H13a1 1 0 0 1-1-1Zm-6 4a1 1 0 0 1 1-1h6a1 1 0 1 1 0 2H7a1 1 0 0 1-1-1Zm0 3a1 1 0 0 1 1-1h6a1 1 0 1 1 0 2H7a1 1 0 0 1-1-1ZM7 6a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1H7Zm1 3V8h1v1H8Z" clip-rule="evenodd"/>
+                    </svg>
+                </span>
+                <span class="flex-1 ml-3 text-left whitespace-nowrap">Gestion actualités</span>
+                <svg class="w-5 h-5 text-gray-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                </svg>
+            </button>
+            <ul id="dropdown-sales" class="hidden py-2 space-y-1 pl-10">
+                <li>
+                    <a href="{{ path('app_news_admin') }}" class="flex items-center p-2 text-sm font-medium text-gray-700 rounded-lg transition duration-200 hover:bg-[#0d079f]/5 hover:text-[#0d079f]">
+                        <span class="w-2 h-2 mr-2 bg-[#0d079f] rounded-full"></span>
+                        Les actualités
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ path('app_addnews_admin') }}" class="flex items-center p-2 text-sm font-medium text-gray-700 rounded-lg transition duration-200 hover:bg-[#0d079f]/5 hover:text-[#0d079f]">
+                        <span class="w-2 h-2 mr-2 bg-[#0d079f] rounded-full"></span>
+                        Ajouter une actualité
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Gestion Galerie -->
+        <div class="mb-2">
+            <button type="button" class="flex items-center p-2 w-full text-base font-medium text-gray-700 rounded-lg transition duration-200 group hover:bg-[#0d079f]/10" aria-controls="dropdown-authentication" data-collapse-toggle="dropdown-authentication">
+                <span class="flex-shrink-0 w-6 h-6 flex items-center justify-center rounded-md bg-[#0d079f]/10 text-[#0d079f] transition duration-200 group-hover:bg-[#0d079f] group-hover:text-white">
+                    <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                        <path fill-rule="evenodd" d="M13 10a1 1 0 0 1 1-1h.01a1 1 0 110 2H14a1 1 0 0 1-1-1Z" clip-rule="evenodd"/>
+                        <path fill-rule="evenodd" d="M2 6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v12c0 .556-.227 1.06-.593 1.422A.999.999 0 0 1 20.5 20H4a2.002 2.002 0 0 1-2-2V6Zm6.892 12 3.833-5.356-3.99-4.322a1 1 0 0 0-1.549.097L4 12.879V6h16v9.95l-3.257-3.619a1 1 0 0 0-1.557.088L11.2 18H8.892Z" clip-rule="evenodd"/>
+                    </svg>
+                </span>
+                <span class="flex-1 ml-3 text-left whitespace-nowrap">Gestion Galerie</span>
+                <svg class="w-5 h-5 text-gray-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                </svg>
+            </button>
+            <ul id="dropdown-authentication" class="hidden py-2 space-y-1 pl-10">
+                <li>
+                    <a href="{{ path('app_gallery_admin') }}" class="flex items-center p-2 text-sm font-medium text-gray-700 rounded-lg transition duration-200 hover:bg-[#0d079f]/5 hover:text-[#0d079f]">
+                        <span class="w-2 h-2 mr-2 bg-[#0d079f] rounded-full"></span>
+                        Les galeries
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ path('app_add_gallery_admin') }}" class="flex items-center p-2 text-sm font-medium text-gray-700 rounded-lg transition duration-200 hover:bg-[#0d079f]/5 hover:text-[#0d079f]">
+                        <span class="w-2 h-2 mr-2 bg-[#0d079f] rounded-full"></span>
+                        Ajouter une galerie
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Gestion tournoi -->
+        <div class="mb-2">
+            <button type="button" class="flex items-center p-2 w-full text-base font-medium text-gray-700 rounded-lg transition duration-200 group hover:bg-[#0d079f]/10" aria-controls="dropdown-tournoi" data-collapse-toggle="dropdown-tournoi">
+                <span class="flex-shrink-0 w-6 h-6 flex items-center justify-center rounded-md bg-[#0d079f]/10 text-[#0d079f] transition duration-200 group-hover:bg-[#0d079f] group-hover:text-white">
+                    <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                    </svg>
+                </span>
+                <span class="flex-1 ml-3 text-left whitespace-nowrap">Gestion tournoi</span>
+                <svg class="w-5 h-5 text-gray-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                </svg>
+            </button>
+            <ul id="dropdown-tournoi" class="hidden py-2 space-y-1 pl-10">
+                <li>
+                    <a href="{{ path('app_admin_tournaments') }}" class="flex items-center p-2 text-sm font-medium text-gray-700 rounded-lg transition duration-200 hover:bg-[#0d079f]/5 hover:text-[#0d079f]">
+                        <span class="w-2 h-2 mr-2 bg-[#0d079f] rounded-full"></span>
+                        Les tournois
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ path('app_admin_addTournament') }}" class="flex items-center p-2 text-sm font-medium text-gray-700 rounded-lg transition duration-200 hover:bg-[#0d079f]/5 hover:text-[#0d079f]">
+                        <span class="w-2 h-2 mr-2 bg-[#0d079f] rounded-full"></span>
+                        Ajouter un tournoi
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Gestion Commentaires -->
+        <div>
+            <a href="{{ path('app_admin_comments') }}" class="flex items-center p-2 text-base font-medium text-gray-700 rounded-lg transition duration-200 group hover:bg-[#0d079f]/10">
+                <div class="flex-shrink-0 w-6 h-6 flex items-center justify-center rounded-md bg-[#0d079f]/10 text-[#0d079f] transition duration-200 group-hover:bg-[#0d079f] group-hover:text-white">
+                    <svg class="w-4 h-4" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path>
+                        <path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"></path>
+                    </svg>
+                </div>
+                <span class="ml-3">Gestion Commentaires</span>
+            </a>
+
+            <a href="{{ path('app_admin_add_arbitrator') }}" class="flex items-center p-2 text-base font-medium text-gray-700 rounded-lg transition duration-200 group hover:bg-[#0d079f]/10">
+                <div class="flex-shrink-0 w-6 h-6 flex items-center justify-center rounded-md bg-[#0d079f]/10 text-[#0d079f] transition duration-200 group-hover:bg-[#0d079f] group-hover:text-white">
+                    <svg class="w-4 h-4" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path>
+                        <path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"></path>
+                    </svg>
+                </div>
+                <span class="ml-3">Gestion Arbitres</span>
+            </a>
+        </div>
+    </nav>
+
+    <!-- Footer de la sidebar -->
+    <div class="absolute bottom-0 w-full p-4 border-t border-gray-200 bg-gray-50">
+        <a href="{{ path('app_home') }}" class="flex items-center p-2 text-sm font-medium text-gray-700 rounded-lg transition duration-200 hover:bg-[#0d079f]/10 hover:text-[#0d079f]">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-[#0d079f]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Retour au site public
+        </a>
+    </div>
+</aside>

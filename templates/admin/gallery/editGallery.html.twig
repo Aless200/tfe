@@ -1,0 +1,312 @@
+{# templates/admin/gallery/editGallery.html.twig #}
+
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Modifier une galerie{% endblock %}
+
+{% block body %}
+    <div class="flex">
+        <!-- Sidebar -->
+        <div class="w-64 h-screen bg-gray-100">
+            {# Sidebar si nécessaire #}
+        </div>
+
+        <!-- Contenu principal -->
+        <div class="flex-1 p-6 overflow-hidden">
+            <div class="mb-8">
+                <h1 class="text-2xl font-extrabold text-gray-900 sm:text-4xl">
+                    Modifier une galerie
+                </h1>
+                <p class="mt-3 text-sm text-gray-500">
+                    Mettez à jour les détails de votre galerie et ajoutez des images par glisser-déposer
+                </p>
+            </div>
+
+            <div class="bg-white shadow-lg sm:rounded-lg overflow-hidden">
+                {{ form_start(form, {'attr': {'class': 'space-y-6', 'enctype': 'multipart/form-data'}}) }}
+
+                <!-- Panneau Informations -->
+                <div class="p-6">
+                    <div class="grid grid-cols-1 gap-6">
+                        <!-- Titre -->
+                        <div>
+                            {{ form_label(form.title, 'Titre', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-1'}}) }}
+                            {{ form_widget(form.title, {'attr': {'class': 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#0d079f] focus:border-[#0d079f]'}}) }}
+                            {{ form_errors(form.title, {'attr': {'class': 'text-red-500 text-sm mt-1'}}) }}
+                        </div>
+
+                        <!-- Description -->
+                        <div>
+                            {{ form_label(form.description, 'Description', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-1'}}) }}
+                            {{ form_widget(form.description, {'attr': {'class': 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#0d079f] focus:border-[#0d079f]', 'rows': 4}}) }}
+                            {{ form_errors(form.description, {'attr': {'class': 'text-red-500 text-sm mt-1'}}) }}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Panneau Images -->
+                <div class="p-6">
+                    <h3 class="text-lg font-medium text-gray-900 mb-3">Images de la galerie</h3>
+                    <p class="text-sm text-gray-500 mb-4">Ajoutez des images à votre galerie.</p>
+
+                    <!-- Zone de glisser-déposer -->
+                    <div id="dropzone" class="dropzone p-8 border-2 border-dashed border-gray-300 rounded-lg text-center cursor-pointer hover:bg-gray-50 transition-colors">
+                        <div class="space-y-2">
+                            <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
+                                <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            <div class="flex justify-center text-sm text-gray-600">
+                                <label for="file-upload" class="relative cursor-pointer bg-white rounded-md font-medium text-[#0d079f] hover:text-[#0a0580] focus-within:outline-none">
+                                    <span>Télécharger des fichiers</span>
+                                    <input id="file-upload" name="file-upload" type="file" class="sr-only" multiple accept="image/*">
+                                </label>
+                                <p class="pl-1">ou glisser-déposer</p>
+                            </div>
+                            <p class="text-xs text-gray-500">PNG, JPG, GIF jusqu'à 10MB</p>
+                        </div>
+                    </div>
+
+                    <!-- Conteneur pour les inputs cachés des nouvelles images -->
+                    <div id="hidden-file-inputs"></div>
+
+                    <!-- Grille d'images -->
+                    <div class="mt-6">
+                        <ul id="pictures-fields-list" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                            {% for picture in gallery.pictures %}
+                                <li class="image-preview relative bg-gray-50 rounded-lg overflow-hidden shadow-sm border border-gray-200 transition-all hover:shadow-md" data-picture-id="{{ picture.id }}">
+                                    <div class="aspect-w-1 aspect-h-1">
+                                        <img src="/images/gallery/{{ picture.imageName }}" alt="Preview" class="w-full h-full object-cover">
+                                    </div>
+                                    <!-- Bouton de suppression -->
+                                    <button type="button" class="remove-existing-image absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white rounded-full p-1.5 shadow-lg transition-colors opacity-0 hover:opacity-100 group-hover:opacity-100" data-picture-id="{{ picture.id }}">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                        </svg>
+                                    </button>
+                                    <!-- Input caché pour marquer la suppression -->
+                                    <input type="hidden" name="remove_images[]" value="" class="remove-input">
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="px-6 py-4 bg-gray-50 border-t border-gray-200 flex justify-between">
+                    <a href="{{ path('app_gallery_admin', {'page': app.request.query.get('page', 1)}) }}" class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md shadow-sm text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#0d079f]">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                        </svg>
+                        Retour
+                    </a>
+                    <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-[#0d079f] hover:bg-[#0a0580] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#0d079f] transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                        Mettre à jour
+                    </button>
+                </div>
+
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .dropzone.highlight {
+            border-color: #0d079f;
+            background-color: #f0f0ff;
+        }
+
+        .image-preview:hover .remove-existing-image,
+        .image-preview:hover .remove-new-image {
+            opacity: 1;
+        }
+
+        .image-preview.removing {
+            opacity: 0.5;
+            transform: scale(0.95);
+            transition: all 0.3s ease;
+        }
+
+        .new-image-badge {
+            position: absolute;
+            bottom: 8px;
+            left: 8px;
+            background: #10b981;
+            color: white;
+            font-size: 0.75rem;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+    </style>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const dropzone = document.getElementById('dropzone');
+            const fileUpload = document.getElementById('file-upload');
+            const hiddenInputsContainer = document.getElementById('hidden-file-inputs');
+            const picturesList = document.getElementById('pictures-fields-list');
+            let fileCounter = 0;
+
+            // Empêcher le comportement par défaut du navigateur
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                dropzone.addEventListener(eventName, preventDefaults, false);
+                document.body.addEventListener(eventName, preventDefaults, false);
+            });
+
+            function preventDefaults(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+
+            // Mettre en évidence la zone de dépôt lors du survol
+            ['dragenter', 'dragover'].forEach(eventName => {
+                dropzone.addEventListener(eventName, highlight, false);
+            });
+
+            ['dragleave', 'drop'].forEach(eventName => {
+                dropzone.addEventListener(eventName, unhighlight, false);
+            });
+
+            function highlight() {
+                dropzone.classList.add('highlight');
+            }
+
+            function unhighlight() {
+                dropzone.classList.remove('highlight');
+            }
+
+            // Gérer le dépôt de fichiers
+            dropzone.addEventListener('drop', handleDrop, false);
+
+            function handleDrop(e) {
+                const dt = e.dataTransfer;
+                const files = dt.files;
+                handleFiles(files);
+            }
+
+            // Gérer la sélection de fichiers via le bouton
+            fileUpload.addEventListener('change', function() {
+                handleFiles(this.files);
+                // Réinitialiser l'input pour permettre de sélectionner les mêmes fichiers
+                this.value = '';
+            });
+
+            function handleFiles(files) {
+                Array.from(files).forEach(file => {
+                    // Vérifier si c'est une image
+                    if (!file.type.match('image.*')) {
+                        alert('Seules les images sont autorisées: ' + file.name);
+                        return;
+                    }
+
+                    // Vérifier la taille du fichier (10MB max)
+                    if (file.size > 10 * 1024 * 1024) {
+                        alert('Le fichier ' + file.name + ' est trop volumineux (max 10MB).');
+                        return;
+                    }
+
+                    addFileToGallery(file);
+                });
+            }
+
+            function addFileToGallery(file) {
+                fileCounter++;
+                const fileId = 'new-file-' + fileCounter;
+
+                // Créer un input file caché pour ce fichier
+                const hiddenInput = document.createElement('input');
+                hiddenInput.type = 'file';
+                hiddenInput.name = 'new_images[]';
+                hiddenInput.style.display = 'none';
+                hiddenInput.id = fileId;
+
+                // Créer un DataTransfer pour assigner le fichier à l'input
+                const dataTransfer = new DataTransfer();
+                dataTransfer.items.add(file);
+                hiddenInput.files = dataTransfer.files;
+
+                hiddenInputsContainer.appendChild(hiddenInput);
+
+                // Créer un aperçu de l'image
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const newImageElement = document.createElement('li');
+                    newImageElement.className = 'image-preview relative bg-gray-50 rounded-lg overflow-hidden shadow-sm border border-gray-200 transition-all hover:shadow-md group';
+                    newImageElement.dataset.fileId = fileId;
+
+                    newImageElement.innerHTML = `
+                        <div class="aspect-w-1 aspect-h-1">
+                            <img src="${e.target.result}" alt="Nouvelle image" class="w-full h-full object-cover">
+                        </div>
+                        <button type="button" class="remove-new-image absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white rounded-full p-1.5 shadow-lg transition-colors opacity-0">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                        <div class="new-image-badge">Nouveau</div>
+                    `;
+
+                    picturesList.appendChild(newImageElement);
+
+                    // Ajouter l'événement de suppression pour les nouvelles images
+                    const removeBtn = newImageElement.querySelector('.remove-new-image');
+                    removeBtn.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+
+                        // Supprimer l'input caché correspondant
+                        const hiddenInput = document.getElementById(fileId);
+                        if (hiddenInput) {
+                            hiddenInput.remove();
+                        }
+
+                        // Animation de suppression
+                        newImageElement.classList.add('removing');
+                        setTimeout(() => {
+                            newImageElement.remove();
+                        }, 300);
+                    });
+                };
+
+                reader.readAsDataURL(file);
+            }
+
+            // Gestion de la suppression des images existantes
+            document.addEventListener('click', function(e) {
+                if (e.target.closest('.remove-existing-image')) {
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    const button = e.target.closest('.remove-existing-image');
+                    const pictureId = button.dataset.pictureId;
+                    const imageContainer = button.closest('.image-preview');
+                    const removeInput = imageContainer.querySelector('.remove-input');
+
+                    if (confirm('Êtes-vous sûr de vouloir supprimer cette image ?')) {
+                        // Marquer l'image pour suppression
+                        removeInput.value = pictureId;
+                        imageContainer.classList.add('removing');
+
+                        // Ajouter un badge "À supprimer"
+                        const badge = document.createElement('div');
+                        badge.className = 'absolute bottom-2 left-2 bg-red-500 text-white text-xs px-2 py-1 rounded font-medium';
+                        badge.textContent = 'À supprimer';
+                        imageContainer.appendChild(badge);
+
+                        // Désactiver le bouton de suppression
+                        button.style.display = 'none';
+                    }
+                }
+            });
+
+            // Cliquer sur le dropzone pour ouvrir le sélecteur de fichiers
+            dropzone.addEventListener('click', function(e) {
+                if (e.target === dropzone || e.target.closest('.space-y-2')) {
+                    fileUpload.click();
+                }
+            });
+        });
+    </script>
+{% endblock %}

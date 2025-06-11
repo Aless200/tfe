@@ -1,0 +1,232 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ news.title }}{% endblock %}
+
+{% block body %}
+    <div class="w-full bg-[#0d079f]">
+        <!-- Top white line -->
+        <div class="h-2 w-full bg-white"></div>
+
+        <!-- Main content section between the white lines -->
+        <div class="relative flex items-center justify-between px-4 py-2">
+            <!-- Logo circle -->
+            <div class="flex items-center">
+                <div class="relative z-10 h-24 w-24 overflow-hidden rounded-full border-4 border-white">
+                    <img src="{{ asset('images/bouleHeader.png') }}" alt="boule de pétanque" class="h-full w-full object-cover"/>
+                </div>
+
+                <!-- Title -->
+                <h1 class="ml-4 text-3xl font-bold text-white">Détails de l'actualité</h1>
+            </div>
+
+            <!-- Social icons -->
+            <div class="flex items-center gap-4">
+                <!-- Facebook icon -->
+                <a href="#" class="text-white hover:text-gray-200 transition-colors duration-200">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z" />
+                    </svg>
+                </a>
+                <!-- Mail icon -->
+                <a href="#" class="text-white hover:text-gray-200 transition-colors duration-200">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+
+        <!-- Bottom white line -->
+        <div class="h-2 w-full bg-white"></div>
+    </div>
+
+    <main class="container mx-auto px-4 py-8">
+        <!-- Breadcrumb navigation -->
+        <nav class="flex mb-6" aria-label="Breadcrumb">
+            <ol class="inline-flex items-center space-x-1 md:space-x-3">
+                <li class="inline-flex items-center">
+                    <a href="{{ path('app_home') }}" class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-[#0d079f]">
+                        <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
+                        </svg>
+                        Accueil
+                    </a>
+                </li>
+                <li>
+                    <div class="flex items-center">
+                        <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                        <a href="{{ path('app_actu') }}" class="ml-1 text-sm font-medium text-gray-700 hover:text-[#0d079f] md:ml-2">Actualités</a>
+                    </div>
+                </li>
+                <li aria-current="page">
+                    <div class="flex items-center">
+                        <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                        <span class="ml-1 text-sm font-medium text-gray-500 md:ml-2">{{ news.title }}</span>
+                    </div>
+                </li>
+            </ol>
+        </nav>
+
+        <!-- News Details Card -->
+        <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+            <!-- News Content with Image on Left and Info on Right -->
+            <div class="p-6">
+                <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-6">{{ news.title }}</h1>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Left Column - Image -->
+                    <div class="h-full">
+                        <div class="h-64 md:h-full w-full rounded-lg overflow-hidden">
+                            <img src="{{ asset('images/news/' ~ news.image) }}"
+                                 alt="{{ news.title }}"
+                                 class="w-full h-full object-cover"
+                            />
+                        </div>
+                    </div>
+
+                    <!-- Right Column - Content and Info -->
+                    <div class="space-y-6">
+                        <!-- News Content -->
+                        <div class="space-y-4">
+                            <p class="text-lg text-gray-600">{{ news.content }}</p>
+                        </div>
+
+                        <!-- Additional Info -->
+                        <div class="mt-6">
+                            <h2 class="text-2xl font-bold text-gray-800 border-b border-gray-200 pb-2">Informations</h2>
+
+                            <div class="bg-gray-50 rounded-lg p-4 border border-gray-200 mt-4">
+                                <div class="space-y-3">
+                                    <div class="flex items-center">
+                                        <svg class="w-5 h-5 mr-2 text-[#0d079f]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                        </svg>
+                                        <span class="text-gray-700">Publié le: <strong>{{ news.datePublished|date("d/m/Y") }}</strong></span>
+                                    </div>
+
+                                    <div class="flex items-center">
+                                        <svg class="w-5 h-5 mr-2 text-[#0d079f]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                        <span class="text-gray-700">Créé le: <strong>{{ news.createdAt|date("d/m/Y") }}</strong></span>
+                                    </div>
+
+                                    <div class="flex items-center">
+                                        <svg class="w-5 h-5 mr-2 text-[#0d079f]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                                        </svg>
+                                        <span class="text-gray-700">Auteur: <strong>{{ news.author.firstName }} {{ news.author.lastName }}</strong></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Comments Section -->
+        <div class="mt-10 bg-white rounded-lg shadow-sm p-6 border border-gray-200">
+            <h3 class="text-2xl font-bold mb-6 pb-2 border-b border-gray-200 flex items-center">
+                <svg class="w-6 h-6 mr-2 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"></path>
+                </svg>
+                Commentaires <span class="ml-2 text-sm font-medium text-gray-500 bg-gray-100 rounded-full px-2.5 py-0.5">{{ news.comments|filter(comment => comment.isPublished)|length }}</span>
+            </h3>
+
+            {% set publishedComments = news.comments|filter(comment => comment.isPublished) %}
+
+            {% if publishedComments|length > 0 %}
+                <div class="space-y-6">
+                    {% for comment in publishedComments %}
+                        <article class="p-6 text-base bg-gray-50 rounded-lg border border-gray-200">
+                            <footer class="flex justify-between items-center mb-2">
+                                <div class="flex items-center">
+                                    <div class="inline-flex items-center mr-3 text-sm text-gray-900 font-semibold">
+                                        <div class="mr-2 w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold">
+                                            {{ comment.user.firstName|first|upper }}{{ comment.user.lastName|first|upper }}
+                                        </div>
+                                        {{ comment.user.firstName }} {{ comment.user.lastName }}
+                                    </div>
+                                </div>
+                                <div class="text-sm text-gray-600 flex items-center">
+                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    {{ comment.createdAt|date("d/m/Y à H:i") }}
+                                </div>
+                            </footer>
+                            <p class="text-gray-700 whitespace-pre-line">{{ comment.content }}</p>
+                        </article>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="flex items-center p-4 mb-4 text-sm text-gray-700 bg-gray-50 rounded-lg" role="alert">
+                    <svg class="flex-shrink-0 inline w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                    </svg>
+                    <span class="font-medium">Aucun commentaire pour le moment. Soyez le premier à partager votre avis !</span>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Comment Form -->
+        <div class="mt-10 bg-white rounded-lg shadow-sm p-6 border border-gray-200">
+            {% if app.user %}
+                {% if hasCommented %}
+                    <div class="flex p-4 mb-4 text-yellow-800 border-t-4 border-yellow-300 bg-yellow-50 rounded-lg" role="alert">
+                        <svg class="flex-shrink-0 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                        </svg>
+                        <div class="ml-3 text-sm font-medium">
+                            Vous avez déjà publié un commentaire pour cette actualité.
+                        </div>
+                    </div>
+                {% else %}
+                    <h3 class="text-2xl font-bold mb-6 pb-2 border-b border-gray-200 flex items-center">
+                        <svg class="w-6 h-6 mr-2 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"></path>
+                        </svg>
+                        Postez un commentaire
+                    </h3>
+
+                    {{ form_start(commentForm, {'attr': {'class': 'space-y-6'}}) }}
+                    <div class="mb-4">
+                        {{ form_label(commentForm.content, 'Votre commentaire', {'label_attr': {'class': 'block mb-2 text-sm font-medium text-gray-900'}}) }}
+                        {{ form_widget(commentForm.content, {
+                            'attr': {
+                                'class': 'block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500',
+                                'rows': '4',
+                                'placeholder': 'Partagez votre avis...'
+                            }
+                        }) }}
+                        {{ form_errors(commentForm.content, {'attr': {'class': 'text-red-500 text-sm mt-1'}}) }}
+                    </div>
+
+                    <div class="flex items-center justify-between">
+                        <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none transition-all duration-200 flex items-center" data-turbo="true">
+                            <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13a1 1 0 102 0V9.414l1.293 1.293a1 1 0 001.414-1.414z" clip-rule="evenodd"></path>
+                            </svg>
+                            Publier mon commentaire
+                        </button>
+                    </div>
+                    {{ form_end(commentForm) }}
+                {% endif %}
+            {% else %}
+                <div class="flex p-4 text-sm text-red-800 border-t-4 border-red-300 bg-red-50 rounded-lg" role="alert">
+                    <svg class="flex-shrink-0 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                    </svg>
+                    <div class="ml-3 font-medium">
+                        Vous devez être <a href="{{ path('app_login') }}" class="font-semibold underline hover:text-red-900">connecté</a> pour poster un commentaire.
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </main>
+{% endblock %}

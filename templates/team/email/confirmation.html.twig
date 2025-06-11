@@ -1,0 +1,61 @@
+{% block body %}
+    {# Email Container #}
+    <div style="font-family: sans-serif; max-width: 42rem; margin-left: auto; margin-right: auto; background-color: #f9fafb;">
+        {# Header #}
+        <div style="width: 100%; background-color: #0d079f;">
+            {# Top white line #}
+            <div style="height: 0.5rem; width: 100%; background-color: white;"></div>
+
+            {# Main header content #}
+            <div style="position: relative; display: flex; align-items: center; padding-left: 1.5rem; padding-right: 1.5rem; padding-top: 1rem; padding-bottom: 1rem;">
+                {# Logo circle #}
+                <div style="position: relative; z-index: 10; height: 4rem; width: 4rem; overflow: hidden; border-radius: 9999px; border: 2px solid white; background-color: white; display: flex; align-items: center; justify-content: center;">
+                    <div style="color: #0d079f; font-weight: bold; font-size: 1.5rem;">
+                        <img src="{{ absolute_url(asset('images/logoPcm.png')) }}" class="mt-2" alt="boule de pétanque" style="max-width: 100%; max-height: 100%;">                    </div>
+                </div>
+
+                {# Title #}
+                <h1 style="margin-left: 1rem; font-size: 1.25rem; font-weight: bold; color: white;">Confirmation de participation à l'équipe</h1>
+            </div>
+
+            {# Bottom white line #}
+            <div style="height: 0.5rem; width: 100%; background-color: white;"></div>
+        </div>
+
+        {# Email Body #}
+        <div style="background-color: white; border-radius: 0.5rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); margin-left: 1rem; margin-right: 1rem; margin-top: 1.5rem; margin-bottom: 1.5rem; overflow: hidden;">
+            {# Content #}
+            <div style="padding: 1.5rem;">
+                <p style="color: #1f2937; margin-bottom: 1rem;">
+                    Bonjour,
+                </p>
+
+                <p style="color: #1f2937; margin-bottom: 1rem;">
+                    Vous faites maintenant partie de l'équipe <strong>{{ teamName }}</strong>.
+                </p>
+
+                <p style="color: #1f2937; margin-bottom: 1rem;">
+                    Tournoi: <strong>{{ tournamentName }}</strong>
+                </p>
+
+                <p style="color: #1f2937; margin-bottom: 1rem;">
+                    Date: {{ date }}
+                </p>
+
+                <p style="color: #1f2937; margin-bottom: 1rem;">
+                    Adresse: {{ address }}
+                </p>
+
+                <p style="color: #1f2937; margin-bottom: 1rem;">
+                    Type: {{ type }}
+                </p>
+            </div>
+        </div>
+
+        {# Footer #}
+        <div style="text-align: center; font-size: 0.75rem; color: #6b7280; padding-left: 1rem; padding-right: 1rem; padding-bottom: 1.5rem;">
+            <p style="margin-bottom: 0.5rem;">© {{ "now"|date("Y") }} Votre Site. Tous droits réservés.</p>
+            <p>Cet email a été envoyé automatiquement, merci de ne pas y répondre directement.</p>
+        </div>
+    </div>
+{% endblock %}

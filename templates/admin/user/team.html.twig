@@ -1,0 +1,104 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Administration - L'équipe{% endblock %}
+
+{% block body %}
+    <div class="flex">
+        <div class="w-64 h-screen bg-gray-100"></div>
+        <div class="flex-1 p-6 overflow-hidden">
+            <h1 class="text-2xl font-bold mb-6 text-gray-800">L'équipe</h1>
+
+            <div class="w-full overflow-hidden shadow-md sm:rounded-lg">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Avatar</th>
+                        <th class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                        <th class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Roles</th>
+                        <th class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Prénom</th>
+                        <th class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nom</th>
+                        <th class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date création</th>
+                        <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Statut</th>
+                        <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Rétrograde</th>
+                        <th class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Téléphone</th>
+                    </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                    {% for user in teamUser %}
+                        <tr class="hover:bg-gray-100">
+                            <td class="px-3 py-4">
+                                <img class="h-10 w-10 rounded-full object-cover" src="{{ asset('images/avatar/' ~ user.imageAvatar) }}" alt="{{ user.firstName }}">
+                            </td>
+                            <td class="px-3 py-4 text-sm text-gray-900 truncate" title="{{ user.email }}">{{ user.email }}</td>
+                            <td class="px-3 py-4">
+                                <div class="flex flex-wrap gap-1">
+                                    {% if 'ROLE_SUPER_ADMIN' in user.roles %}
+                                        <span class="px-2 inline-flex text-xs font-semibold rounded-full bg-purple-100 text-purple-800">Super Admin</span>
+                                    {% elseif 'ROLE_ADMIN' in user.roles %}
+                                        <span class="px-2 inline-flex text-xs font-semibold rounded-full bg-blue-100 text-blue-800">Admin</span>
+                                    {% elseif 'ROLE_USER' in user.roles %}
+                                        <span class="px-2 inline-flex text-xs font-semibold rounded-full bg-green-100 text-green-800">Utilisateur</span>
+                                    {% endif %}
+                                </div>
+                            </td>
+                            <td class="px-3 py-4 text-sm text-gray-900">{{ user.firstName }}</td>
+                            <td class="px-3 py-4 text-sm text-gray-900">{{ user.lastName }}</td>
+                            <td class="px-3 py-4 text-sm text-gray-900">
+                                {{ user.createdAt ? user.createdAt|date('d-m-Y') }}
+                            </td>
+                            <td class="px-3 py-4 text-center">
+                                <turbo-frame id="user-team-status-{{ user.id }}">
+                                    <a href="{{ path('app_admin_eyesTeam', { id: user.id }) }}" data-turbo-frame="user-team-status-{{ user.id }}">
+                                        {% if user.isDisabled == 0 %}
+                                            <span class="flex h-8 w-8 items-center justify-center rounded-full bg-green-100 mx-auto">
+                                                <svg class="h-5 w-5 text-green-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                    <path stroke="currentColor" stroke-width="2" d="M21 12c0 1.2-4.03 6-9 6s-9-4.8-9-6c0-1.2 4.03-6 9-6s9 4.8 9 6Z"/>
+                                                    <path stroke="currentColor" stroke-width="2" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
+                                                </svg>
+                                            </span>
+                                        {% else %}
+                                            <span class="flex h-8 w-8 items-center justify-center rounded-full bg-red-100 mx-auto">
+                                                <svg class="h-5 w-5 text-red-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                    <path stroke="currentColor" stroke-width="2" d="M21 12c0 1.2-4.03 6-9 6s-9-4.8-9-6c0-1.2 4.03-6 9-6s9 4.8 9 6Z"/>
+                                                    <path stroke="currentColor" stroke-width="2" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
+                                                </svg>
+                                            </span>
+                                        {% endif %}
+                                    </a>
+                                </turbo-frame>
+                            </td>
+                            <td class="px-3 py-4 text-center">
+                                {% if is_granted('ROLE_SUPER_ADMIN') %}
+                                    {% if 'ROLE_ADMIN' in user.roles %}
+                                        <a href="{{ path('app_admin_downgrade', {id: user.id}) }}"
+                                           data-turbo="true"
+                                           title="Rétrograder en utilisateur standard"
+                                           onclick="return confirm('Êtes-vous sûr de vouloir rétrograder cet administrateur ?')">
+                                            <span class="flex h-8 w-8 items-center justify-center rounded-full bg-red-100 hover:bg-red-200 transition mx-auto">
+                                                <svg class="w-6 h-6 text-red-600" fill="currentColor" viewBox="0 0 24 24">
+                                                    <path fill-rule="evenodd" d="M5 8a4 4 0 1 1 8 0 4 4 0 0 1-8 0Zm-2 9a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1Zm13-6a1 1 0 1 0 0 2h4a1 1 0 1 0 0-2h-4Z" clip-rule="evenodd"/>
+                                                </svg>
+                                            </span>
+                                        </a>
+                                    {% else %}
+                                        <span class="flex h-8 w-8 items-center justify-center rounded-full bg-gray-200 cursor-not-allowed mx-auto" title="Non administrateur">
+                                            <svg class="w-6 h-6 text-gray-400 opacity-50" fill="currentColor" viewBox="0 0 24 24">
+                                                <path fill-rule="evenodd" d="M5 8a4 4 0 1 1 8 0 4 4 0 0 1-8 0Zm-2 9a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1Zm13-6a1 1 0 1 0 0 2h4a1 1 0 1 0 0-2h-4Z" clip-rule="evenodd"/>
+                                            </svg>
+                                        </span>
+                                    {% endif %}
+                                {% endif %}
+                            </td>
+                            <td class="px-3 py-4 text-sm text-gray-900 truncate" title="{{ user.phoneNumber }}">{{ user.phoneNumber }}</td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="9" class="px-3 py-4 text-center text-sm text-gray-500">Aucun membre trouvé</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

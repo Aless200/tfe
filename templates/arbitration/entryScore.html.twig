@@ -1,0 +1,339 @@
+{#{% extends 'base.html.twig' %}#}
+
+{#{% block title %}Saisie des Scores | Pétanque Club Manager{% endblock %}#}
+
+{% block body %}
+    <title>Saisie des Scores | Pétanque Club Manager</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0d079f',
+                        'primary-hover': '#0a0580'
+                    }
+                }
+            }
+        }
+    </script>
+    <div class="min-h-screen bg-gray-50 flex flex-col relative overflow-hidden">
+        <!-- Éléments décoratifs en arrière-plan -->
+        <div class="absolute inset-0 z-0 overflow-hidden">
+            <!-- Cercles décoratifs -->
+            <div class="absolute top-20 right-10 w-32 h-32 sm:w-64 sm:h-64 rounded-full bg-[#0d079f]/5"></div>
+            <div class="absolute -bottom-20 -left-20 w-48 h-48 sm:w-96 sm:h-96 rounded-full bg-[#0d079f]/10"></div>
+
+            <!-- Silhouettes de boules de pétanque -->
+            <div class="absolute top-1/4 left-1/4 w-8 h-8 sm:w-16 sm:h-16 rounded-full border-2 border-gray-400/25"></div>
+            <div class="absolute bottom-1/3 right-1/4 w-6 h-6 sm:w-12 sm:h-12 rounded-full border-2 border-gray-400/25"></div>
+            <div class="absolute top-2/3 left-1/3 w-5 h-5 sm:w-10 sm:h-10 rounded-full border-2 border-gray-400/25"></div>
+        </div>
+
+        <!-- En-tête -->
+        <header class="relative z-10 bg-[#0d079f] text-white shadow-md">
+            <div class="container mx-auto px-4 py-3">
+                <div class="flex items-center justify-center sm:justify-start">
+                    <div class="h-10 w-10 sm:h-12 sm:w-12 overflow-hidden rounded-full border-2 border-white p-1 mr-3">
+                        <img src="{{ asset('images/bouleHeader.png') }}" alt="Boule de pétanque" class="h-full w-full object-cover" />
+                    </div>
+                    <h1 class="text-xl sm:text-2xl font-bold">Espace Arbitre</h1>
+                </div>
+            </div>
+        </header>
+
+        <!-- Contenu principal -->
+        <main class="flex-grow container mx-auto px-4 py-4 sm:py-8 relative z-10">
+            <div class="max-w-2xl mx-auto">
+                <!-- Titre de la page -->
+                <div class="text-center mb-6">
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-gray-900 mb-2">Saisie des Scores</h2>
+                    <p class="text-sm sm:text-base text-gray-600">Enregistrez les résultats du match en cours</p>
+                </div>
+
+                {% if teams is empty %}
+                    <!-- Message si aucune équipe n'est disponible -->
+                    <div class="bg-yellow-50 border-l-4 border-yellow-400 p-6 rounded-lg shadow-md">
+                        <div class="flex items-center">
+                            <svg class="h-8 w-8 text-yellow-400 mr-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                            </svg>
+                            <p class="text-lg text-yellow-700">Aucune équipe disponible pour ce tournoi.</p>
+                        </div>
+                    </div>
+                {% else %}
+                    <!-- Formulaire de saisie des scores -->
+                    <form id="scoreForm" method="post" action="{{ path('app_arbitrator_save_score') }}" class="bg-white rounded-xl shadow-lg overflow-hidden">
+                        <!-- En-tête du formulaire -->
+                        <div class="bg-[#0d079f] px-4 sm:px-6 py-3 sm:py-4 text-white">
+                            <h3 class="text-lg sm:text-xl font-semibold text-center">Match en cours</h3>
+                        </div>
+
+                        <!-- Corps du formulaire -->
+                        <div class="p-4 sm:p-6">
+
+
+                            <!-- Saisie des scores -->
+                            <div class="space-y-6">
+                                <!-- Score Équipe 1 -->
+                                <div class="bg-gray-50 rounded-xl p-4 sm:p-6 border border-gray-200">
+                                    <!-- Menu déroulant équipe 1 -->
+                                    <div class="mb-4">
+                                        <select id="team1" name="team1" class="block w-full px-3 py-2 sm:px-4 sm:py-3 border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:ring-[#0d079f] focus:border-[#0d079f] text-sm sm:text-base">
+                                            <option value="" selected disabled>Choisissez une équipe</option>
+                                            {% for team in teams %}
+                                                    <option value="{{ team.id }}">{{ team.teamName }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <!-- Score -->
+                                    <div class="flex items-center justify-center">
+                                        <button type="button" onclick="decrementScore('Team1')" class="w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center bg-red-500 hover:bg-red-600 text-white rounded-full shadow-md transition-colors touch-manipulation">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 sm:h-8 sm:w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4" />
+                                            </svg>
+                                        </button>
+                                        <input type="number" id="scoreTeam1" name="scoreTeam1" value="0" min="0" max="13" readonly class="mx-3 sm:mx-4 w-16 h-16 sm:w-20 sm:h-20 text-center text-2xl sm:text-4xl font-bold border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-[#0d079f] focus:border-[#0d079f] bg-white cursor-default">
+                                        <button type="button" onclick="incrementScore('Team1')" class="w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center bg-green-500 hover:bg-green-600 text-white rounded-full shadow-md transition-colors touch-manipulation">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 sm:h-8 sm:w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Versus visuel -->
+                                <div class="flex items-center justify-center gap-2 sm:gap-4 mb-6">
+                                    <span class="text-lg sm:text-xl font-bold text-gray-500">VS</span>
+                                </div>
+
+                                <!-- Score Équipe 2 -->
+                                <div class="bg-gray-50 rounded-xl p-4 sm:p-6 border border-gray-200">
+                                    <!-- Menu déroulant équipe 2 -->
+                                    <div class="mb-4">
+                                        <select id="team2" name="team2" class="block w-full px-3 py-2 sm:px-4 sm:py-3 border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:ring-[#0d079f] focus:border-[#0d079f] text-sm sm:text-base">
+                                            <option value="" selected disabled>Choisissez une équipe</option>
+                                            {% for team in teams %}
+                                                    <option value="{{ team.id }}">{{ team.teamName }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <!-- Score -->
+                                    <div class="flex items-center justify-center">
+                                        <button type="button" onclick="decrementScore('Team2')" class="w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center bg-red-500 hover:bg-red-600 text-white rounded-full shadow-md transition-colors touch-manipulation">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 sm:h-8 sm:w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4" />
+                                            </svg>
+                                        </button>
+                                        <input type="number" id="scoreTeam2" name="scoreTeam2" value="0" min="0" max="13" readonly class="mx-3 sm:mx-4 w-16 h-16 sm:w-20 sm:h-20 text-center text-2xl sm:text-4xl font-bold border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-[#0d079f] focus:border-[#0d079f] bg-white cursor-default">
+                                        <button type="button" onclick="incrementScore('Team2')" class="w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center bg-green-500 hover:bg-green-600 text-white rounded-full shadow-md transition-colors touch-manipulation">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 sm:h-8 sm:w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Bouton d'action -->
+                            <div class="mt-6">
+                                <button type="button" onclick="showConfirmationModal()" class="w-full inline-flex justify-center items-center py-3 px-6 border border-transparent shadow-sm text-base font-medium rounded-lg text-white bg-[#0d079f] hover:bg-[#0a0580] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#0d079f] transition-colors touch-manipulation">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                    </svg>
+                                    Enregistrer le score
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <!-- Aide contextuelle -->
+                    <div class="mt-6 bg-blue-50 rounded-lg p-4 border border-blue-100">
+                        <div class="flex">
+                            <div class="flex-shrink-0">
+                                <svg class="h-5 w-5 text-blue-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                            <div class="ml-3">
+                                <h3 class="text-sm font-medium text-blue-800">Rappel des règles</h3>
+                                <div class="mt-2 text-sm text-blue-700">
+                                    <p>Le match se termine lorsqu'une équipe atteint 13 points. Vérifiez bien les scores avant de valider.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </main>
+
+        <!-- Pied de page -->
+        <footer class="bg-white py-3 sm:py-4 border-t border-gray-200 relative z-10">
+            <div class="container mx-auto px-4 text-center text-xs sm:text-sm text-gray-500">
+                <p>© {{ "now"|date("Y") }} Pétanque Club Manager. Tous droits réservés.</p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Modal de confirmation -->
+    <div id="confirmationModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50 hidden">
+        <div class="relative top-20 mx-auto p-5 border w-11/12 max-w-md shadow-lg rounded-md bg-white">
+            <div class="mt-3 text-center">
+                <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-yellow-100">
+                    <svg class="h-6 w-6 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                </div>
+                <h3 class="text-lg leading-6 font-medium text-gray-900 mt-4">Confirmer le score</h3>
+                <div class="mt-2 px-7 py-3">
+                    <p class="text-sm text-gray-500" id="confirmationText">
+                        Êtes-vous sûr de vouloir enregistrer ce score ?
+                    </p>
+                </div>
+                <div class="items-center px-4 py-3">
+                    <div class="flex flex-col sm:flex-row gap-3">
+                        <button id="confirmBtn" onclick="confirmScore()" class="px-4 py-2 bg-[#0d079f] text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-[#0a0580] focus:outline-none focus:ring-2 focus:ring-[#0d079f]">
+                            Confirmer
+                        </button>
+                        <button onclick="hideConfirmationModal()" class="px-4 py-2 bg-gray-300 text-gray-800 text-base font-medium rounded-md w-full shadow-sm hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300">
+                            Annuler
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function incrementScore(team) {
+            const scoreInput = document.getElementById(`score${team}`);
+            let currentScore = parseInt(scoreInput.value);
+
+            if (currentScore < 13) {
+                scoreInput.value = currentScore + 1;
+
+                // Animation de feedback
+                scoreInput.classList.add('ring-4', 'ring-green-200');
+                setTimeout(() => {
+                    scoreInput.classList.remove('ring-4', 'ring-green-200');
+                }, 300);
+
+                // Vérifier si le score a atteint 13
+                if (currentScore + 1 >= 13) {
+                    highlightWinningScore(team);
+                }
+            }
+        }
+
+        function decrementScore(team) {
+            const scoreInput = document.getElementById(`score${team}`);
+            let currentScore = parseInt(scoreInput.value);
+            if (currentScore > 0) {
+                scoreInput.value = currentScore - 1;
+
+                // Animation de feedback
+                scoreInput.classList.add('ring-4', 'ring-red-200');
+                setTimeout(() => {
+                    scoreInput.classList.remove('ring-4', 'ring-red-200');
+                }, 300);
+
+                // Réinitialiser le style si le score descend en dessous de 13
+                if (currentScore === 13) {
+                    resetScoreHighlight(team);
+                }
+            }
+        }
+
+        function highlightWinningScore(team) {
+            const scoreInput = document.getElementById(`score${team}`);
+            scoreInput.classList.add('bg-green-100', 'border-green-500');
+        }
+
+        function resetScoreHighlight(team) {
+            const scoreInput = document.getElementById(`score${team}`);
+            scoreInput.classList.remove('bg-green-100', 'border-green-500');
+        }
+
+        function showConfirmationModal() {
+            const team1Name = document.getElementById('team1').selectedOptions[0].text;
+            const team2Name = document.getElementById('team2').selectedOptions[0].text;
+            const score1 = document.getElementById('scoreTeam1').value;
+            const score2 = document.getElementById('scoreTeam2').value;
+
+            // Vérifier que les équipes sont différentes
+            if (document.getElementById('team1').value === document.getElementById('team2').value) {
+                alert('Veuillez sélectionner deux équipes différentes.');
+                return;
+            }
+
+            const confirmationText = `${team1Name}: ${score1} - ${team2Name}: ${score2}`;
+            document.getElementById('confirmationText').innerHTML =
+                `Êtes-vous sûr de vouloir enregistrer ce score ?<br><strong>${confirmationText}</strong>`;
+
+            document.getElementById('confirmationModal').classList.remove('hidden');
+        }
+
+        function hideConfirmationModal() {
+            document.getElementById('confirmationModal').classList.add('hidden');
+        }
+
+        function confirmScore() {
+            document.getElementById('scoreForm').submit();
+            hideConfirmationModal();
+        }
+
+        // Empêcher la sélection de la même équipe
+        document.addEventListener('DOMContentLoaded', function() {
+            const team1Select = document.getElementById('team1');
+            const team2Select = document.getElementById('team2');
+
+            if (team1Select && team2Select) {
+                team1Select.addEventListener('change', function() {
+                    updateOtherTeamOptions(team1Select, team2Select);
+                });
+
+                team2Select.addEventListener('change', function() {
+                    updateOtherTeamOptions(team2Select, team1Select);
+                });
+
+                // Initialiser au chargement
+                if (team1Select.options.length > 1) {
+                    team1Select.selectedIndex = 0;
+                    team2Select.selectedIndex = 1;
+                    updateOtherTeamOptions(team1Select, team2Select);
+                    updateOtherTeamOptions(team2Select, team1Select);
+                }
+            }
+        });
+
+        function updateOtherTeamOptions(changedSelect, otherSelect) {
+            const selectedValue = changedSelect.value;
+
+            // Si l'autre select a la même valeur, sélectionner une option différente
+            if (otherSelect.value === selectedValue && otherSelect.options.length > 1) {
+                for (let i = 0; i < otherSelect.options.length; i++) {
+                    if (otherSelect.options[i].value !== selectedValue) {
+                        otherSelect.selectedIndex = i;
+                        break;
+                    }
+                }
+            }
+
+            // Mettre en évidence visuellement les options sélectionnées
+            for (let i = 0; i < otherSelect.options.length; i++) {
+                if (otherSelect.options[i].value === selectedValue) {
+                    otherSelect.options[i].disabled = true;
+                } else {
+                    otherSelect.options[i].disabled = false;
+                }
+            }
+        }
+
+        // Fermer le modal en cliquant à l'extérieur
+        document.getElementById('confirmationModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                hideConfirmationModal();
+            }
+        });
+    </script>
+{% endblock %}

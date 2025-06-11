@@ -1,0 +1,176 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Modifier un tournoi{% endblock %}
+
+{% block body %}
+    <div class="flex">
+        <!-- Sidebar -->
+        <div class="w-64 h-screen bg-gray-100">
+            {# Sidebar si nécessaire #}
+        </div>
+
+        <!-- Contenu principal -->
+        <div class="flex-1 p-6 overflow-hidden">
+            <div class="mb-8">
+                <h1 class="text-2xl font-extrabold text-gray-900 sm:text-4xl">
+                    Modifier un tournoi
+                </h1>
+                <p class="mt-3 text-sm text-gray-500">
+                    Mettez à jour les détails de votre tournoi
+                </p>
+            </div>
+
+            <div class="bg-white shadow-md sm:rounded-lg p-6">
+                {{ form_start(formEditTournament, {
+                'attr': {
+                'class': 'space-y-6',
+                }
+                }) }}
+
+                <div class="grid grid-cols-1 gap-6">
+                    <div>
+                        {{ form_label(formEditTournament.name, 'Nom', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-1'}}) }}
+                        {{ form_widget(formEditTournament.name, {'attr': {'class': 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500'}}) }}
+                        {{ form_errors(formEditTournament.name) }}
+                    </div>
+
+                    <!-- Date du tournoi -->
+                    <div>
+                        {{ form_label(formEditTournament.dateTournament, 'Date du tournoi', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-1'}}) }}
+                        {{ form_widget(formEditTournament.dateTournament, {'attr': {'class': 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500'}}) }}
+                        {{ form_errors(formEditTournament.dateTournament) }}
+                    </div>
+
+                    <!-- Prix -->
+                    <div>
+                        {{ form_label(formEditTournament.price, 'Prix', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-1'}}) }}
+                        {{ form_widget(formEditTournament.price, {'attr': {'class': 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500'}}) }}
+                        {{ form_errors(formEditTournament.price) }}
+                    </div>
+
+                    <!-- Adresse -->
+                    <div>
+                        {{ form_label(formEditTournament.adresse, 'Adresse', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-1'}}) }}
+                        {{ form_widget(formEditTournament.adresse, {'attr': {'class': 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500'}}) }}
+                        {{ form_errors(formEditTournament.adresse) }}
+                    </div>
+
+                    <!-- Nombre d'équipes maximum -->
+                    <div>
+                        {{ form_label(formEditTournament.teamsMax, 'Nombre d\'équipes max', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-1'}}) }}
+                        {{ form_widget(formEditTournament.teamsMax, {'attr': {'class': 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500'}}) }}
+                        {{ form_errors(formEditTournament.teamsMax) }}
+                    </div>
+
+                    <!-- Nombre de terrains maximum -->
+                    <div>
+                        {{ form_label(formEditTournament.groundMax, 'Nombre de terrains max', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-1'}}) }}
+                        {{ form_widget(formEditTournament.groundMax, {'attr': {'class': 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500'}}) }}
+                        {{ form_errors(formEditTournament.groundMax) }}
+                    </div>
+
+                    <!-- Statut -->
+                    <div>
+                        {{ form_label(formEditTournament.status, 'Statut', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-1'}}) }}
+                        {{ form_widget(formEditTournament.status, {'attr': {'class': 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500'}}) }}
+                        {{ form_errors(formEditTournament.status) }}
+                    </div>
+
+                    <!-- Type de tournoi -->
+                    <div>
+                        {{ form_label(formEditTournament.typeTournament, 'Type de tournoi', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-1'}}) }}
+                        {{ form_widget(formEditTournament.typeTournament, {'attr': {'class': 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500'}}) }}
+                        {{ form_errors(formEditTournament.typeTournament) }}
+                    </div>
+
+                    <!-- Image -->
+                    <div>
+                        {{ form_label(formEditTournament.imageFile, 'Image', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-1'}}) }}
+
+                        {% if tournament.imageTournament %}
+                            <div class="mb-4">
+                                <p class="text-sm font-medium text-gray-700 mb-2">Image actuelle :</p>
+                                <div class="flex items-center space-x-4">
+                                    <img src="{{ asset('images/tournamentPoster/' ~ tournament.imageTournament) }}"
+                                         alt="Image actuelle"
+                                         class="h-24 w-24 object-cover rounded-md border border-gray-200">
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        <div class="mt-1 flex items-center">
+                            <label class="cursor-pointer">
+                                <span class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                    <svg class="-ml-1 mr-2 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                                    </svg>
+                                    {% if formEditTournament.vars.value.imageTournament %}Changer l'image{% else %}Ajouter une image{% endif %}
+                                </span>
+                                {{ form_widget(formEditTournament.imageFile, {'attr': {'class': 'sr-only'}}) }}
+                            </label>
+                            <span class="ml-2 text-sm text-gray-500" id="file-name">
+                                {% if formEditTournament.vars.value.imageTournament %}Image actuelle conservée{% else %}Aucun fichier sélectionné{% endif %}
+                            </span>
+                        </div>
+                        <p class="mt-1 text-xs text-gray-500">PNG, JPG, JPEG jusqu'à 5MB</p>
+                        {{ form_errors(formEditTournament.imageFile) }}
+                    </div>
+                </div>
+
+                <div class="pt-6 flex justify-between">
+                    <a href="{{ path('app_admin_tournaments', {'page': app.request.query.get('page', 1)}) }}" class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md shadow-sm text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                        </svg>
+                        Retour
+                    </a>
+                    <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                        Mettre à jour le tournoi
+                    </button>
+                </div>
+
+                {{ form_end(formEditTournament) }}
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('turbo:load', function() {
+            // Fonction pour initialiser le champ fichier
+            const initFileInput = () => {
+                const fileInput = document.querySelector('input[type="file"][name*="[imageFile]"]');
+                const fileNameSpan = document.getElementById('file-name');
+
+                if (fileInput && fileNameSpan) {
+                    // Sauvegarde le texte par défaut
+                    const defaultText = fileNameSpan.textContent;
+
+                    // Gestion du changement de fichier
+                    fileInput.addEventListener('change', function(e) {
+                        fileNameSpan.textContent = e.target.files[0]?.name || defaultText;
+                    });
+
+                    // Réinitialisation après soumission (compatible Turbo)
+                    fileInput.form.addEventListener('turbo:submit-end', function() {
+                        // Réinitialise seulement si la soumission a réussi
+                        if (fileInput.form.querySelector('[data-turbo-submit-success]')) {
+                            fileInput.value = '';
+                            fileNameSpan.textContent = defaultText;
+                        }
+                    });
+                }
+            };
+
+            // Initialisation au chargement
+            initFileInput();
+
+            // Réinitialisation après navigation Turbo
+            document.addEventListener('turbo:before-render', function() {
+                initFileInput();
+            });
+        });
+    </script>
+{% endblock %}

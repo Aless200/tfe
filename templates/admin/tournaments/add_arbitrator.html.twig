@@ -1,0 +1,68 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Ajouter un Arbitre{% endblock %}
+
+{% block body %}
+    <div class="flex">
+        <!-- Sidebar -->
+        <div class="w-64 h-screen bg-gray-100">
+            {# Votre sidebar ici #}
+        </div>
+
+        <!-- Contenu principal -->
+        <div class="flex-1 p-6 overflow-hidden">
+            <div class="mb-8">
+                <h1 class="text-2xl font-extrabold text-gray-900 sm:text-4xl">
+                    Ajouter un Arbitre
+                </h1>
+                <p class="mt-3 text-sm text-gray-500">
+                    Remplissez les informations de l'arbitre
+                </p>
+            </div>
+
+            <div class="bg-white shadow-md sm:rounded-lg p-6">
+                <form method="post" class="space-y-6">
+                    <!-- Nom d'utilisateur -->
+                    <div>
+                        <label for="username" class="block text-sm font-medium text-gray-700 mb-1">Nom d'utilisateur</label>
+                        <input type="text" id="username" name="username" required
+                               class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                    </div>
+
+                    <!-- Mot de passe -->
+                    <div>
+                        <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Mot de passe</label>
+                        <input type="password" id="password" name="password" required
+                               class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                    </div>
+
+                    <!-- Menu déroulant des tournois -->
+                    <div>
+                        <label for="tournamentId" class="block text-sm font-medium text-gray-700 mb-1">Tournoi</label>
+                        <select id="tournamentId" name="tournamentId" required
+                                class="mt-1 block w-full pl-3 pr-10 py-2 text-base border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md shadow-sm">
+                            <option value="" disabled selected>Choisissez un tournoi</option>
+                            {% for tournament in tournaments %}
+                                <option value="{{ tournament.id }}">{{ tournament.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="pt-6 flex justify-between">
+{#                        <a href="{{ path('app_referee_admin') }}"#}
+{#                           class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md shadow-sm text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">#}
+{#                            Retour#}
+{#                        </a>#}
+                        <button type="submit"
+                                class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            <svg class="-ml-1 mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                            </svg>
+                            Ajouter l'arbitre
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

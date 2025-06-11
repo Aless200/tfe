@@ -3,3 +3,17 @@ controllers:
         path: ../src/Controller/
         namespace: App\Controller
     type: attribute
+
+app_arbitrator_login:
+    path: /arbitre/login
+    controller: App\Controller\ArbitratorController::login
+
+app_arbitrator_score_entry:
+    path: /arbitre/score-entry
+    controller: App\Controller\ArbitratorController::scoreEntry
+
+app_arbitrator_logout:
+    path: /arbitre/logout
+    controller: App\Controller\ArbitratorController::logout
+
+

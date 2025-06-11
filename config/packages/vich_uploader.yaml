@@ -1,0 +1,27 @@
+vich_uploader:
+    db_driver: orm
+
+    mappings:
+        news:
+            uri_prefix: /images/news
+            upload_destination: '%kernel.project_dir%/assets/images/news'
+            namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
+
+        tournament:
+            uri_prefix: /images/tournamentPoster
+            upload_destination: '%kernel.project_dir%/assets/images/tournamentPoster'
+            namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
+
+        user:
+            uri_prefix: /images/avatar
+            upload_destination: '%kernel.project_dir%/public/images/avatar'
+            namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
+            inject_on_load: false
+
+        gallery:
+            uri_prefix: /images/gallery
+            upload_destination: '%kernel.project_dir%/public/images/gallery'
+            namer: vich_uploader.namer_uniqid
+            inject_on_load: false
+            delete_on_update: true
+            delete_on_remove: true

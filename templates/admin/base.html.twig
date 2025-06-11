@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="{{ asset('images/bouleHeader.png') }}">
+{#    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.css" />#}
+    <title>{% block title %}Administration{% endblock %}</title>
+    {% block stylesheets %}
+
+    {% endblock %}
+
+    {% block javascripts %}
+        {% block importmap %}{{ importmap('app') }}{% endblock %}
+    {% endblock %}
+
+</head>
+<body class="flex flex-col lg:flex-row">
+{% include 'admin/partials/sidenav.html.twig' %}
+{% include 'admin/partials/flash.html.twig' %}
+<div class="flex-grow">
+    {% block body %}{% endblock %}
+</div>
+{#<script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.js"></script>#}
+</body>
+</html>

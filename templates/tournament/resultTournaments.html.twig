@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Résultats des Tournois{% endblock %}
+
+{% block body %}
+    <h1>Résultats des Tournois Terminés</h1>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {% for tournoi in tournaments %}
+            <div class="bg-white rounded-lg shadow-md p-4">
+                <h2 class="text-xl font-bold">{{ tournoi.name }}</h2>
+                <p class="text-gray-600">Date: {{ tournoi.dateTournament|date('d/m/Y') }}</p>
+
+                <div class="mt-4">
+                    <a href="{{ path('app_detail_result', {'slug': tournoi.slug}) }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                        Voir les résultats
+                    </a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

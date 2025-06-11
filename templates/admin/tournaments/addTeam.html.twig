@@ -1,0 +1,71 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Ajouter une équipe manuellement{% endblock %}
+
+{% block body %}
+    <div class="flex">
+        <div class="w-64 h-screen bg-gray-100">
+            {# Sidebar #}
+        </div>
+        <div class="flex-1 p-6 overflow-hidden">
+            <h1 class="text-2xl font-bold mb-4">Ajouter une équipe manuellement</h1>
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-xl font-semibold mb-4">Tournoi: {{ tournament.name }}</h2>
+                <p class="text-sm text-gray-500 mb-4">
+                    Type: {{ tournament.typeTournament|join(', ') }}
+                </p>
+
+                {{ form_start(form) }}
+                <div class="space-y-4">
+                    {{ form_row(form.teamName, {
+                        'attr': {'class': 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'}
+                    }) }}
+
+                    <div class="form-group">
+                        {{ form_label(form.player1, 'Joueur 1', {
+                            'label_attr': {'class': 'block text-sm font-medium text-gray-700'}
+                        }) }}
+                        {{ form_widget(form.player1, {
+                            'attr': {'class': 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'}
+                        }) }}
+                        {{ form_errors(form.player1) }}
+                    </div>
+
+                    <div class="form-group">
+                        {{ form_label(form.player2, 'Joueur 2', {
+                            'label_attr': {'class': 'block text-sm font-medium text-gray-700'}
+                        }) }}
+                        {{ form_widget(form.player2, {
+                            'attr': {'class': 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'}
+                        }) }}
+                        {{ form_errors(form.player2) }}
+                    </div>
+
+                    {% if not isDoublette %}
+                        <div class="form-group">
+                            {{ form_label(form.player3, 'Joueur 3', {
+                                'label_attr': {'class': 'block text-sm font-medium text-gray-700'}
+                            }) }}
+                            {{ form_widget(form.player3, {
+                                'attr': {'class': 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'}
+                            }) }}
+                            {{ form_errors(form.player3) }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="mt-6 flex justify-end space-x-4">
+                    <a href="{{ path('app_admin_showTournament', {'id': tournament.id}) }}"
+                       class="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        Annuler
+                    </a>
+                    <button type="submit"
+                            class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        Ajouter l'équipe
+                    </button>
+                </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

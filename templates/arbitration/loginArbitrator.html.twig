@@ -1,0 +1,149 @@
+{#{% extends 'base.html.twig' %}#}
+
+{#{% block title %}Connexion Arbitre | Pétanque Club Manager{% endblock %}#}
+
+{% block body %}
+    <title>Connexion Arbitre | Pétanque Club Manager</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0d079f',
+                        'primary-hover': '#0a0580'
+                    }
+                }
+            }
+        }
+    </script>
+    <div class="min-h-screen bg-gray-50 flex flex-col relative overflow-hidden">
+        <!-- Éléments décoratifs en arrière-plan -->
+        <div class="absolute inset-0 z-0 overflow-hidden">
+            <!-- Cercles décoratifs -->
+            <div class="absolute top-20 right-10 w-32 h-32 sm:w-64 sm:h-64 rounded-full bg-[#0d079f]/5"></div>
+            <div class="absolute -bottom-20 -left-20 w-48 h-48 sm:w-96 sm:h-96 rounded-full bg-[#0d079f]/10"></div>
+
+            <!-- Silhouettes de boules de pétanque -->
+            <div class="absolute top-1/4 left-1/4 w-8 h-8 sm:w-16 sm:h-16 rounded-full border-2 border-gray-400/25"></div>
+            <div class="absolute bottom-1/3 right-1/4 w-6 h-6 sm:w-12 sm:h-12 rounded-full border-2 border-gray-400/25"></div>
+            <div class="absolute top-2/3 left-1/3 w-5 h-5 sm:w-10 sm:h-10 rounded-full border-2 border-gray-400/25"></div>
+        </div>
+
+        <!-- En-tête -->
+        <header class="relative z-10 bg-[#0d079f] text-white shadow-md">
+            <div class="container mx-auto px-4 py-3">
+                <div class="flex items-center justify-center sm:justify-start">
+                    <div class="h-10 w-10 sm:h-12 sm:w-12 overflow-hidden rounded-full border-2 border-white p-1 mr-3">
+                        <img src="{{ asset('images/bouleHeader.png') }}" alt="Boule de pétanque" class="h-full w-full object-cover" />
+                    </div>
+                    <h1 class="text-xl sm:text-2xl font-bold">Espace Arbitre</h1>
+                </div>
+            </div>
+        </header>
+
+        <!-- Contenu principal -->
+        <main class="flex-grow container mx-auto px-4 py-4 sm:py-8 relative z-10 flex items-center justify-center">
+            <div class="w-full max-w-md">
+                <!-- Titre de la page -->
+                <div class="text-center mb-6">
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-gray-900 mb-2">Connexion</h2>
+                    <p class="text-sm sm:text-base text-gray-600">Accédez à votre espace arbitre</p>
+                </div>
+
+                <!-- Formulaire de connexion -->
+                <form method="post" class="bg-white rounded-xl shadow-lg overflow-hidden">
+                    <!-- En-tête du formulaire -->
+                    <div class="bg-[#0d079f] px-4 sm:px-6 py-3 sm:py-4 text-white">
+                        <h3 class="text-lg sm:text-xl font-semibold text-center">Identification</h3>
+                    </div>
+
+                    <!-- Corps du formulaire -->
+                    <div class="p-6">
+                        {% if error is defined and error %}
+                            <div class="mb-4 bg-red-50 border-l-4 border-red-400 p-4 rounded">
+                                <div class="flex">
+                                    <div class="flex-shrink-0">
+                                        <svg class="h-5 w-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                                        </svg>
+                                    </div>
+                                    <div class="ml-3">
+                                        <p class="text-sm text-red-700">
+                                            {{ error.messageKey|trans(error.messageData, 'security') }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        {% for message in app.flashes('error') %}
+                            <div class="mb-4 bg-red-50 border-l-4 border-red-400 p-4 rounded">
+                                <div class="flex">
+                                    <div class="flex-shrink-0">
+                                        <svg class="h-5 w-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                                        </svg>
+                                    </div>
+                                    <div class="ml-3">
+                                        <p class="text-sm text-red-700">{{ message }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+
+                        <!-- Champ nom d'utilisateur -->
+                        <div class="mb-6">
+                            <label for="username" class="block text-sm font-medium text-gray-700 mb-2">Nom d'utilisateur</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+                                    </svg>
+                                </div>
+                                <input type="text" id="username" name="username" required autofocus
+                                       class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-[#0d079f] focus:border-[#0d079f] text-base"
+                                       placeholder="Votre identifiant">
+                            </div>
+                        </div>
+
+                        <!-- Champ mot de passe -->
+                        <div class="mb-6">
+                            <label for="password" class="block text-sm font-medium text-gray-700 mb-2">Mot de passe</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />
+                                    </svg>
+                                </div>
+                                <input type="password" id="password" name="password" required
+                                       class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-[#0d079f] focus:border-[#0d079f] text-base"
+                                       placeholder="Votre mot de passe">
+                            </div>
+                        </div>
+
+                        <!-- CSRF Token -->
+                        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+                        <!-- Bouton de connexion -->
+                        <div>
+                            <button type="submit" class="w-full flex justify-center items-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-base font-medium text-white bg-[#0d079f] hover:bg-[#0a0580] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#0d079f] transition-colors duration-200">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+                                </svg>
+                                Se connecter
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </main>
+
+        <!-- Pied de page -->
+        <footer class="bg-white py-3 sm:py-4 border-t border-gray-200 relative z-10">
+            <div class="container mx-auto px-4 text-center text-xs sm:text-sm text-gray-500">
+                <p>© {{ "now"|date("Y") }} Pétanque Club Manager. Tous droits réservés.</p>
+            </div>
+        </footer>
+    </div>
+{% endblock %}

@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@hotwired/turbo": "^8.0.12",
+    "jquery": "^3.7.1"
+  }
+}

@@ -1,0 +1,100 @@
+<header class="hero-section">
+    <nav class="bg-white border-gray-200">
+        <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+            <a href="{{ path('app_home') }}" class="flex items-center space-x-3 rtl:space-x-reverse">
+                <img src="{{ asset('images/logoPcm.png') }}" style="height: 60px; width: auto;" alt="logo pétanque club manager">
+            </a>
+
+            <div class="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
+                {% if app.user %}
+                    <div class="relative">
+                        <button type="button"
+                                class="flex text-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 focus:ring-gray-300"
+                                id="user-menu-button" aria-expanded="false" data-dropdown-toggle="user-dropdown"
+                                data-dropdown-placement="left-start">
+                            <span class="sr-only">Open user menu</span>
+                            <img class="w-8 h-8 rounded-full" src="{{ asset('images/avatar/' ~ app.user.imageAvatar) }}" alt="Photo de profil utilisateur">
+                        </button>
+                        <!-- Dropdown menu -->
+                        <div class="z-50 hidden absolute right-0 mt-2 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow-sm min-w-[200px]" id="user-dropdown" style="left: auto; right: 0;">
+                            <div class="px-4 py-3">
+                                <span class="block text-sm text-gray-900">{{ app.user.firstName }}</span>
+                                <span class="block text-sm text-gray-500 truncate">
+                                    {{ app.user.userIdentifier }}
+                                </span>
+                            </div>
+                            <ul class="py-2" aria-labelledby="user-menu-button">
+                                <li>
+                                    <a href="{{ path('app_profile') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Mon profil</a>
+                                </li>
+                                <li>
+                                    <a href="{{ path('app_editProfile') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Modifier mon profil</a>
+                                </li>
+                                <li>
+                                    <a href="{{ path('app_edit_password') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Changer mon mot de passe</a>
+                                </li>
+                                <li>
+                                    <a href="{{ path('app_logout') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Se déconnecter</a>
+                                </li>
+                                {% if is_granted('ROLE_ADMIN') %}
+                                    <li>
+                                        <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                           href="{{ path('app_user_admin') }}">Administration</a>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                    </div>
+                {% else %}
+                        <a href="{{ path('app_login') }}" class="px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300">S'identifier</a>
+                    &nbsp;&nbsp;
+                        <a href="{{ path('app_register') }}" class="px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300">S'enregistrer</a>
+                {% endif %}
+                <button data-collapse-toggle="navbar-user" type="button"
+                        class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
+                        aria-controls="navbar-user" aria-expanded="false">
+                    <span class="sr-only">Open main menu</span>
+                    <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15"/>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="w-full md:flex md:w-auto md:order-1" id="navbar-user">
+                <ul class="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white">
+                    <li>
+                        <a href="{{ path('app_home') }}"
+                           class="nav-link block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:p-0 {{ app.request.get('_route') == 'app_home' ? 'active' : '' }}">
+                            Accueil
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ path('app_actu') }}"
+                           class="nav-link block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:p-0 {{ app.request.get('_route') == 'app_actu' ? 'active' : '' }}">
+                            Actualités
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ path('app_gallery') }}"
+                           class="nav-link block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:p-0 {{ app.request.get('_route') == 'app_gallery' ? 'active' : '' }}">
+                            Galeries
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ path('app_tournament') }}"
+                           class="nav-link block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:p-0 {{ app.request.get('_route') == 'app_tournament' ? 'active' : '' }}">
+                            Tournois
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ path('app_contact') }}"
+                           class="nav-link block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:p-0 {{ app.request.get('_route') == 'app_contact' ? 'active' : '' }}">
+                            Contact
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="border-b border-gray-100"></div>
+</header>

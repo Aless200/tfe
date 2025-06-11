@@ -1,0 +1,118 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Pcm - Actualités{% endblock %}
+
+{% block body %}
+    <div class="w-full bg-[#0d079f]">
+        <!-- Top white line -->
+        {#        <div class="h-2 w-full bg-white"></div>#}
+
+        <!-- Main content section between the white lines -->
+        <div class="relative flex items-center justify-between px-4 py-2">
+            <!-- Logo circle -->
+            <div class="flex items-center">
+                <div class="relative z-10 h-24 w-24 overflow-hidden rounded-full border-4 border-white p-2">
+                    <img src="{{ asset('images/bouleHeader.png') }}" alt="boule de pétanque" class="h-full w-full object-cover mt-1"/>
+                </div>
+
+                <!-- Title -->
+                <h1 class="ml-4 text-3xl font-bold text-white">Les actualités</h1>
+            </div>
+
+            <!-- Social icons -->
+            <div class="flex items-center gap-4">
+                <!-- Facebook icon -->
+                <a href="#" class="text-white hover:text-gray-200 transition-colors duration-200">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z" />
+                    </svg>
+                </a>
+                <!-- Mail icon -->
+                <a href="#" class="text-white hover:text-gray-200 transition-colors duration-200">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+
+        <!-- Bottom white line -->
+        {#        <div class="h-2 w-full bg-white"></div>#}
+    </div>
+
+    <main class="min-h-[calc(100vh-120px)] bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+        <!-- Éléments décoratifs -->
+        <div class="absolute inset-0 overflow-hidden pointer-events-none z-0">
+            <div class="absolute -top-20 -left-20 w-64 h-64 rounded-full bg-[#0d079f]/20"></div>
+            <div class="absolute top-1/3 right-10 w-96 h-96 rounded-full bg-[#0d079f]/30"></div>
+            <div class="absolute bottom-10 left-1/4 w-72 h-72 rounded-full bg-[#0d079f]/20"></div>
+
+            <!-- Silhouettes de boules de pétanque -->
+            <div class="absolute top-20 right-20 w-16 h-16 rounded-full border-2 border-gray-400/25"></div>
+            <div class="absolute bottom-40 left-20 w-12 h-12 rounded-full border-2 border-gray-400/25"></div>
+            <div class="absolute top-1/2 left-1/3 w-10 h-10 rounded-full border-2 border-gray-400/25"></div>
+        </div>
+
+        <div class="max-w-7xl mx-auto relative z-10">
+            <!-- News intro section -->
+            <div class="mb-12 text-center">
+                <h2 class="text-4xl font-extrabold text-gray-900 mb-4">Découvrez nos dernières actualités</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">Restez informé des derniers événements et nouvelles de notre communauté de pétanque.</p>
+            </div>
+
+            <!-- News grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-10">
+                {% for n in news %}
+                    <div class="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-all duration-300 border border-gray-100 flex flex-col h-full">
+                        <!-- Featured image with overlay -->
+                        <div class="relative h-56 overflow-hidden group">
+                            <img
+                                    src="{{ asset('/images/news/' ~ n.image) }}"
+                                    alt="{{ n.title }}"
+                                    class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                            />
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                        </div>
+
+                        <!-- News content -->
+                        <div class="p-5 flex flex-col flex-grow">
+                            <h3 class="text-xl font-bold text-gray-800 mb-2">{{ n.title }}</h3>
+
+                            <p class="text-gray-600 mb-4 line-clamp-2 flex-grow">{{ n.content|u.truncate(100, '...', false) }}</p>
+
+                            <!-- Date and view button -->
+                            <div class="flex items-center justify-between mt-auto pt-3 border-t border-gray-100">
+                                <div class="text-sm text-gray-500 flex items-center">
+                                    <svg class="w-4 h-4 mr-1 text-[#0d079f]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                                    </svg>
+                                    {{ n.createdAt|date('d/m/Y') }}
+                                </div>
+
+                                <a href="{{ path('app_detail_actu', {'slug': n.slug}) }}" data-turbo="true"
+                                   class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-white bg-[#0d079f] rounded-lg hover:bg-[#0a0580] transition-colors duration-200">
+                                    Voir plus
+                                    <svg class="w-3.5 h-3.5 ml-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="col-span-full p-8 text-center bg-white rounded-xl shadow">
+                        <svg class="w-16 h-16 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                        <p class="text-gray-600 text-lg">Aucune actualité n'est disponible pour le moment.</p>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <!-- Pagination -->
+            <div class="mt-8 flex justify-center">
+                {{ knp_pagination_render(news, 'partials/pagination.html.twig') }}
+            </div>
+        </div>
+    </main>
+{% endblock %}
