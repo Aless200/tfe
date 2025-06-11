@@ -5,73 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="99cee274-6e64-4b15-925c-b9f21b3544ee" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.symfony.local.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bin/mailpit.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/config/packages/knp_paginator.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Class/Arbitrator.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Class/Contact.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Security/UserChecker.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Service/ArbitratorStorage.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Service/TournamentService.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/admin/base.html.twig" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/admin/comment/_statut.html.twig" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/admin/comment/comments.html.twig" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/admin/comment/email/comment_disabled.html.twig" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/admin/gallery/_galleryStatut.html.twig" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/admin/gallery/addGallery.html.twig" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/admin/gallery/editGallery.html.twig" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/admin/news/_statut.html.twig" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/admin/news/addNews.html.twig" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/admin/news/editNews.html.twig" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/admin/news/news.html.twig" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/admin/partials/flash.html.twig" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/admin/partials/pagination.html.twig" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/admin/partials/sidenav.html.twig" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/admin/tournaments/_tournamentsStatut.html.twig" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/admin/tournaments/addTeam.html.twig" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/admin/tournaments/addTournament.html.twig" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/admin/tournaments/add_arbitrator.html.twig" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/admin/tournaments/editTournament.html.twig" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/admin/tournaments/showTournament.html.twig" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/admin/tournaments/tournamentcancelled.html.twig" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/admin/user/_teamStatut.html.twig" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/admin/user/_userStatut.html.twig" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/admin/user/team.html.twig" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/admin/user/users.html.twig" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/arbitration/entryScore.html.twig" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/gallery/detailGallery.html.twig" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/news/detailNews.html.twig" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/news/news.html.twig" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/partials/flash.html.twig" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/partials/footer.html.twig" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/partials/navbar.html.twig" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/partials/pagination.html.twig" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/pictures/new.html.twig" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/profile/editPassword.html.twig" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/profile/editProfile.html.twig" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/profile/profile.html.twig" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/team/acceptInvite.html.twig" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/team/email/confirmation.html.twig" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/team/email/invitation.html.twig" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/tournament/detailResult.html.twig" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/tournament/detailTournament.html.twig" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/tournament/resultTournaments.html.twig" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/assets/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/styles/app.css" beforeDir="false" afterPath="$PROJECT_DIR$/assets/styles/app.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/composer.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/composer.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/bundles.php" beforeDir="false" afterPath="$PROJECT_DIR$/config/bundles.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/packages/asset_mapper.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/config/packages/asset_mapper.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/packages/framework.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/config/packages/framework.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/packages/messenger.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/config/packages/messenger.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/packages/security.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/config/packages/security.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/packages/translation.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/config/packages/translation.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/routes.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/config/routes.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/services.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/config/services.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/importmap.php" beforeDir="false" afterPath="$PROJECT_DIR$/importmap.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/symfony.lock" beforeDir="false" afterPath="$PROJECT_DIR$/symfony.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/base.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -262,27 +197,27 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/wamp64/www/ANNEE2/FrameworkServeur/tfePcm/bin&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;php.override.implement.member.chooser.php.doc&quot;: &quot;NONE&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "C:/wamp64/www/ANNEE2/FrameworkServeur/tfePcm/bin",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "php.override.implement.member.chooser.php.doc": "NONE",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;mysql&quot;
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "mysql"
     ]
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\wamp64\www\ANNEE2\FrameworkServeur\tfePcm\bin" />
@@ -370,6 +305,7 @@
       <workItem from="1749131938235" duration="15871000" />
       <workItem from="1749232671522" duration="5629000" />
       <workItem from="1749290491310" duration="11301000" />
+      <workItem from="1749633481665" duration="64000" />
     </task>
     <servers />
   </component>
