@@ -5,26 +5,69 @@
 {% block body %}
     <div class="flex">
         <div class="w-64 h-screen bg-gray-100">
-            {# Sidebar ici si nécessaire #}
+            {# Sidebar ici #}
         </div>
 
         <div class="flex-1 p-6 overflow-hidden">
             <div class="mb-8">
-                <h1 class="text-2xl font-extrabold text-gray-900 sm:text-4xl">
-                    Créer une nouvelle galerie
-                </h1>
-                <p class="mt-3 text-sm text-gray-500">
-                    Remplissez les informations de votre galerie
-                </p>
+                <h1 class="text-2xl font-extrabold text-gray-900 sm:text-4xl">Créer une nouvelle galerie</h1>
+                <p class="mt-3 text-sm text-gray-500">Remplissez les informations de votre galerie</p>
             </div>
 
             <div class="bg-white shadow-md sm:rounded-lg p-6">
                 {{ form_start(form, {'attr': {'class': 'space-y-6'}}) }}
-                <div class="grid grid-cols-1 gap-6">
-                    {{ form_row(form.title) }}
 
-                    {{ form_row(form.description , {'attr': {'class': 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 min-h-[150px]', 'rows': '6'}}) }}
-                    {{ form_errors(form.description) }}
+                <div class="grid grid-cols-1 gap-6">
+                    <!-- Titre -->
+                    <div>
+                        {{ form_label(form.title, 'Titre', {
+                            'label_attr': {
+                                'class': 'block text-sm font-medium ' ~ (form.title.vars.errors|length ? 'text-red-700' : 'text-gray-700') ~ ' mb-1'
+                            }
+                        }) }}
+                        {{ form_widget(form.title, {
+                            'attr': {
+                                'class': 'mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none ' ~
+                                (form.title.vars.errors|length ?
+                                'border-red-500 focus:ring-red-500 focus:border-red-500' :
+                                'border-gray-300 focus:ring-indigo-500 focus:border-indigo-500'
+                                )
+                            }
+                        }) }}
+                        {% if form.title.vars.errors|length %}
+                            {% for error in form.title.vars.errors %}
+                                <p class="mt-2 text-sm text-red-600">
+                                    <span class="font-medium">Erreur !</span> {{ error.message }}
+                                </p>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+
+                    <!-- Description -->
+                    <div>
+                        {{ form_label(form.description, 'Description', {
+                            'label_attr': {
+                                'class': 'block text-sm font-medium ' ~ (form.description.vars.errors|length ? 'text-red-700' : 'text-gray-700') ~ ' mb-1'
+                            }
+                        }) }}
+                        {{ form_widget(form.description, {
+                            'attr': {
+                                'class': 'mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none ' ~
+                                (form.description.vars.errors|length ?
+                                'border-red-500 focus:ring-red-500 focus:border-red-500' :
+                                'border-gray-300 focus:ring-indigo-500 focus:border-indigo-500'
+                                ),
+                                'rows': '6'
+                            }
+                        }) }}
+                        {% if form.description.vars.errors|length %}
+                            {% for error in form.description.vars.errors %}
+                                <p class="mt-2 text-sm text-red-600">
+                                    <span class="font-medium">Erreur !</span> {{ error.message }}
+                                </p>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
                 </div>
 
                 <div class="pt-6 flex justify-between">

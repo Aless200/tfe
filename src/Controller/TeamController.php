@@ -94,6 +94,9 @@ class TeamController extends AbstractController
             $manager->persist($team);
             $manager->flush();
 
+            // Envoi de la confirmation au créateur
+            $this->sendCreationConfirmation($user, $team, $tournament, $mailer);
+
             $teamUser = new TeamUser();
             $teamUser->setTeam($team);
             $teamUser->setUser($user);
@@ -138,7 +141,6 @@ class TeamController extends AbstractController
                 $teamUser->setTournament($tournament);
                 $teamUser->setEmailGuest($email);
 
-                // Vérifier si l'e-mail appartient à un utilisateur existant
                 $invitedUser = $manager->getRepository(User::class)->findOneBy(['email' => $email]);
                 if ($invitedUser) {
                     $teamUser->setUser($invitedUser);
@@ -148,16 +150,38 @@ class TeamController extends AbstractController
             }
 
             $manager->flush();
+            $this->addFlash('success', 'Votre équipe a été créée avec succès !');
             return $this->redirectToRoute('app_tournament');
         }
 
         return $this->render('team/index.html.twig', [
             'form' => $form->createView(),
             'recaptcha_site_key' => $_ENV['GOOGLE_RECAPTCHA_SITE_KEY'],
-            'tournament' => $tournament // Passer les données du tournoi à la vue
+            'tournament' => $tournament
         ]);
     }
 
+    private function sendCreationConfirmation(User $creator, Team $team, Tournament $tournament, MailerInterface $mailer): void
+    {
+        $typeTournament = $tournament->getTypeTournament();
+        $typeDisplay = in_array('doublette', $typeTournament) ? 'doublette' : (in_array('triplette', $typeTournament) ? 'triplette' : 'Type inconnu');
+
+        $email = (new Email())
+            ->from('pc.noiseux@gmail.com')
+            ->to($creator->getEmail())
+            ->subject('Confirmation de création de votre équipe')
+            ->html($this->renderView('team/email/creation_confirmation.html.twig', [
+                'creatorName' => $creator->getFirstName(),
+                'teamName' => $team->getTeamName(),
+                'tournamentName' => $tournament->getName(),
+                'date' => $tournament->getDateTournament()->format('d/m/Y'),
+                'address' => $tournament->getAdresse(),
+                'type' => $typeDisplay,
+                'invitedCount' => count($team->getTeamUsers()) - 1
+            ]));
+
+        $mailer->send($email);
+    }
 
     #[Route('/team/accept/{token}', name: 'team_accept_invite', methods: ['GET'])]
     public function acceptInvite($token, EntityManagerInterface $manager, MailerInterface $mailer): Response
@@ -195,10 +219,8 @@ class TeamController extends AbstractController
             $email = $teamUser->getUser() ? $teamUser->getUser()->getEmail() : $teamUser->getEmailGuest();
 
             if ($teamUser->getUser() === $team->getTeamUsers()->first()->getUser()) {
-                // Email pour le créateur de l'équipe
                 $subject = 'Votre équipe est complète';
             } else {
-                // Email pour les autres membres
                 $subject = 'Confirmation de participation à l\'équipe';
             }
 
@@ -217,7 +239,4 @@ class TeamController extends AbstractController
             $mailer->send($emailMessage);
         }
     }
-
-
-
 }

@@ -11,7 +11,7 @@
 
         <!-- Contenu principal -->
         <div class="flex-1 p-6 overflow-hidden">
-            <div class="mb-8">  <!-- Container pour les titres -->
+            <div class="mb-8">
                 <h1 class="text-2xl font-extrabold text-gray-900 sm:text-4xl">
                     Modifier l'actualité
                 </h1>
@@ -26,21 +26,62 @@
                 <div class="grid grid-cols-1 gap-6">
                     <!-- Titre -->
                     <div>
-                        {{ form_label(formEditNews.title, 'Titre', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-1'}}) }}
-                        {{ form_widget(formEditNews.title, {'attr': {'class': 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500'}}) }}
-                        {{ form_errors(formEditNews.title) }}
+                        {{ form_label(formEditNews.title, 'Titre', {
+                            'label_attr': {
+                                'class': 'block text-sm font-medium ' ~ (formEditNews.title.vars.errors|length ? 'text-red-700' : 'text-gray-700') ~ ' mb-1'
+                            }
+                        }) }}
+                        {{ form_widget(formEditNews.title, {
+                            'attr': {
+                                'class': 'mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none ' ~
+                                (formEditNews.title.vars.errors|length ?
+                                'border-red-500 focus:ring-red-500 focus:border-red-500' :
+                                'border-gray-300 focus:ring-indigo-500 focus:border-indigo-500'
+                                )
+                            }
+                        }) }}
+                        {% if formEditNews.title.vars.errors|length %}
+                            {% for error in formEditNews.title.vars.errors %}
+                                <p class="mt-2 text-sm text-red-600">
+                                    <span class="font-medium">Erreur !</span> {{ error.message }}
+                                </p>
+                            {% endfor %}
+                        {% endif %}
                     </div>
 
                     <!-- Contenu -->
                     <div>
-                        {{ form_label(formEditNews.content, 'Contenu', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-1'}}) }}
-                        {{ form_widget(formEditNews.content, {'attr': {'class': 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 min-h-[150px]', 'rows': '6'}}) }}
-                        {{ form_errors(formEditNews.content) }}
+                        {{ form_label(formEditNews.content, 'Contenu', {
+                            'label_attr': {
+                                'class': 'block text-sm font-medium ' ~ (formEditNews.content.vars.errors|length ? 'text-red-700' : 'text-gray-700') ~ ' mb-1'
+                            }
+                        }) }}
+                        {{ form_widget(formEditNews.content, {
+                            'attr': {
+                                'class': 'mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none ' ~
+                                (formEditNews.content.vars.errors|length ?
+                                'border-red-500 focus:ring-red-500 focus:border-red-500' :
+                                'border-gray-300 focus:ring-indigo-500 focus:border-indigo-500'
+                                ),
+                                'rows': '6'
+                            }
+                        }) }}
+                        {% if formEditNews.content.vars.errors|length %}
+                            {% for error in formEditNews.content.vars.errors %}
+                                <p class="mt-2 text-sm text-red-600">
+                                    <span class="font-medium">Erreur !</span> {{ error.message }}
+                                </p>
+                            {% endfor %}
+                        {% endif %}
                     </div>
 
                     <!-- Image -->
                     <div>
-                        {{ form_label(formEditNews.imageFile, 'Image', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-1'}}) }}
+                        {{ form_label(formEditNews.imageFile, 'Image', {
+                            'label_attr': {
+                                'class': 'block text-sm font-medium ' ~ (formEditNews.imageFile.vars.errors|length ? 'text-red-700' : 'text-gray-700') ~ ' mb-1'
+                            }
+                        }) }}
 
                         {% if formEditNews.vars.value.image %}
                             <div class="mb-4">
@@ -55,7 +96,7 @@
 
                         <div class="mt-1 flex items-center">
                             <label class="cursor-pointer">
-                                <span class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                <span class="inline-flex items-center px-3 py-2 border shadow-sm text-sm leading-4 font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 {{ formEditNews.imageFile.vars.errors|length ? 'border-red-500 text-red-700 hover:bg-gray-50 focus:ring-red-500' : 'border-gray-300 text-gray-700 hover:bg-gray-50 focus:ring-indigo-500' }}">
                                     <svg class="-ml-1 mr-2 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                                     </svg>
@@ -63,12 +104,18 @@
                                 </span>
                                 {{ form_widget(formEditNews.imageFile, {'attr': {'class': 'sr-only'}}) }}
                             </label>
-                            <span class="ml-2 text-sm text-gray-500" id="file-name">
+                            <span class="ml-2 text-sm {{ formEditNews.imageFile.vars.errors|length ? 'text-red-500' : 'text-gray-500' }}" id="file-name">
                                 {% if formEditNews.vars.value.image %}Image actuelle conservée{% else %}Aucun fichier sélectionné{% endif %}
                             </span>
                         </div>
-                        <p class="mt-1 text-xs text-gray-500">PNG, JPG, JPEG jusqu'à 5MB</p>
-                        {{ form_errors(formEditNews.imageFile) }}
+                        <p class="mt-1 text-xs {{ formEditNews.imageFile.vars.errors|length ? 'text-red-500' : 'text-gray-500' }}">PNG, JPG, JPEG jusqu'à 5MB</p>
+                        {% if formEditNews.imageFile.vars.errors|length %}
+                            {% for error in formEditNews.imageFile.vars.errors %}
+                                <p class="mt-2 text-sm text-red-600">
+                                    <span class="font-medium">Erreur !</span> {{ error.message }}
+                                </p>
+                            {% endfor %}
+                        {% endif %}
                     </div>
                 </div>
 
@@ -76,7 +123,7 @@
                     <a href="{{ path('app_news_admin', {'page': app.request.query.get('page', 1)}) }}" class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md shadow-sm text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                         Retour
                     </a>
-                    <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white {{ formEditNews.vars.errors|length ? 'bg-red-600 hover:bg-red-700 focus:ring-red-500' : 'bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500' }} focus:outline-none focus:ring-2 focus:ring-offset-2" data-turbo="false">
                         <svg class="-ml-1 mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
                         </svg>
@@ -92,23 +139,18 @@
 
     <script>
         document.addEventListener('turbo:load', function() {
-            // Fonction pour initialiser le champ fichier
             const initFileInput = () => {
                 const fileInput = document.querySelector('input[type="file"][name*="[imageFile]"]');
                 const fileNameSpan = document.getElementById('file-name');
 
                 if (fileInput && fileNameSpan) {
-                    // Sauvegarde le texte par défaut
                     const defaultText = fileNameSpan.textContent;
 
-                    // Gestion du changement de fichier
                     fileInput.addEventListener('change', function(e) {
                         fileNameSpan.textContent = e.target.files[0]?.name || defaultText;
                     });
 
-                    // Réinitialisation après soumission (compatible Turbo)
                     fileInput.form.addEventListener('turbo:submit-end', function() {
-                        // Réinitialise seulement si la soumission a réussi
                         if (fileInput.form.querySelector('[data-turbo-submit-success]')) {
                             fileInput.value = '';
                             fileNameSpan.textContent = defaultText;
@@ -117,10 +159,8 @@
                 }
             };
 
-            // Initialisation au chargement
             initFileInput();
 
-            // Réinitialisation après navigation Turbo
             document.addEventListener('turbo:before-render', function() {
                 initFileInput();
             });

@@ -6,6 +6,7 @@ use App\Repository\TeamRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: TeamRepository::class)]
 class Team
@@ -15,6 +16,16 @@ class Team
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Assert\NotBlank(
+        message: 'le nom de l\'équipe ne peux pas être vide.',
+    )]
+    #[Assert\Length(
+        min: 3,
+        max: 255,
+        minMessage: 'Le nom de votre équipe doit au moins faire { limit } caractères.',
+        maxMessage: 'Le nom de votre équipe ne peux pas dépasser { limit } caractères.',
+
+    )]
     #[ORM\Column(length: 255)]
     private ?string $teamName = null;
 

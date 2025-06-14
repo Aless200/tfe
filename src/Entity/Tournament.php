@@ -36,11 +36,19 @@ class Tournament
     #[Assert\NotBlank(
         message: 'La date ne doit pas être est vide.'
     )]
+    #[Assert\DateTime(
+        message: 'La date n\'est pas valide.',
+    )]
     #[ORM\Column]
     private ?\DateTimeImmutable $dateTournament = null;
 
     #[Assert\NotBlank(
         message: 'Le prix ne doit pas être vide.'
+    )]
+    #[Assert\Range(
+        notInRangeMessage: 'Le prix doit être compris entre {{ min }} et {{ max }} euros.',
+        min: 4,
+        max: 12,
     )]
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
     private ?string $price = null;

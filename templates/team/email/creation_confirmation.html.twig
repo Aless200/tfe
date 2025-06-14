@@ -1,0 +1,25 @@
+{% block body %}
+        <head>
+            <meta charset="UTF-8">
+            <title>Confirmation de création d'équipe</title>
+        </head>
+        <body>
+        <p>Bonjour {{ creatorName }},</p>
+
+        <p>Nous confirmons la création de votre équipe <strong>{{ teamName }}</strong> pour le tournoi <strong>{{ tournamentName }}</strong>.</p>
+
+        <p><strong>Détails du tournoi :</strong></p>
+        <ul>
+            <li>Date : {{ date }}</li>
+            <li>Lieu : {{ address }}</li>
+            <li>Format : {{ type }}</li>
+        </ul>
+
+        <p>Vous avez invité {{ invitedCount }} personne(s) à rejoindre votre équipe.</p>
+
+        <p>Vous recevrez une nouvelle confirmation lorsque tous les membres auront accepté leur invitation.</p>
+
+        <p>Cordialement,<br>L'équipe d'organisation</p>
+        </body>
+{% endblock %}
+

@@ -6,6 +6,7 @@ use App\Repository\GalleryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: GalleryRepository::class)]
 class Gallery
@@ -15,9 +16,27 @@ class Gallery
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Assert\NotBlank(
+        message: 'Le titre ne doit pas être vide.',
+    )]
+    #[Assert\Length(
+        min: 3,
+        max: 120,
+        minMessage: 'Le titre doit contenir au minimum {{ limit }} caractères',
+        maxMessage: 'Le titre ne doit pas dépasser {{ limit }} caractères.'
+    )]
     #[ORM\Column(length: 120)]
     private ?string $title = null;
 
+    #[Assert\NotBlank(
+        message: 'La description ne doit pas être vide.',
+    )]
+    #[Assert\Length(
+        min: 3,
+        max: 120,
+        minMessage: 'La description doit contenir au minimum {{ limit }} caractères',
+        maxMessage: 'La description ne doit pas dépasser {{ limit }} caractères.'
+    )]
     #[ORM\Column(length: 255)]
     private ?string $description = null;
 

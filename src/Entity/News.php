@@ -23,14 +23,27 @@ class News
     #[Assert\NotBlank(
         message: 'Veulliez entrer un titre.'
     )]
+    #[Assert\Length(
+        min: 3,
+        max: 255,
+        minMessage: 'le titre doit contenir au minimum {{ limit }} caractères.',
+        maxMessage: 'Le titre ne doit pas dépasser {{ limit }} caractères.'
+    )]
     #[ORM\Column(length: 255)]
     private ?string $title = null;
 
     #[Assert\NotBlank(
         message: 'Veuillez entrer du contenu.'
     )]
+    #[Assert\Length(
+        min: 3,
+        max: 255,
+        minMessage: 'le contenu doit contenir au minimum {{ limit }} caractères.',
+        maxMessage: 'Le contenu ne doit pas dépasser {{ limit }} caractères.'
+    )]
     #[ORM\Column(length: 255)]
     private ?string $content = null;
+
 
     #[Vich\UploadableField(mapping: 'news', fileNameProperty: 'image')]
     private ?File $imageFile = null;

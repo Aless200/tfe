@@ -5,9 +5,24 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="99cee274-6e64-4b15-925c-b9f21b3544ee" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/templates/team/email/creation_confirmation.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/TfePcm.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/TfePcm.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/Admin/tournaments/TournamentsAdminController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/Admin/tournaments/TournamentsAdminController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/admin/tournaments/showTournament.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/admin/tournaments/showTournament.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/composer.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/composer.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/bundles.php" beforeDir="false" afterPath="$PROJECT_DIR$/config/bundles.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/TeamController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/TeamController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity/Gallery.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Gallery.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity/News.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/News.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity/Team.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Team.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity/Tournament.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Tournament.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/symfony.lock" beforeDir="false" afterPath="$PROJECT_DIR$/symfony.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/admin/gallery/addGallery.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/admin/gallery/addGallery.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/admin/news/addNews.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/admin/news/addNews.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/admin/news/editNews.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/admin/news/editNews.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/arbitration/entryScore.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/arbitration/entryScore.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/team/index.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/team/index.html.twig" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -185,6 +200,7 @@
       <path value="$PROJECT_DIR$/vendor/knpuniversity/oauth2-client-bundle" />
       <path value="$PROJECT_DIR$/vendor/google/recaptcha" />
       <path value="$PROJECT_DIR$/vendor/symfonycasts/reset-password-bundle" />
+      <path value="$PROJECT_DIR$/vendor/symfonycasts/verify-email-bundle" />
     </include_path>
   </component>
   <component name="ProjectColorInfo">{
@@ -307,7 +323,9 @@
       <workItem from="1749232671522" duration="5629000" />
       <workItem from="1749290491310" duration="11301000" />
       <workItem from="1749633481665" duration="1011000" />
-      <workItem from="1749658307025" duration="2015000" />
+      <workItem from="1749658307025" duration="3275000" />
+      <workItem from="1749729302595" duration="4928000" />
+      <workItem from="1749892409652" duration="6745000" />
     </task>
     <servers />
   </component>
