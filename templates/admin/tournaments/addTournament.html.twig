@@ -26,66 +26,214 @@
                 <div class="grid grid-cols-1 gap-6">
                     <!-- Nom -->
                     <div>
-                        {{ form_label(formTournament.name, 'Nom', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-1'}}) }}
-                        {{ form_widget(formTournament.name, {'attr': {'class': 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500'}}) }}
-                        {{ form_errors(formTournament.name) }}
+                        {{ form_label(formTournament.name, 'Nom', {
+                            'label_attr': {
+                                'class': 'block text-sm font-medium ' ~ (formTournament.name.vars.errors|length ? 'text-red-700' : 'text-gray-700') ~ ' mb-1'
+                            }
+                        }) }}
+                        {{ form_widget(formTournament.name, {
+                            'attr': {
+                                'class': 'mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none ' ~
+                                (formTournament.name.vars.errors|length ?
+                                'border-red-500 text-red-900 placeholder-red-700 bg-red-50 focus:ring-red-500 focus:border-red-500' :
+                                'border-gray-300 focus:ring-indigo-500 focus:border-indigo-500'
+                                )
+                            }
+                        }) }}
+                        {% if formTournament.name.vars.errors|length %}
+                            {% for error in formTournament.name.vars.errors %}
+                                <p class="mt-2 text-sm text-red-600">
+                                    <span class="font-medium">Erreur !</span> {{ error.message }}
+                                </p>
+                            {% endfor %}
+                        {% endif %}
                     </div>
 
                     <!-- Date du tournoi -->
                     <div>
-                        {{ form_label(formTournament.dateTournament, 'Date du tournoi', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-1'}}) }}
-                        {{ form_widget(formTournament.dateTournament, {'attr': {'class': 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500'}}) }}
-                        {{ form_errors(formTournament.dateTournament) }}
+                        {{ form_label(formTournament.dateTournament, 'Date du tournoi', {
+                            'label_attr': {
+                                'class': 'block text-sm font-medium ' ~ (formTournament.dateTournament.vars.errors|length ? 'text-red-700' : 'text-gray-700') ~ ' mb-1'
+                            }
+                        }) }}
+                        {{ form_widget(formTournament.dateTournament, {
+                            'attr': {
+                                'class': 'mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none ' ~
+                                (formTournament.dateTournament.vars.errors|length ?
+                                'border-red-500 text-red-900 placeholder-red-700 bg-red-50 focus:ring-red-500 focus:border-red-500' :
+                                'border-gray-300 focus:ring-indigo-500 focus:border-indigo-500'
+                                )
+                            }
+                        }) }}
+                        {% if formTournament.dateTournament.vars.errors|length %}
+                            {% for error in formTournament.dateTournament.vars.errors %}
+                                <p class="mt-2 text-sm text-red-600">
+                                    <span class="font-medium">Erreur !</span> {{ error.message }}
+                                </p>
+                            {% endfor %}
+                        {% endif %}
                     </div>
 
                     <!-- Prix -->
                     <div>
-                        {{ form_label(formTournament.price, 'Prix', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-1'}}) }}
-                        {{ form_widget(formTournament.price, {'attr': {'class': 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500'}}) }}
-                        {{ form_errors(formTournament.price) }}
+                        {{ form_label(formTournament.price, 'Prix', {
+                            'label_attr': {
+                                'class': 'block text-sm font-medium ' ~ (formTournament.price.vars.errors|length ? 'text-red-700' : 'text-gray-700') ~ ' mb-1'
+                            }
+                        }) }}
+                        {{ form_widget(formTournament.price, {
+                            'attr': {
+                                'class': 'mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none ' ~
+                                (formTournament.price.vars.errors|length ?
+                                'border-red-500 text-red-900 placeholder-red-700 bg-red-50 focus:ring-red-500 focus:border-red-500' :
+                                'border-gray-300 focus:ring-indigo-500 focus:border-indigo-500'
+                                )
+                            }
+                        }) }}
+                        {% if formTournament.price.vars.errors|length %}
+                            {% for error in formTournament.price.vars.errors %}
+                                <p class="mt-2 text-sm text-red-600">
+                                    <span class="font-medium">Erreur !</span> {{ error.message }}
+                                </p>
+                            {% endfor %}
+                        {% endif %}
                     </div>
 
                     <!-- Adresse -->
                     <div>
-                        {{ form_label(formTournament.adresse, 'Adresse', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-1'}}) }}
-                        {{ form_widget(formTournament.adresse, {'attr': {'class': 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500'}}) }}
-                        {{ form_errors(formTournament.adresse) }}
+                        {{ form_label(formTournament.adresse, 'Adresse', {
+                            'label_attr': {
+                                'class': 'block text-sm font-medium ' ~ (formTournament.adresse.vars.errors|length ? 'text-red-700' : 'text-gray-700') ~ ' mb-1'
+                            }
+                        }) }}
+                        {{ form_widget(formTournament.adresse, {
+                            'attr': {
+                                'class': 'mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none ' ~
+                                (formTournament.adresse.vars.errors|length ?
+                                'border-red-500 text-red-900 placeholder-red-700 bg-red-50 focus:ring-red-500 focus:border-red-500' :
+                                'border-gray-300 focus:ring-indigo-500 focus:border-indigo-500'
+                                )
+                            }
+                        }) }}
+                        {% if formTournament.adresse.vars.errors|length %}
+                            {% for error in formTournament.adresse.vars.errors %}
+                                <p class="mt-2 text-sm text-red-600">
+                                    <span class="font-medium">Erreur !</span> {{ error.message }}
+                                </p>
+                            {% endfor %}
+                        {% endif %}
                     </div>
 
                     <!-- Nombre d'équipes maximum -->
                     <div>
-                        {{ form_label(formTournament.teamsMax, 'Nombre d\'équipes max', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-1'}}) }}
-                        {{ form_widget(formTournament.teamsMax, {'attr': {'class': 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500'}}) }}
-                        {{ form_errors(formTournament.teamsMax) }}
+                        {{ form_label(formTournament.teamsMax, 'Nombre d\'équipes max', {
+                            'label_attr': {
+                                'class': 'block text-sm font-medium ' ~ (formTournament.teamsMax.vars.errors|length ? 'text-red-700' : 'text-gray-700') ~ ' mb-1'
+                            }
+                        }) }}
+                        {{ form_widget(formTournament.teamsMax, {
+                            'attr': {
+                                'class': 'mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none ' ~
+                                (formTournament.teamsMax.vars.errors|length ?
+                                'border-red-500 text-red-900 placeholder-red-700 bg-red-50 focus:ring-red-500 focus:border-red-500' :
+                                'border-gray-300 focus:ring-indigo-500 focus:border-indigo-500'
+                                )
+                            }
+                        }) }}
+                        {% if formTournament.teamsMax.vars.errors|length %}
+                            {% for error in formTournament.teamsMax.vars.errors %}
+                                <p class="mt-2 text-sm text-red-600">
+                                    <span class="font-medium">Erreur !</span> {{ error.message }}
+                                </p>
+                            {% endfor %}
+                        {% endif %}
                     </div>
 
                     <!-- Nombre de terrains maximum -->
                     <div>
-                        {{ form_label(formTournament.groundMax, 'Nombre de terrains max', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-1'}}) }}
-                        {{ form_widget(formTournament.groundMax, {'attr': {'class': 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500'}}) }}
-                        {{ form_errors(formTournament.groundMax) }}
+                        {{ form_label(formTournament.groundMax, 'Nombre de terrains max', {
+                            'label_attr': {
+                                'class': 'block text-sm font-medium ' ~ (formTournament.groundMax.vars.errors|length ? 'text-red-700' : 'text-gray-700') ~ ' mb-1'
+                            }
+                        }) }}
+                        {{ form_widget(formTournament.groundMax, {
+                            'attr': {
+                                'class': 'mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none ' ~
+                                (formTournament.groundMax.vars.errors|length ?
+                                'border-red-500 text-red-900 placeholder-red-700 bg-red-50 focus:ring-red-500 focus:border-red-500' :
+                                'border-gray-300 focus:ring-indigo-500 focus:border-indigo-500'
+                                )
+                            }
+                        }) }}
+                        {% if formTournament.groundMax.vars.errors|length %}
+                            {% for error in formTournament.groundMax.vars.errors %}
+                                <p class="mt-2 text-sm text-red-600">
+                                    <span class="font-medium">Erreur !</span> {{ error.message }}
+                                </p>
+                            {% endfor %}
+                        {% endif %}
                     </div>
 
                     <!-- Statut -->
                     <div>
-                        {{ form_label(formTournament.status, 'Statut', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-1'}}) }}
-                        {{ form_widget(formTournament.status, {'attr': {'class': 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500'}}) }}
-                        {{ form_errors(formTournament.status) }}
+                        {{ form_label(formTournament.status, 'Statut', {
+                            'label_attr': {
+                                'class': 'block text-sm font-medium ' ~ (formTournament.status.vars.errors|length ? 'text-red-700' : 'text-gray-700') ~ ' mb-1'
+                            }
+                        }) }}
+                        {{ form_widget(formTournament.status, {
+                            'attr': {
+                                'class': 'mt-1 block w-full pl-3 pr-10 py-2 text-base border rounded-md shadow-sm focus:outline-none ' ~
+                                (formTournament.status.vars.errors|length ?
+                                'border-red-500 text-red-900 bg-red-50 focus:ring-red-500 focus:border-red-500' :
+                                'border-gray-300 focus:ring-indigo-500 focus:border-indigo-500'
+                                )
+                            }
+                        }) }}
+                        {% if formTournament.status.vars.errors|length %}
+                            {% for error in formTournament.status.vars.errors %}
+                                <p class="mt-2 text-sm text-red-600">
+                                    <span class="font-medium">Erreur !</span> {{ error.message }}
+                                </p>
+                            {% endfor %}
+                        {% endif %}
                     </div>
 
                     <!-- Type de tournoi -->
                     <div>
-                        {{ form_label(formTournament.typeTournament, 'Type de tournoi', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-1'}}) }}
-                        {{ form_widget(formTournament.typeTournament, {'attr': {'class': 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500'}}) }}
-                        {{ form_errors(formTournament.typeTournament) }}
+                        {{ form_label(formTournament.typeTournament, 'Type de tournoi', {
+                            'label_attr': {
+                                'class': 'block text-sm font-medium ' ~ (formTournament.typeTournament.vars.errors|length ? 'text-red-700' : 'text-gray-700') ~ ' mb-1'
+                            }
+                        }) }}
+                        {{ form_widget(formTournament.typeTournament, {
+                            'attr': {
+                                'class': 'mt-1 block w-full pl-3 pr-10 py-2 text-base border rounded-md shadow-sm focus:outline-none ' ~
+                                (formTournament.typeTournament.vars.errors|length ?
+                                'border-red-500 text-red-900 bg-red-50 focus:ring-red-500 focus:border-red-500' :
+                                'border-gray-300 focus:ring-indigo-500 focus:border-indigo-500'
+                                )
+                            }
+                        }) }}
+                        {% if formTournament.typeTournament.vars.errors|length %}
+                            {% for error in formTournament.typeTournament.vars.errors %}
+                                <p class="mt-2 text-sm text-red-600">
+                                    <span class="font-medium">Erreur !</span> {{ error.message }}
+                                </p>
+                            {% endfor %}
+                        {% endif %}
                     </div>
 
                     <!-- Image -->
                     <div>
-                        {{ form_label(formTournament.imageFile, 'Image', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-1'}}) }}
+                        {{ form_label(formTournament.imageFile, 'Image', {
+                            'label_attr': {
+                                'class': 'block text-sm font-medium ' ~ (formTournament.imageFile.vars.errors|length ? 'text-red-700' : 'text-gray-700') ~ ' mb-1'
+                            }
+                        }) }}
                         <div class="mt-1 flex items-center">
                             <label class="cursor-pointer">
-                                <span class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                <span class="inline-flex items-center px-3 py-2 border shadow-sm text-sm leading-4 font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 {{ formTournament.imageFile.vars.errors|length ? 'border-red-500 text-red-700 bg-red-50 hover:bg-red-100 focus:ring-red-500' : 'border-gray-300 text-gray-700 bg-white hover:bg-gray-50 focus:ring-indigo-500' }}">
                                     <svg class="-ml-1 mr-2 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                                     </svg>
@@ -93,10 +241,18 @@
                                 </span>
                                 {{ form_widget(formTournament.imageFile, {'attr': {'class': 'sr-only'}}) }}
                             </label>
-                            <span class="ml-2 text-sm text-gray-500" id="file-name">Aucun fichier sélectionné</span>
+                            <span class="ml-2 text-sm {{ formTournament.imageFile.vars.errors|length ? 'text-red-500' : 'text-gray-500' }}" id="file-name">
+                                Aucun fichier sélectionné
+                            </span>
                         </div>
-                        <p class="mt-1 text-xs text-gray-500">PNG, JPG, JPEG jusqu'à 5MB</p>
-                        {{ form_errors(formTournament.imageFile) }}
+                        <p class="mt-1 text-xs {{ formTournament.imageFile.vars.errors|length ? 'text-red-500' : 'text-gray-500' }}">PNG, JPG, JPEG jusqu'à 5MB</p>
+                        {% if formTournament.imageFile.vars.errors|length %}
+                            {% for error in formTournament.imageFile.vars.errors %}
+                                <p class="mt-2 text-sm text-red-600">
+                                    <span class="font-medium">Erreur !</span> {{ error.message }}
+                                </p>
+                            {% endfor %}
+                        {% endif %}
                     </div>
                 </div>
 
@@ -104,7 +260,7 @@
                     <a href="{{ path('app_admin_tournaments', {'page': app.request.query.get('page', 1)}) }}" class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md shadow-sm text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                         Retour
                     </a>
-                    <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white {{ formTournament.vars.errors|length ? 'bg-red-600 hover:bg-red-700 focus:ring-red-500' : 'bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500' }} focus:outline-none focus:ring-2 focus:ring-offset-2">
                         Ajouter le tournoi
                     </button>
                 </div>

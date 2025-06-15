@@ -21,71 +21,216 @@
             </div>
 
             <div class="bg-white shadow-md sm:rounded-lg p-6">
-                {{ form_start(formEditTournament, {
-                'attr': {
-                'class': 'space-y-6',
-                }
-                }) }}
+                {{ form_start(formEditTournament, {'attr': {'class': 'space-y-6'}}) }}
 
                 <div class="grid grid-cols-1 gap-6">
+                    <!-- Nom -->
                     <div>
-                        {{ form_label(formEditTournament.name, 'Nom', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-1'}}) }}
-                        {{ form_widget(formEditTournament.name, {'attr': {'class': 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500'}}) }}
-                        {{ form_errors(formEditTournament.name) }}
+                        {{ form_label(formEditTournament.name, 'Nom', {
+                            'label_attr': {
+                                'class': 'block text-sm font-medium ' ~ (formEditTournament.name.vars.errors|length ? 'text-red-700' : 'text-gray-700') ~ ' mb-1'
+                            }
+                        }) }}
+                        {{ form_widget(formEditTournament.name, {
+                            'attr': {
+                                'class': 'mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none ' ~
+                                (formEditTournament.name.vars.errors|length ?
+                                'border-red-500 text-red-900 placeholder-red-700 bg-red-50 focus:ring-red-500 focus:border-red-500' :
+                                'border-gray-300 focus:ring-indigo-500 focus:border-indigo-500'
+                                )
+                            }
+                        }) }}
+                        {% if formEditTournament.name.vars.errors|length %}
+                            {% for error in formEditTournament.name.vars.errors %}
+                                <p class="mt-2 text-sm text-red-600">
+                                    <span class="font-medium">Erreur !</span> {{ error.message }}
+                                </p>
+                            {% endfor %}
+                        {% endif %}
                     </div>
 
                     <!-- Date du tournoi -->
                     <div>
-                        {{ form_label(formEditTournament.dateTournament, 'Date du tournoi', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-1'}}) }}
-                        {{ form_widget(formEditTournament.dateTournament, {'attr': {'class': 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500'}}) }}
-                        {{ form_errors(formEditTournament.dateTournament) }}
+                        {{ form_label(formEditTournament.dateTournament, 'Date du tournoi', {
+                            'label_attr': {
+                                'class': 'block text-sm font-medium ' ~ (formEditTournament.dateTournament.vars.errors|length ? 'text-red-700' : 'text-gray-700') ~ ' mb-1'
+                            }
+                        }) }}
+                        {{ form_widget(formEditTournament.dateTournament, {
+                            'attr': {
+                                'class': 'mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none ' ~
+                                (formEditTournament.dateTournament.vars.errors|length ?
+                                'border-red-500 text-red-900 placeholder-red-700 bg-red-50 focus:ring-red-500 focus:border-red-500' :
+                                'border-gray-300 focus:ring-indigo-500 focus:border-indigo-500'
+                                )
+                            }
+                        }) }}
+                        {% if formEditTournament.dateTournament.vars.errors|length %}
+                            {% for error in formEditTournament.dateTournament.vars.errors %}
+                                <p class="mt-2 text-sm text-red-600">
+                                    <span class="font-medium">Erreur !</span> {{ error.message }}
+                                </p>
+                            {% endfor %}
+                        {% endif %}
                     </div>
 
                     <!-- Prix -->
                     <div>
-                        {{ form_label(formEditTournament.price, 'Prix', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-1'}}) }}
-                        {{ form_widget(formEditTournament.price, {'attr': {'class': 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500'}}) }}
-                        {{ form_errors(formEditTournament.price) }}
+                        {{ form_label(formEditTournament.price, 'Prix', {
+                            'label_attr': {
+                                'class': 'block text-sm font-medium ' ~ (formEditTournament.price.vars.errors|length ? 'text-red-700' : 'text-gray-700') ~ ' mb-1'
+                            }
+                        }) }}
+                        {{ form_widget(formEditTournament.price, {
+                            'attr': {
+                                'class': 'mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none ' ~
+                                (formEditTournament.price.vars.errors|length ?
+                                'border-red-500 text-red-900 placeholder-red-700 bg-red-50 focus:ring-red-500 focus:border-red-500' :
+                                'border-gray-300 focus:ring-indigo-500 focus:border-indigo-500'
+                                )
+                            }
+                        }) }}
+                        {% if formEditTournament.price.vars.errors|length %}
+                            {% for error in formEditTournament.price.vars.errors %}
+                                <p class="mt-2 text-sm text-red-600">
+                                    <span class="font-medium">Erreur !</span> {{ error.message }}
+                                </p>
+                            {% endfor %}
+                        {% endif %}
                     </div>
 
                     <!-- Adresse -->
                     <div>
-                        {{ form_label(formEditTournament.adresse, 'Adresse', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-1'}}) }}
-                        {{ form_widget(formEditTournament.adresse, {'attr': {'class': 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500'}}) }}
-                        {{ form_errors(formEditTournament.adresse) }}
+                        {{ form_label(formEditTournament.adresse, 'Adresse', {
+                            'label_attr': {
+                                'class': 'block text-sm font-medium ' ~ (formEditTournament.adresse.vars.errors|length ? 'text-red-700' : 'text-gray-700') ~ ' mb-1'
+                            }
+                        }) }}
+                        {{ form_widget(formEditTournament.adresse, {
+                            'attr': {
+                                'class': 'mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none ' ~
+                                (formEditTournament.adresse.vars.errors|length ?
+                                'border-red-500 text-red-900 placeholder-red-700 bg-red-50 focus:ring-red-500 focus:border-red-500' :
+                                'border-gray-300 focus:ring-indigo-500 focus:border-indigo-500'
+                                )
+                            }
+                        }) }}
+                        {% if formEditTournament.adresse.vars.errors|length %}
+                            {% for error in formEditTournament.adresse.vars.errors %}
+                                <p class="mt-2 text-sm text-red-600">
+                                    <span class="font-medium">Erreur !</span> {{ error.message }}
+                                </p>
+                            {% endfor %}
+                        {% endif %}
                     </div>
 
                     <!-- Nombre d'équipes maximum -->
                     <div>
-                        {{ form_label(formEditTournament.teamsMax, 'Nombre d\'équipes max', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-1'}}) }}
-                        {{ form_widget(formEditTournament.teamsMax, {'attr': {'class': 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500'}}) }}
-                        {{ form_errors(formEditTournament.teamsMax) }}
+                        {{ form_label(formEditTournament.teamsMax, 'Nombre d\'équipes max', {
+                            'label_attr': {
+                                'class': 'block text-sm font-medium ' ~ (formEditTournament.teamsMax.vars.errors|length ? 'text-red-700' : 'text-gray-700') ~ ' mb-1'
+                            }
+                        }) }}
+                        {{ form_widget(formEditTournament.teamsMax, {
+                            'attr': {
+                                'class': 'mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none ' ~
+                                (formEditTournament.teamsMax.vars.errors|length ?
+                                'border-red-500 text-red-900 placeholder-red-700 bg-red-50 focus:ring-red-500 focus:border-red-500' :
+                                'border-gray-300 focus:ring-indigo-500 focus:border-indigo-500'
+                                )
+                            }
+                        }) }}
+                        {% if formEditTournament.teamsMax.vars.errors|length %}
+                            {% for error in formEditTournament.teamsMax.vars.errors %}
+                                <p class="mt-2 text-sm text-red-600">
+                                    <span class="font-medium">Erreur !</span> {{ error.message }}
+                                </p>
+                            {% endfor %}
+                        {% endif %}
                     </div>
 
                     <!-- Nombre de terrains maximum -->
                     <div>
-                        {{ form_label(formEditTournament.groundMax, 'Nombre de terrains max', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-1'}}) }}
-                        {{ form_widget(formEditTournament.groundMax, {'attr': {'class': 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500'}}) }}
-                        {{ form_errors(formEditTournament.groundMax) }}
+                        {{ form_label(formEditTournament.groundMax, 'Nombre de terrains max', {
+                            'label_attr': {
+                                'class': 'block text-sm font-medium ' ~ (formEditTournament.groundMax.vars.errors|length ? 'text-red-700' : 'text-gray-700') ~ ' mb-1'
+                            }
+                        }) }}
+                        {{ form_widget(formEditTournament.groundMax, {
+                            'attr': {
+                                'class': 'mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none ' ~
+                                (formEditTournament.groundMax.vars.errors|length ?
+                                'border-red-500 text-red-900 placeholder-red-700 bg-red-50 focus:ring-red-500 focus:border-red-500' :
+                                'border-gray-300 focus:ring-indigo-500 focus:border-indigo-500'
+                                )
+                            }
+                        }) }}
+                        {% if formEditTournament.groundMax.vars.errors|length %}
+                            {% for error in formEditTournament.groundMax.vars.errors %}
+                                <p class="mt-2 text-sm text-red-600">
+                                    <span class="font-medium">Erreur !</span> {{ error.message }}
+                                </p>
+                            {% endfor %}
+                        {% endif %}
                     </div>
 
                     <!-- Statut -->
                     <div>
-                        {{ form_label(formEditTournament.status, 'Statut', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-1'}}) }}
-                        {{ form_widget(formEditTournament.status, {'attr': {'class': 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500'}}) }}
-                        {{ form_errors(formEditTournament.status) }}
+                        {{ form_label(formEditTournament.status, 'Statut', {
+                            'label_attr': {
+                                'class': 'block text-sm font-medium ' ~ (formEditTournament.status.vars.errors|length ? 'text-red-700' : 'text-gray-700') ~ ' mb-1'
+                            }
+                        }) }}
+                        {{ form_widget(formEditTournament.status, {
+                            'attr': {
+                                'class': 'mt-1 block w-full pl-3 pr-10 py-2 text-base border rounded-md shadow-sm focus:outline-none ' ~
+                                (formEditTournament.status.vars.errors|length ?
+                                'border-red-500 text-red-900 bg-red-50 focus:ring-red-500 focus:border-red-500' :
+                                'border-gray-300 focus:ring-indigo-500 focus:border-indigo-500'
+                                )
+                            }
+                        }) }}
+                        {% if formEditTournament.status.vars.errors|length %}
+                            {% for error in formEditTournament.status.vars.errors %}
+                                <p class="mt-2 text-sm text-red-600">
+                                    <span class="font-medium">Erreur !</span> {{ error.message }}
+                                </p>
+                            {% endfor %}
+                        {% endif %}
                     </div>
 
                     <!-- Type de tournoi -->
                     <div>
-                        {{ form_label(formEditTournament.typeTournament, 'Type de tournoi', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-1'}}) }}
-                        {{ form_widget(formEditTournament.typeTournament, {'attr': {'class': 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500'}}) }}
-                        {{ form_errors(formEditTournament.typeTournament) }}
+                        {{ form_label(formEditTournament.typeTournament, 'Type de tournoi', {
+                            'label_attr': {
+                                'class': 'block text-sm font-medium ' ~ (formEditTournament.typeTournament.vars.errors|length ? 'text-red-700' : 'text-gray-700') ~ ' mb-1'
+                            }
+                        }) }}
+                        {{ form_widget(formEditTournament.typeTournament, {
+                            'attr': {
+                                'class': 'mt-1 block w-full pl-3 pr-10 py-2 text-base border rounded-md shadow-sm focus:outline-none ' ~
+                                (formEditTournament.typeTournament.vars.errors|length ?
+                                'border-red-500 text-red-900 bg-red-50 focus:ring-red-500 focus:border-red-500' :
+                                'border-gray-300 focus:ring-indigo-500 focus:border-indigo-500'
+                                )
+                            }
+                        }) }}
+                        {% if formEditTournament.typeTournament.vars.errors|length %}
+                            {% for error in formEditTournament.typeTournament.vars.errors %}
+                                <p class="mt-2 text-sm text-red-600">
+                                    <span class="font-medium">Erreur !</span> {{ error.message }}
+                                </p>
+                            {% endfor %}
+                        {% endif %}
                     </div>
 
                     <!-- Image -->
                     <div>
-                        {{ form_label(formEditTournament.imageFile, 'Image', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-1'}}) }}
+                        {{ form_label(formEditTournament.imageFile, 'Image', {
+                            'label_attr': {
+                                'class': 'block text-sm font-medium ' ~ (formEditTournament.imageFile.vars.errors|length ? 'text-red-700' : 'text-gray-700') ~ ' mb-1'
+                            }
+                        }) }}
 
                         {% if tournament.imageTournament %}
                             <div class="mb-4">
@@ -100,7 +245,7 @@
 
                         <div class="mt-1 flex items-center">
                             <label class="cursor-pointer">
-                                <span class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                <span class="inline-flex items-center px-3 py-2 border shadow-sm text-sm leading-4 font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 {{ formEditTournament.imageFile.vars.errors|length ? 'border-red-500 text-red-700 bg-red-50 hover:bg-red-100 focus:ring-red-500' : 'border-gray-300 text-gray-700 bg-white hover:bg-gray-50 focus:ring-indigo-500' }}">
                                     <svg class="-ml-1 mr-2 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                                     </svg>
@@ -108,12 +253,18 @@
                                 </span>
                                 {{ form_widget(formEditTournament.imageFile, {'attr': {'class': 'sr-only'}}) }}
                             </label>
-                            <span class="ml-2 text-sm text-gray-500" id="file-name">
+                            <span class="ml-2 text-sm {{ formEditTournament.imageFile.vars.errors|length ? 'text-red-500' : 'text-gray-500' }}" id="file-name">
                                 {% if formEditTournament.vars.value.imageTournament %}Image actuelle conservée{% else %}Aucun fichier sélectionné{% endif %}
                             </span>
                         </div>
-                        <p class="mt-1 text-xs text-gray-500">PNG, JPG, JPEG jusqu'à 5MB</p>
-                        {{ form_errors(formEditTournament.imageFile) }}
+                        <p class="mt-1 text-xs {{ formEditTournament.imageFile.vars.errors|length ? 'text-red-500' : 'text-gray-500' }}">PNG, JPG, JPEG jusqu'à 5MB</p>
+                        {% if formEditTournament.imageFile.vars.errors|length %}
+                            {% for error in formEditTournament.imageFile.vars.errors %}
+                                <p class="mt-2 text-sm text-red-600">
+                                    <span class="font-medium">Erreur !</span> {{ error.message }}
+                                </p>
+                            {% endfor %}
+                        {% endif %}
                     </div>
                 </div>
 
@@ -124,7 +275,7 @@
                         </svg>
                         Retour
                     </a>
-                    <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white {{ formEditTournament.vars.errors|length ? 'bg-red-600 hover:bg-red-700 focus:ring-red-500' : 'bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500' }} focus:outline-none focus:ring-2 focus:ring-offset-2" data-turbo="false">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                         </svg>

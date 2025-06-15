@@ -36,9 +36,6 @@ class Tournament
     #[Assert\NotBlank(
         message: 'La date ne doit pas être est vide.'
     )]
-    #[Assert\DateTime(
-        message: 'La date n\'est pas valide.',
-    )]
     #[ORM\Column]
     private ?\DateTimeImmutable $dateTournament = null;
 
@@ -59,18 +56,40 @@ class Tournament
     #[ORM\Column(length: 255)]
     private ?string $adresse = null;
 
+    #[Assert\NotBlank(
+        message: 'Le nombres d\'équipes max ne doit pas être vide.'
+    )]
     #[ORM\Column]
+//    #[Assert\Range(
+//        max: 16,
+//        maxMessage: 'Le nombre d\équipe max est de {{ limit }}.'
+//    )]
     private ?int $teamsMax = null;
 
     #[ORM\Column]
     private ?bool $isPublished = null;
 
+    #[Assert\NotBlank(
+        message: 'Veuillez entrer le nombre de terrain.'
+    )]
+//    #[Assert\Range(
+//        min: 1,
+//        max: 8,
+//        minMessage: 'Le nombre de terrain doit être de minimum {{ limit }}.',
+//        maxMessage: 'Le nombre de terrain doit être de maximum {{ limit }}.'
+//    )]
     #[ORM\Column]
     private ?int $groundMax = null;
 
+    #[Assert\NotBlank(
+        message: 'Veuillez séléctionner un statut.'
+    )]
     #[ORM\Column]
     private array $status = [];
 
+    #[Assert\NotBlank(
+        message: 'Veuillez sélectionner un type de tournoi.'
+    )]
     #[ORM\Column]
     private array $typeTournament = [];
 
