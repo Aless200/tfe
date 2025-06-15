@@ -4,7 +4,6 @@
 
 {% block body %}
     <div class="w-full bg-[#0d079f]">
-{#        <div class="h-2 w-full bg-white"></div>#}
         <div class="relative flex items-center justify-between px-4 py-2">
             <div class="flex items-center">
                 <div class="relative z-10 h-24 w-24 overflow-hidden rounded-full border-4 border-white p-2">
@@ -25,7 +24,6 @@
                 </a>
             </div>
         </div>
-{#        <div class="h-2 w-full bg-white"></div>#}
     </div>
 
     <div class="min-h-[calc(100vh-120px)] bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
@@ -102,21 +100,153 @@
 
                     {{ form_start(registrationForm, {'attr': {'class': 'space-y-6'}}) }}
 
-                    {{ form_row(registrationForm.firstName) }}
-                    {{ form_row(registrationForm.lastName) }}
-                    {{ form_row(registrationForm.email) }}
-                    {{ form_row(registrationForm.password) }}
-                    {{ form_row(registrationForm.phoneNumber) }}
-
-                    {# Champ image avec style Tailwind #}
                     <div>
-                        {{ form_label(registrationForm.imageFile, 'Photo de profil', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
-                        {{ form_errors(registrationForm.imageFile) }}
-                        {{ form_widget(registrationForm.imageFile, {'attr': {'class': 'mt-1 block w-full text-sm text-gray-900 border border-gray-300 rounded-md cursor-pointer bg-gray-50 focus:outline-none'}}) }}
+                        {{ form_label(registrationForm.firstName, 'Prénom', {
+                            'label_attr': {
+                                'class': 'block text-sm font-medium ' ~ (registrationForm.firstName.vars.errors|length ? 'text-red-700' : 'text-gray-700') ~ ' mb-1'
+                            }
+                        }) }}
+                        {{ form_widget(registrationForm.firstName, {
+                            'attr': {
+                                'class': 'mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none ' ~
+                                (registrationForm.firstName.vars.errors|length ?
+                                'border-red-500 focus:ring-red-500 focus:border-red-500' :
+                                'border-gray-300 focus:ring-indigo-500 focus:border-indigo-500')
+                            }
+                        }) }}
+                        {% if registrationForm.firstName.vars.errors|length %}
+                            {% for error in registrationForm.firstName.vars.errors %}
+                                <p class="mt-2 text-sm text-red-600">
+                                    <span class="font-medium">Erreur !</span> {{ error.message }}
+                                </p>
+                            {% endfor %}
+                        {% endif %}
                     </div>
 
                     <div>
-                        <button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-white bg-[#0d079f] hover:bg-[#0a0580] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#0d079f]">
+                        {{ form_label(registrationForm.lastName, 'Nom', {
+                            'label_attr': {
+                                'class': 'block text-sm font-medium ' ~ (registrationForm.lastName.vars.errors|length ? 'text-red-700' : 'text-gray-700') ~ ' mb-1'
+                            }
+                        }) }}
+                        {{ form_widget(registrationForm.lastName, {
+                            'attr': {
+                                'class': 'mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none ' ~
+                                (registrationForm.lastName.vars.errors|length ?
+                                'border-red-500 focus:ring-red-500 focus:border-red-500' :
+                                'border-gray-300 focus:ring-indigo-500 focus:border-indigo-500')
+                            }
+                        }) }}
+                        {% if registrationForm.lastName.vars.errors|length %}
+                            {% for error in registrationForm.lastName.vars.errors %}
+                                <p class="mt-2 text-sm text-red-600">
+                                    <span class="font-medium">Erreur !</span> {{ error.message }}
+                                </p>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+
+                    <div>
+                        {{ form_label(registrationForm.email, 'Email', {
+                            'label_attr': {
+                                'class': 'block text-sm font-medium ' ~ (registrationForm.email.vars.errors|length ? 'text-red-700' : 'text-gray-700') ~ ' mb-1'
+                            }
+                        }) }}
+                        {{ form_widget(registrationForm.email, {
+                            'attr': {
+                                'class': 'mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none ' ~
+                                (registrationForm.email.vars.errors|length ?
+                                'border-red-500 focus:ring-red-500 focus:border-red-500' :
+                                'border-gray-300 focus:ring-indigo-500 focus:border-indigo-500')
+                            }
+                        }) }}
+                        {% if registrationForm.email.vars.errors|length %}
+                            {% for error in registrationForm.email.vars.errors %}
+                                <p class="mt-2 text-sm text-red-600">
+                                    <span class="font-medium">Erreur !</span> {{ error.message }}
+                                </p>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+
+                    <div>
+                        {{ form_label(registrationForm.password, 'Mot de passe', {
+                            'label_attr': {
+                                'class': 'block text-sm font-medium ' ~ (registrationForm.password.vars.errors|length ? 'text-red-700' : 'text-gray-700') ~ ' mb-1'
+                            }
+                        }) }}
+                        {{ form_widget(registrationForm.password, {
+                            'attr': {
+                                'class': 'mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none ' ~
+                                (registrationForm.password.vars.errors|length ?
+                                'border-red-500 focus:ring-red-500 focus:border-red-500' :
+                                'border-gray-300 focus:ring-indigo-500 focus:border-indigo-500')
+                            }
+                        }) }}
+                        {% if registrationForm.password.vars.errors|length %}
+                            {% for error in registrationForm.password.vars.errors %}
+                                <p class="mt-2 text-sm text-red-600">
+                                    <span class="font-medium">Erreur !</span> {{ error.message }}
+                                </p>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+
+                    <div>
+                        {{ form_label(registrationForm.phoneNumber, 'Numéro de téléphone', {
+                            'label_attr': {
+                                'class': 'block text-sm font-medium ' ~ (registrationForm.phoneNumber.vars.errors|length ? 'text-red-700' : 'text-gray-700') ~ ' mb-1'
+                            }
+                        }) }}
+                        {{ form_widget(registrationForm.phoneNumber, {
+                            'attr': {
+                                'class': 'mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none ' ~
+                                (registrationForm.phoneNumber.vars.errors|length ?
+                                'border-red-500 focus:ring-red-500 focus:border-red-500' :
+                                'border-gray-300 focus:ring-indigo-500 focus:border-indigo-500')
+                            }
+                        }) }}
+                        {% if registrationForm.phoneNumber.vars.errors|length %}
+                            {% for error in registrationForm.phoneNumber.vars.errors %}
+                                <p class="mt-2 text-sm text-red-600">
+                                    <span class="font-medium">Erreur !</span> {{ error.message }}
+                                </p>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+
+                    <div>
+                        {{ form_label(registrationForm.imageFile, 'Photo de profil', {
+                            'label_attr': {
+                                'class': 'block text-sm font-medium ' ~ (registrationForm.imageFile.vars.errors|length ? 'text-red-700' : 'text-gray-700') ~ ' mb-1'
+                            }
+                        }) }}
+                        <div class="mt-1 flex items-center">
+                            <label class="cursor-pointer">
+            <span class="inline-flex items-center px-3 py-2 border shadow-sm text-sm leading-4 font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 {{ registrationForm.imageFile.vars.errors|length ? 'border-red-500 text-red-700 bg-red-50 hover:bg-red-100 focus:ring-red-500' : 'border-gray-300 text-gray-700 bg-white hover:bg-gray-50 focus:ring-indigo-500' }}">
+                <svg class="-ml-1 mr-2 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                </svg>
+                Choisir un fichier
+            </span>
+                                {{ form_widget(registrationForm.imageFile, {'attr': {'class': 'sr-only'}}) }}
+                            </label>
+                            <span class="ml-2 text-sm {{ registrationForm.imageFile.vars.errors|length ? 'text-red-500' : 'text-gray-500' }}" id="file-name">
+            Aucun fichier sélectionné
+        </span>
+                        </div>
+                        <p class="mt-1 text-xs {{ registrationForm.imageFile.vars.errors|length ? 'text-red-500' : 'text-gray-500' }}">PNG, JPG, JPEG jusqu'à 5MB</p>
+                        {% if registrationForm.imageFile.vars.errors|length %}
+                            {% for error in registrationForm.imageFile.vars.errors %}
+                                <p class="mt-2 text-sm text-red-600">
+                                    <span class="font-medium">Erreur !</span> {{ error.message }}
+                                </p>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+
+                    <div>
+                        <button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-white bg-[#0d079f] hover:bg-[#0a0580] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#0d079f]" data-turbo="false">
                             S'inscrire
                         </button>
                     </div>
@@ -126,4 +256,34 @@
             </div>
         </div>
     </div>
+
+    <script>
+        document.addEventListener('turbo:load', function() {
+            const initFileInput = () => {
+                const fileInput = document.querySelector('input[type="file"][name*="[imageFile]"]');
+                const fileNameSpan = document.getElementById('file-name');
+
+                if (fileInput && fileNameSpan) {
+                    const defaultText = fileNameSpan.textContent;
+
+                    fileInput.addEventListener('change', function(e) {
+                        fileNameSpan.textContent = e.target.files[0]?.name || defaultText;
+                    });
+
+                    fileInput.form.addEventListener('turbo:submit-end', function() {
+                        if (fileInput.form.querySelector('[data-turbo-submit-success]')) {
+                            fileInput.value = '';
+                            fileNameSpan.textContent = defaultText;
+                        }
+                    });
+                }
+            };
+
+            initFileInput();
+
+            document.addEventListener('turbo:before-render', function() {
+                initFileInput();
+            });
+        });
+    </script>
 {% endblock %}

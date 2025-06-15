@@ -37,7 +37,8 @@ class RegistrationController extends AbstractController
                 ->setRoles(['ROLE_USER'])
                 ->setCreatedAt(new \DateTimeImmutable())
                 ->setUpdatedAt(new \DateTimeImmutable())
-                ->setIsDisabled(false);
+                ->setIsDisabled(false)
+                ->setIsAnonymized(false);
 
             // Traitement de l'image
             $imageFile = $form->get('imageFile')->getData();

@@ -27,7 +27,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \Serial
 
     #[ORM\Column(length: 180)]
     #[Assert\NotBlank(message: 'Veuillez entrer votre email.')]
-    #[Assert\Email(message: 'L\'email n\'est pas valide.')]
+    #[Assert\Regex(
+        pattern: '/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/',
+        message: 'L\'email n\'est pas valide.',
+    )]
     private ?string $email = null;
 
     /**
@@ -44,20 +47,28 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \Serial
 
     #[Assert\NotBlank(message: 'Veuillez entrer votre prénom.')]
     #[Assert\Length(
-        min: 2,
+        min: 3,
         max: 120,
         minMessage: 'Le prénom doit contenir au moins {{ limit }} caractères.',
         maxMessage: 'Le prénom ne doit pas dépasser {{ limit }} caractères.',
+    )]
+    #[Assert\regex(
+        pattern: "/^[A-Za-zÀÂÄÉÈÊËÎÏÔÖÙÛÜÇàâäéèêëîïôöùûüç][a-zàâäéèêëîïôöùûüç\-']+$/",
+        message:'Le prénom n\'est pas valide.'
     )]
     #[ORM\Column(length: 120)]
     private ?string $firstName = null;
 
     #[Assert\NotBlank(message: 'Veuillez entrer votre nom.')]
     #[Assert\Length(
-        min: 2,
+        min: 3,
         max: 120,
         minMessage: 'Le nom doit contenir au moins {{ limit }} caractères.',
-        maxMessage: 'Le nom ne doit pas depasser {{ limit }} caractères.',
+        maxMessage: 'Le nom ne doit pas dépasser {{ limit }} caractères.',
+    )]
+    #[Assert\regex(
+        pattern: "/^[A-Za-zÀÂÄÉÈÊËÎÏÔÖÙÛÜÇàâäéèêëîïôöùûüç]+([ \-'][A-Za-zÀÂÄÉÈÊËÎÏÔÖÙÛÜÇàâäéèêëîïôöùûüç]+)*$/",
+        message: 'Le nom n\'est pas valide.',
     )]
     #[ORM\Column(length: 120)]
     private ?string $lastName = null;
@@ -79,6 +90,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \Serial
 
     #[Assert\NotBlank(message: 'Veuillez entrer votre numéro de téléphone.')]
     #[ORM\Column(length: 15)]
+    #[Assert\regex(
+        pattern: "/^(((\+|00)32[ ]?(?:\(0\)[ ]?)?)|0){1}(4(60|[789]\d)\/?(\s?\d{2}\.?){2}(\s?\d{2})|(\d\/?\s?\d{3}|\d{2}\/?\s?\d{2})(\.?\s?\d{2}){2})$/",
+        message: 'Votre numéro de téléphone n\'est pas valide. Veuillez respecter : +32 ou 04.'
+    )]
     private ?string $phoneNumber = null;
 
     /**
