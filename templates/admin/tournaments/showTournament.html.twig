@@ -4,6 +4,9 @@
 
 {% block body %}
     <main>
+        <!-- Div pour stocker l'ID du tournoi -->
+        <div id="tournament-data" data-tournament-id="{{ tournamentId }}"></div>
+
         <section>
             <div class="flex">
                 <div class="w-64 h-screen bg-gray-100">
@@ -32,14 +35,45 @@
                         {% endif %}
                     </div>
 
+                    <!-- Indicateur de progression -->
+                    <div id="progress-indicator" class="mb-6 bg-white rounded-lg shadow-md p-4 hidden">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-sm font-medium text-gray-700">Progression du tour actuel</span>
+                            <span id="progress-text" class="text-sm text-gray-500">0/0 matchs terminés</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2">
+                            <div id="progress-bar" class="bg-[#0d079f] h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+                        </div>
+                    </div>
+
+                    <!-- Bannière de tournoi terminé -->
+                    <div id="tournament-completed-banner" class="mb-6 bg-gradient-to-r from-green-500 to-green-600 rounded-lg shadow-md p-4 text-white hidden">
+                        <div class="flex items-center justify-center">
+                            <span class="text-2xl mr-3">🏆</span>
+                            <div class="text-center">
+                                <h3 class="text-lg font-bold">Tournoi Terminé !</h3>
+                                <p id="tournament-winner-banner" class="text-sm opacity-90"></p>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Tableaux des matchs par tour -->
-                    {% for currentRound, roundMatches in matchesByRound %}
-                        <div class="mb-8">
+                    {% for roundNumber, roundMatches in matchesByRound %}
+                        <div class="mb-8" id="round-{{ roundNumber }}">
                             <div class="flex items-center mb-4">
                                 <div class="h-8 w-8 rounded-full bg-[#0d079f] flex items-center justify-center text-white font-bold text-sm mr-3">
-                                    {{ currentRound }}
+                                    {{ roundNumber }}
                                 </div>
-                                <h2 class="text-xl font-semibold text-gray-800">Tour {{ currentRound }}</h2>
+                                <h2 class="text-xl font-semibold text-gray-800">
+                                    Tour {{ roundNumber }}
+                                    {% if roundNumber == currentRound %}
+                                        <span class="ml-2 px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">En cours</span>
+                                    {% elseif roundNumber < currentRound %}
+                                        <span class="ml-2 px-2 py-1 bg-gray-100 text-gray-600 text-xs font-medium rounded-full">Terminé</span>
+                                    {% else %}
+                                        <span class="ml-2 px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full">À venir</span>
+                                    {% endif %}
+                                </h2>
                             </div>
 
                             <div class="w-full overflow-hidden shadow-md sm:rounded-lg">
@@ -53,20 +87,41 @@
                                         <th scope="col" class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
                                     </tr>
                                     </thead>
-                                    <tbody id="match-table-body-{{ currentRound }}" class="bg-white divide-y divide-gray-200">
+                                    <tbody id="match-table-body-{{ roundNumber }}" class="bg-white divide-y divide-gray-200">
                                     {% for match in roundMatches %}
-                                        <tr class="hover:bg-gray-100" id="match-row-{{ match.id }}">
-                                            <td class="px-3 py-4 text-sm font-medium" data-team-id="{{ match.team1.id }}">
+                                        {% set isMatchCompleted = match.scoreTeam1 is not null and match.scoreTeam2 is not null and (match.scoreTeam1 >= 13 or match.scoreTeam2 >= 13) %}
+                                        {% set isCurrentRoundMatch = roundNumber == currentRound %}
+
+                                        <tr class="hover:bg-gray-100 {{ isMatchCompleted ? 'bg-green-50' : '' }}" id="match-row-{{ match.id }}">
+                                            <td class="px-3 py-4 text-sm font-medium {{ match.scoreTeam1 >= 13 ? 'text-green-600 font-bold' : '' }}" data-team-id="{{ match.team1.id }}">
                                                 {{ match.team1.teamName }}
+                                                {% if match.scoreTeam1 >= 13 %}
+                                                    <span class="ml-2 text-green-600">🏆</span>
+                                                {% endif %}
                                             </td>
-                                            <td class="px-3 py-4 text-sm font-medium" data-team-id="{{ match.team2.id }}">
+                                            <td class="px-3 py-4 text-sm font-medium {{ match.scoreTeam2 >= 13 ? 'text-green-600 font-bold' : '' }}" data-team-id="{{ match.team2.id }}">
                                                 {{ match.team2.teamName }}
+                                                {% if match.scoreTeam2 >= 13 %}
+                                                    <span class="ml-2 text-green-600">🏆</span>
+                                                {% endif %}
                                             </td>
                                             <td class="px-3 py-4">
-                                                <input type="number" name="scoreTeam1" class="score-input w-full px-2 py-1 rounded border focus:ring-[#0d079f] focus:border-[#0d079f]" min="0" max="13" value="{{ match.scoreTeam1 ?? '' }}" {{ match.scoreTeam1 is not null ? 'readonly' : '' }}>
+                                                <input type="number"
+                                                       name="scoreTeam1"
+                                                       class="score-input w-full px-2 py-1 rounded border focus:ring-[#0d079f] focus:border-[#0d079f] {{ isMatchCompleted ? 'bg-gray-100' : '' }}"
+                                                       min="0"
+                                                       max="13"
+                                                       value="{{ match.scoreTeam1 ?? '' }}"
+                                                        {{ isMatchCompleted or not isCurrentRoundMatch ? 'readonly' : '' }}>
                                             </td>
                                             <td class="px-3 py-4">
-                                                <input type="number" name="scoreTeam2" class="score-input w-full px-2 py-1 rounded border focus:ring-[#0d079f] focus:border-[#0d079f]" min="0" max="13" value="{{ match.scoreTeam2 ?? '' }}" {{ match.scoreTeam2 is not null ? 'readonly' : '' }}>
+                                                <input type="number"
+                                                       name="scoreTeam2"
+                                                       class="score-input w-full px-2 py-1 rounded border focus:ring-[#0d079f] focus:border-[#0d079f] {{ isMatchCompleted ? 'bg-gray-100' : '' }}"
+                                                       min="0"
+                                                       max="13"
+                                                       value="{{ match.scoreTeam2 ?? '' }}"
+                                                        {{ isMatchCompleted or not isCurrentRoundMatch ? 'readonly' : '' }}>
                                             </td>
                                             <td class="px-3 py-4 text-center">
                                                 <form id="match-form-{{ match.id }}" class="score-form" action="{{ path('app_admin_update_score') }}" method="POST" data-match-id="{{ match.id }}">
@@ -76,25 +131,24 @@
                                                     <input type="hidden" name="round" value="{{ match.roundT }}">
                                                     <input type="hidden" name="team1Id" value="{{ match.team1.id }}">
                                                     <input type="hidden" name="team2Id" value="{{ match.team2.id }}">
-                                                    <button type="submit" class="save-btn inline-flex items-center justify-center px-3 py-1.5 rounded-md text-sm font-medium transition-colors duration-200
-                                                        {% if match.scoreTeam1 is not null and match.scoreTeam2 is not null %}
-                                                            bg-gray-200 text-gray-700 cursor-not-allowed
-                                                        {% else %}
-                                                            bg-green-500 hover:bg-green-600 text-white
-                                                        {% endif %}"
-                                                            {{ (match.scoreTeam1 is not null and match.scoreTeam2 is not null) ? 'disabled' : '' }}>
-                                                        {% if match.scoreTeam1 is not null and match.scoreTeam2 is not null %}
+
+                                                    {% if isMatchCompleted %}
+                                                        <button type="button" class="inline-flex items-center justify-center px-3 py-1.5 rounded-md text-sm font-medium bg-green-100 text-green-800 cursor-default">
                                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                                                             </svg>
                                                             Terminé
-                                                        {% else %}
+                                                        </button>
+                                                    {% elseif isCurrentRoundMatch %}
+                                                        <button type="submit" class="save-btn inline-flex items-center justify-center px-3 py-1.5 rounded-md text-sm font-medium bg-green-500 hover:bg-green-600 text-white transition-colors duration-200">
                                                             Enregistrer
-                                                        {% endif %}
-                                                    </button>
-                                                    {% if match.scoreTeam1 is null or match.scoreTeam2 is null %}
+                                                        </button>
                                                         <button type="button" class="edit-btn inline-flex items-center justify-center px-3 py-1.5 ml-2 rounded-md text-sm font-medium bg-blue-500 hover:bg-blue-600 text-white transition-colors duration-200" onclick="enableScoreEdit('{{ match.id }}')">
                                                             Modifier
+                                                        </button>
+                                                    {% else %}
+                                                        <button type="button" class="inline-flex items-center justify-center px-3 py-1.5 rounded-md text-sm font-medium bg-gray-200 text-gray-500 cursor-not-allowed">
+                                                            En attente
                                                         </button>
                                                     {% endif %}
                                                 </form>
@@ -107,24 +161,146 @@
                         </div>
                     {% endfor %}
 
-                    <!-- Bouton Tour Suivant (caché par défaut, affiché via JS) -->
-                    <div id="next-round-container" class="flex justify-center mt-8 {% if allMatches|filter(m => m.scoreTeam1 is null or m.scoreTeam2 is null)|length > 0 or currentRound >= 4 %}hidden{% endif %}">
-                        <a href="{{ path('app_admin_next_round', {'id': tournamentId}) }}" data-turbo="true" class="inline-flex items-center px-4 py-2 bg-[#0d079f] text-white font-medium rounded-lg shadow-md hover:bg-[#0a0580] transition-colors duration-200">
+                    <!-- Bouton Tour Suivant -->
+                    <div id="next-round-container" class="flex justify-center mt-8 {% if not showNextRoundButton %}hidden{% endif %}">
+                        <a href="{{ path('app_admin_next_round', {'id': tournamentId}) }}"
+                           class="inline-flex items-center px-6 py-3 bg-[#0d079f] text-white font-medium rounded-lg shadow-md hover:bg-[#0a0580] transition-colors duration-200 transform hover:scale-105">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7" />
                             </svg>
-                            Tour Suivant
+                            Générer le Tour Suivant
                         </a>
+                    </div>
+
+                    <!-- Message d'information -->
+                    <div id="info-message" class="mt-4 text-center text-gray-600 {% if showNextRoundButton %}hidden{% endif %}">
+                        <p>Tous les matchs du tour actuel doivent être terminés pour passer au tour suivant.</p>
                     </div>
                 </div>
             </div>
         </section>
     </main>
 
-    <!-- Notification d'erreur -->
+    <!-- Modal de victoire -->
+    <div id="victory-modal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-2xl p-8 max-w-md w-full mx-4 text-center relative overflow-hidden">
+            <!-- Confettis animés -->
+            <div id="confetti-container" class="absolute inset-0 pointer-events-none"></div>
+
+            <!-- Contenu du modal -->
+            <div class="relative z-10">
+                <div class="mb-6">
+                    <div class="w-24 h-24 bg-gradient-to-r from-yellow-400 to-yellow-600 rounded-full mx-auto flex items-center justify-center mb-4 animate-bounce">
+                        <span class="text-4xl">🏆</span>
+                    </div>
+                    <h2 class="text-3xl font-bold text-gray-800 mb-2">Félicitations !</h2>
+                    <p class="text-lg text-gray-600">Le tournoi est terminé !</p>
+                </div>
+
+                <div class="bg-gradient-to-r from-[#0d079f] to-purple-600 rounded-xl p-6 mb-6 text-white">
+                    <h3 class="text-xl font-bold mb-2">🥇 Équipe Gagnante</h3>
+                    <p id="winner-name" class="text-2xl font-bold"></p>
+                </div>
+
+                <div class="space-y-3 mb-6">
+                    <div class="flex items-center justify-center space-x-2">
+                        <span class="text-2xl">🎉</span>
+                        <span class="text-gray-700">Tournoi terminé avec succès</span>
+                    </div>
+                    <div class="flex items-center justify-center space-x-2">
+                        <span class="text-2xl">⭐</span>
+                        <span class="text-gray-700">Bravo à tous les participants</span>
+                    </div>
+                </div>
+
+                <button onclick="closeVictoryModal()" class="bg-[#0d079f] hover:bg-[#0a0580] text-white px-6 py-3 rounded-lg font-medium transition-colors duration-200">
+                    Fermer
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Canvas pour les feux d'artifice -->
+    <canvas id="fireworks-canvas" class="fixed inset-0 pointer-events-none z-40 hidden"></canvas>
+
+    <!-- Notifications -->
     <div id="error-message" class="fixed top-4 right-4 bg-red-500 text-white px-4 py-2 rounded shadow-lg hidden z-50"></div>
+    <div id="success-message" class="fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded shadow-lg hidden z-50"></div>
+
+    <style>
+        /* Animations CSS */
+        @keyframes confetti-fall {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        @keyframes winner-glow {
+            0%, 100% {
+                box-shadow: 0 0 20px rgba(13, 7, 159, 0.5);
+            }
+            50% {
+                box-shadow: 0 0 40px rgba(13, 7, 159, 0.8), 0 0 60px rgba(13, 7, 159, 0.6);
+            }
+        }
+
+        @keyframes trophy-bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0) scale(1);
+            }
+            40% {
+                transform: translateY(-20px) scale(1.1);
+            }
+            60% {
+                transform: translateY(-10px) scale(1.05);
+            }
+        }
+
+        .confetti-piece {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            animation: confetti-fall 3s linear infinite;
+        }
+
+        .winner-glow {
+            animation: winner-glow 2s ease-in-out infinite;
+        }
+
+        .trophy-bounce {
+            animation: trophy-bounce 2s ease-in-out infinite;
+        }
+
+        /* Styles pour les feux d'artifice */
+        .firework {
+            position: absolute;
+            border-radius: 50%;
+            animation: firework-explosion 1s ease-out forwards;
+        }
+
+        @keyframes firework-explosion {
+            0% {
+                transform: scale(0);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 0;
+            }
+        }
+    </style>
 
     <script>
+        // Variables globales pour le contrôle de l'animation
+        let tournamentAnimationShown = false;
+        const tournamentId = document.getElementById('tournament-data').dataset.tournamentId;
+        const STORAGE_KEY = `tournament_completed_${tournamentId}`;
+
         function enableScoreEdit(matchId) {
             const row = document.getElementById(`match-row-${matchId}`);
             if (!row) {
@@ -135,6 +311,7 @@
             const inputs = row.querySelectorAll('input[type="number"]');
             inputs.forEach(input => {
                 input.readOnly = false;
+                input.classList.remove('bg-gray-100');
                 input.focus();
             });
 
@@ -147,158 +324,438 @@
             }
         }
 
-        function checkAllMatchesCompleted() {
-            const scoreInputs = document.querySelectorAll('.score-input');
-            let allCompleted = true;
+        function updateProgressIndicator(completedMatches, totalMatches) {
+            const progressIndicator = document.getElementById('progress-indicator');
+            const progressBar = document.getElementById('progress-bar');
+            const progressText = document.getElementById('progress-text');
 
-            scoreInputs.forEach(input => {
-                if (input.value === '') {
-                    allCompleted = false;
-                }
-            });
-
-            const nextRoundContainer = document.getElementById('next-round-container');
-            const currentRound = {{ currentRound ?? 1 }};
-
-            if (allCompleted && currentRound < 4) {
-                if (nextRoundContainer) {
-                    nextRoundContainer.classList.remove('hidden');
-                    console.log('Tous les matchs sont terminés - Affichage du bouton Tour Suivant');
-                }
+            if (totalMatches > 0) {
+                progressIndicator.classList.remove('hidden');
+                const percentage = (completedMatches / totalMatches) * 100;
+                progressBar.style.width = percentage + '%';
+                progressText.textContent = `${completedMatches}/${totalMatches} matchs terminés`;
             } else {
-                if (nextRoundContainer) {
-                    nextRoundContainer.classList.add('hidden');
-                    console.log('Matchs non terminés - Masquage du bouton Tour Suivant');
+                progressIndicator.classList.add('hidden');
+            }
+        }
+
+        function createConfetti() {
+            const container = document.getElementById('confetti-container');
+            const colors = ['#FFD700', '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7', '#DDA0DD', '#98D8C8'];
+
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti-piece';
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.animationDelay = Math.random() * 3 + 's';
+                confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                container.appendChild(confetti);
+            }
+
+            // Nettoyer les confettis après l'animation
+            setTimeout(() => {
+                container.innerHTML = '';
+            }, 6000);
+        }
+
+        function createFireworks() {
+            const canvas = document.getElementById('fireworks-canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            canvas.classList.remove('hidden');
+
+            const fireworks = [];
+
+            class Firework {
+                constructor(x, y) {
+                    this.x = x;
+                    this.y = y;
+                    this.particles = [];
+                    this.createParticles();
+                }
+
+                createParticles() {
+                    const colors = ['#FFD700', '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4'];
+                    for (let i = 0; i < 30; i++) {
+                        this.particles.push({
+                            x: this.x,
+                            y: this.y,
+                            vx: (Math.random() - 0.5) * 10,
+                            vy: (Math.random() - 0.5) * 10,
+                            life: 1,
+                            decay: Math.random() * 0.02 + 0.01,
+                            color: colors[Math.floor(Math.random() * colors.length)]
+                        });
+                    }
+                }
+
+                update() {
+                    this.particles.forEach((particle, index) => {
+                        particle.x += particle.vx;
+                        particle.y += particle.vy;
+                        particle.vy += 0.1; // gravity
+                        particle.life -= particle.decay;
+
+                        if (particle.life <= 0) {
+                            this.particles.splice(index, 1);
+                        }
+                    });
+                }
+
+                draw(ctx) {
+                    this.particles.forEach(particle => {
+                        ctx.save();
+                        ctx.globalAlpha = particle.life;
+                        ctx.fillStyle = particle.color;
+                        ctx.beginPath();
+                        ctx.arc(particle.x, particle.y, 3, 0, Math.PI * 2);
+                        ctx.fill();
+                        ctx.restore();
+                    });
+                }
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                fireworks.forEach((firework, index) => {
+                    firework.update();
+                    firework.draw(ctx);
+
+                    if (firework.particles.length === 0) {
+                        fireworks.splice(index, 1);
+                    }
+                });
+
+                if (fireworks.length > 0) {
+                    requestAnimationFrame(animate);
+                } else {
+                    canvas.classList.add('hidden');
+                }
+            }
+
+            // Créer plusieurs feux d'artifice
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => {
+                    fireworks.push(new Firework(
+                        Math.random() * canvas.width,
+                        Math.random() * canvas.height * 0.5
+                    ));
+                    if (i === 0) animate();
+                }, i * 500);
+            }
+        }
+
+        function showVictoryAnimation(winnerName) {
+            // Marquer l'animation comme affichée dans le localStorage
+            localStorage.setItem(STORAGE_KEY, JSON.stringify({
+                completed: true,
+                winner: winnerName,
+                timestamp: Date.now()
+            }));
+
+            // Afficher le modal
+            const modal = document.getElementById('victory-modal');
+            const winnerNameElement = document.getElementById('winner-name');
+
+            winnerNameElement.textContent = winnerName;
+            modal.classList.remove('hidden');
+
+            // Créer les confettis
+            createConfetti();
+
+            // Créer les feux d'artifice
+            setTimeout(() => {
+                createFireworks();
+            }, 1000);
+
+            // Marquer que l'animation a été montrée
+            tournamentAnimationShown = true;
+
+            console.log('🏆 Animation de victoire affichée pour:', winnerName);
+        }
+
+        function closeVictoryModal() {
+            const modal = document.getElementById('victory-modal');
+            modal.classList.add('hidden');
+
+            // Afficher la bannière de tournoi terminé
+            showCompletedTournamentBanner();
+        }
+
+        function showCompletedTournamentBanner() {
+            const tournamentData = localStorage.getItem(STORAGE_KEY);
+            if (tournamentData) {
+                const data = JSON.parse(tournamentData);
+                const banner = document.getElementById('tournament-completed-banner');
+                const winnerBanner = document.getElementById('tournament-winner-banner');
+
+                winnerBanner.textContent = `Gagnant: ${data.winner}`;
+                banner.classList.remove('hidden');
+            }
+        }
+
+        function isTournamentCompleted() {
+            const tournamentData = localStorage.getItem(STORAGE_KEY);
+            return tournamentData !== null;
+        }
+
+        function checkForTournamentEnd(data, isFromScoreSubmission = false) {
+            // Vérifier si le tournoi est déjà marqué comme terminé
+            if (isTournamentCompleted()) {
+                console.log('🚫 Tournoi déjà terminé, animation déjà affichée');
+                showCompletedTournamentBanner();
+                return;
+            }
+
+            // Vérifier si c'est le dernier tour et qu'il n'y a plus de tour suivant possible
+            if (!data.showNextRoundButton && data.allMatchesCompleted && data.totalMatches > 0) {
+                // Trouver le gagnant du dernier match du dernier tour
+                const lastRoundMatches = document.querySelectorAll(`#round-${data.currentRound} tr[id^="match-row-"]`);
+
+                if (lastRoundMatches.length === 1) {
+                    // C'est la finale !
+                    const finalMatch = lastRoundMatches[0];
+                    const team1Cell = finalMatch.children[0];
+                    const team2Cell = finalMatch.children[1];
+                    const score1Input = finalMatch.querySelector('input[name="scoreTeam1"]');
+                    const score2Input = finalMatch.querySelector('input[name="scoreTeam2"]');
+
+                    const score1 = parseInt(score1Input.value);
+                    const score2 = parseInt(score2Input.value);
+
+                    let winnerName = '';
+                    if (score1 >= 13) {
+                        winnerName = team1Cell.textContent.replace('🏆', '').trim();
+                        team1Cell.classList.add('winner-glow');
+                    } else if (score2 >= 13) {
+                        winnerName = team2Cell.textContent.replace('🏆', '').trim();
+                        team2Cell.classList.add('winner-glow');
+                    }
+
+                    // SEULEMENT déclencher l'animation si elle vient d'une soumission de score
+                    // ET que l'animation n'a jamais été montrée
+                    if (winnerName && isFromScoreSubmission && !tournamentAnimationShown) {
+                        console.log('🎉 Déclenchement de l\'animation de victoire pour:', winnerName);
+                        setTimeout(() => {
+                            showVictoryAnimation(winnerName);
+                        }, 1500); // Délai pour laisser le temps de voir le score
+                    } else if (winnerName && !isFromScoreSubmission) {
+                        // Si on arrive sur la page et que le tournoi est terminé, juste afficher la bannière
+                        console.log('📋 Tournoi terminé détecté au chargement, affichage de la bannière');
+                        showCompletedTournamentBanner();
+                    }
                 }
             }
         }
 
-        document.querySelectorAll('.score-form').forEach(form => {
-            form.addEventListener('submit', async (e) => {
-                e.preventDefault();
+        function checkMatchesCompleted(isFromScoreSubmission = false) {
+            fetch(`/check-matches-completed?tournamentId=${tournamentId}`)
+                .then(response => response.json())
+                .then(data => {
+                    const nextRoundButton = document.getElementById('next-round-container');
+                    const infoMessage = document.getElementById('info-message');
 
-                const matchId = form.dataset.matchId;
-                const row = document.getElementById(`match-row-${matchId}`);
-                const scoreInputs = row.querySelectorAll('input[type="number"]');
-
-                if (scoreInputs.length !== 2) {
-                    showError("Erreur: Impossible de trouver les champs de score");
-                    return;
-                }
-
-                const score1 = scoreInputs[0].value;
-                const score2 = scoreInputs[1].value;
-
-                // Validation
-                if (score1 === "" || score2 === "") {
-                    showError("Les scores ne peuvent pas être vides");
-                    return;
-                }
-                if (isNaN(score1) || isNaN(score2)) {
-                    showError("Les scores doivent être des nombres");
-                    return;
-                }
-                if (score1 < 0 || score2 < 0) {
-                    showError("Les scores ne peuvent pas être négatifs");
-                    return;
-                }
-                if (parseInt(score1) === parseInt(score2)) {
-                    showError("Les scores ne peuvent pas être égaux en pétanque");
-                    return;
-                }
-                if ((score1 == 13 && score2 > 11) || (score2 == 13 && score1 > 11)) {
-                    showError("Score invalide - en pétanque, quand une équipe atteint 13, l'autre ne peut pas dépasser 11");
-                    return;
-                }
-
-                const saveBtn = form.querySelector('.save-btn');
-                saveBtn.disabled = true;
-                saveBtn.innerHTML = '<svg class="animate-spin h-4 w-4 mr-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Chargement...';
-
-                try {
-                    const formData = new FormData(form);
-                    formData.append('scoreTeam1', score1);
-                    formData.append('scoreTeam2', score2);
-
-                    const response = await fetch(form.action, {
-                        method: 'POST',
-                        body: formData,
-                        headers: {
-                            'Accept': 'application/json',
-                            'X-Requested-With': 'XMLHttpRequest'
+                    // Mise à jour du bouton "Tour suivant"
+                    if (data.showNextRoundButton) {
+                        nextRoundButton.classList.remove('hidden');
+                        infoMessage.classList.add('hidden');
+                    } else {
+                        nextRoundButton.classList.add('hidden');
+                        if (data.totalMatches > 0 && !data.allMatchesCompleted) {
+                            infoMessage.classList.remove('hidden');
+                        } else {
+                            infoMessage.classList.add('hidden');
                         }
+                    }
+
+                    // Mise à jour de l'indicateur de progression
+                    updateProgressIndicator(data.completedMatches, data.totalMatches);
+
+                    // Vérifier si le tournoi est terminé
+                    checkForTournamentEnd(data, isFromScoreSubmission);
+                })
+                .catch(error => {
+                    console.error('Error checking matches:', error);
+                });
+        }
+
+        async function handleScoreSubmit(form) {
+            const matchId = form.dataset.matchId;
+            const row = document.getElementById(`match-row-${matchId}`);
+            const scoreInputs = row.querySelectorAll('input[type="number"]');
+            const saveBtn = form.querySelector('.save-btn');
+
+            // Récupération des scores
+            const score1 = scoreInputs[0].value;
+            const score2 = scoreInputs[1].value;
+
+            // Validation des scores
+            if (score1 === "" || score2 === "") {
+                showError("Les scores ne peuvent pas être vides");
+                return false;
+            }
+            if (isNaN(score1) || isNaN(score2)) {
+                showError("Les scores doivent être des nombres");
+                return false;
+            }
+            if (score1 < 0 || score2 < 0) {
+                showError("Les scores ne peuvent pas être négatifs");
+                return false;
+            }
+            if (parseInt(score1) === parseInt(score2)) {
+                showError("Les scores ne peuvent pas être égaux en pétanque");
+                return false;
+            }
+            if ((score1 == 13 && score2 > 11) || (score2 == 13 && score1 > 11)) {
+                showError("Score invalide - quand une équipe atteint 13, l'autre ne peut pas dépasser 11");
+                return false;
+            }
+            if (score1 > 13 || score2 > 13) {
+                showError("Le score maximum est 13");
+                return false;
+            }
+            if (score1 < 13 && score2 < 13) {
+                showError("Au moins une équipe doit atteindre 13 points pour gagner");
+                return false;
+            }
+
+            // Afficher l'indicateur de chargement
+            saveBtn.disabled = true;
+            saveBtn.innerHTML = '<svg class="animate-spin h-4 w-4 mr-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Enregistrement...';
+
+            try {
+                const formData = new FormData(form);
+                formData.append('scoreTeam1', score1);
+                formData.append('scoreTeam2', score2);
+
+                const response = await fetch(form.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.message || `Erreur HTTP: ${response.status}`);
+                }
+
+                if (data.status === 'success') {
+                    // Mise à jour de l'interface
+                    scoreInputs.forEach(input => {
+                        input.readOnly = true;
+                        input.classList.add('bg-gray-100');
                     });
 
-                    if (!response.ok) {
-                        const errorData = await response.json();
-                        throw new Error(errorData.message || `Erreur HTTP: ${response.status}`);
+                    // Mise à jour visuelle du gagnant
+                    const team1Cell = row.children[0];
+                    const team2Cell = row.children[1];
+
+                    if (parseInt(score1) >= 13) {
+                        team1Cell.classList.add('text-green-600', 'font-bold');
+                        team1Cell.innerHTML += ' <span class="ml-2 text-green-600 trophy-bounce">🏆</span>';
+                    } else if (parseInt(score2) >= 13) {
+                        team2Cell.classList.add('text-green-600', 'font-bold');
+                        team2Cell.innerHTML += ' <span class="ml-2 text-green-600 trophy-bounce">🏆</span>';
                     }
 
-                    const data = await response.json();
+                    row.classList.add('bg-green-50');
 
-                    if (data.status === 'success') {
-                        // Mettre à jour l'interface
-                        scoreInputs.forEach(input => {
-                            input.readOnly = true;
-                            input.classList.add('bg-gray-100');
-                        });
+                    saveBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg> Terminé';
+                    saveBtn.classList.remove('bg-green-500', 'hover:bg-green-600');
+                    saveBtn.classList.add('bg-green-100', 'text-green-800', 'cursor-default');
 
-                        saveBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg> Terminé';
-                        saveBtn.classList.remove('bg-green-500', 'hover:bg-green-600');
-                        saveBtn.classList.add('bg-gray-200', 'text-gray-700', 'cursor-not-allowed');
-
-                        // Vérifier si tous les matchs sont terminés après un léger délai
-                        setTimeout(checkAllMatchesCompleted, 300);
-
-                        // Notification de succès
-                        showSuccess(data.message || 'Scores enregistrés');
-                    } else {
-                        throw new Error(data.message || 'Erreur lors de l\'enregistrement');
+                    // Masquer le bouton modifier
+                    const editBtn = row.querySelector('.edit-btn');
+                    if (editBtn) {
+                        editBtn.style.display = 'none';
                     }
-                } catch (error) {
-                    console.error('Erreur:', error);
-                    saveBtn.disabled = false;
-                    saveBtn.innerHTML = 'Enregistrer';
-                    saveBtn.classList.add('bg-green-500', 'hover:bg-green-600', 'text-white');
-                    saveBtn.classList.remove('bg-gray-200', 'text-gray-700', 'cursor-not-allowed');
-                    showError(error.message);
+
+                    // Vérifier l'état des matchs avec un délai pour l'animation
+                    // IMPORTANT: Marquer que c'est une soumission de score
+                    setTimeout(() => {
+                        checkMatchesCompleted(true); // true = isFromScoreSubmission
+                    }, 1000);
+
+                    // Afficher le message de succès
+                    showSuccess(data.message || 'Scores enregistrés avec succès');
+                    return true;
+                } else {
+                    throw new Error(data.message || 'Erreur lors de l\'enregistrement');
+                }
+            } catch (error) {
+                console.error('Erreur:', error);
+                showError(error.message);
+
+                // Réactiver le bouton
+                saveBtn.disabled = false;
+                saveBtn.innerHTML = 'Enregistrer';
+                saveBtn.classList.add('bg-green-500', 'hover:bg-green-600', 'text-white');
+                saveBtn.classList.remove('bg-gray-200', 'text-gray-700', 'cursor-not-allowed');
+                return false;
+            }
+        }
+
+        // Initialisation des événements
+        document.addEventListener('DOMContentLoaded', function() {
+            // Vérifier si le tournoi est déjà terminé au chargement
+            if (isTournamentCompleted()) {
+                console.log('🏁 Tournoi déjà terminé détecté au chargement');
+                showCompletedTournamentBanner();
+            }
+
+            // Vérification initiale (pas une soumission de score)
+            checkMatchesCompleted(false);
+
+            // Vérification périodique toutes les 3 secondes (pas une soumission de score)
+            setInterval(() => checkMatchesCompleted(false), 3000);
+
+            // Gestion de la soumission des scores
+            document.querySelectorAll('.score-form').forEach(form => {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    handleScoreSubmit(this);
+                });
+            });
+
+            // Fermer le modal en cliquant à l'extérieur
+            document.getElementById('victory-modal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeVictoryModal();
                 }
             });
         });
 
-        // Vérification initiale au chargement
-        document.addEventListener('DOMContentLoaded', function() {
-            // Double vérification avec des délais différents
-            setTimeout(checkAllMatchesCompleted, 100);
-            setTimeout(checkAllMatchesCompleted, 500);
-
-            // Vérification finale après que tout soit chargé
-            setTimeout(checkAllMatchesCompleted, 1000);
-        });
-
         function showSuccess(message) {
-            const successDiv = document.createElement('div');
-            successDiv.className = 'fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded shadow-lg z-50 flex items-center';
+            const successDiv = document.getElementById('success-message');
             successDiv.innerHTML = `
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-            </svg>
-            ${message}
-        `;
-            document.body.appendChild(successDiv);
-            setTimeout(() => successDiv.remove(), 3000);
+                <div class="flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                    ${message}
+                </div>
+            `;
+            successDiv.classList.remove('hidden');
+            setTimeout(() => successDiv.classList.add('hidden'), 3000);
         }
 
         function showError(message) {
             const errorDiv = document.getElementById('error-message');
             errorDiv.innerHTML = `
-            <div class="flex items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                ${message.includes('Erreur HTTP: 400') ? 'Données invalides' : message}
-            </div>
-        `;
+                <div class="flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    ${message}
+                </div>
+            `;
             errorDiv.classList.remove('hidden');
             setTimeout(() => errorDiv.classList.add('hidden'), 5000);
         }

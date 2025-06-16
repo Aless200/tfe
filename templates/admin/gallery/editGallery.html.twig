@@ -108,12 +108,12 @@
                     <div class="mt-6">
                         <ul id="pictures-fields-list" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                             {% for picture in gallery.pictures %}
-                                <li class="image-preview relative bg-gray-50 rounded-lg overflow-hidden shadow-sm border border-gray-200 transition-all hover:shadow-md" data-picture-id="{{ picture.id }}">
+                                <li class="image-preview relative bg-gray-50 rounded-lg overflow-hidden shadow-sm border border-gray-200 transition-all hover:shadow-md group" data-picture-id="{{ picture.id }}">
                                     <div class="aspect-w-1 aspect-h-1">
-                                        <img src="/images/gallery/{{ picture.imageName }}" alt="Preview" class="w-full h-full object-cover">
+                                        <img src="{{ asset('images/gallery/' ~ picture.imageName) }}" alt="Preview" class="w-full h-full object-cover">
                                     </div>
                                     <!-- Bouton de suppression -->
-                                    <button type="button" class="remove-existing-image absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white rounded-full p-1.5 shadow-lg transition-colors opacity-0 hover:opacity-100 group-hover:opacity-100" data-picture-id="{{ picture.id }}">
+                                    <button type="button" onclick="showDeleteConfirmationModal('{{ picture.id }}')" class="remove-existing-image absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white rounded-full p-1.5 shadow-lg transition-colors opacity-0 hover:opacity-100 group-hover:opacity-100">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                                         </svg>
@@ -142,6 +142,35 @@
                 </div>
 
                 {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de confirmation de suppression -->
+    <div id="deleteConfirmationModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50 hidden">
+        <div class="relative top-20 mx-auto p-5 border w-11/12 max-w-md shadow-lg rounded-md bg-white">
+            <div class="mt-3 text-center">
+                <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-yellow-100">
+                    <svg class="h-6 w-6 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                </div>
+                <h3 class="text-lg leading-6 font-medium text-gray-900 mt-4">Confirmer la suppression</h3>
+                <div class="mt-2 px-7 py-3">
+                    <p class="text-sm text-gray-500">
+                        Êtes-vous sûr de vouloir supprimer cette image ?
+                    </p>
+                </div>
+                <div class="items-center px-4 py-3">
+                    <div class="flex flex-col sm:flex-row gap-3">
+                        <button id="confirmDeleteBtn" onclick="confirmDeleteImage()" class="px-4 py-2 bg-[#0d079f] text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-[#0a0580] focus:outline-none focus:ring-2 focus:ring-[#0d079f]">
+                            Confirmer
+                        </button>
+                        <button onclick="hideDeleteConfirmationModal()" class="px-4 py-2 bg-gray-300 text-gray-800 text-base font-medium rounded-md w-full shadow-sm hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300">
+                            Annuler
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -177,6 +206,39 @@
     </style>
 
     <script>
+        let pictureIdToDelete = null;
+
+        function showDeleteConfirmationModal(pictureId) {
+            pictureIdToDelete = pictureId;
+            document.getElementById('deleteConfirmationModal').classList.remove('hidden');
+        }
+
+        function hideDeleteConfirmationModal() {
+            document.getElementById('deleteConfirmationModal').classList.add('hidden');
+        }
+
+        function confirmDeleteImage() {
+            if (pictureIdToDelete) {
+                const imageContainer = document.querySelector(`.image-preview[data-picture-id="${pictureIdToDelete}"]`);
+                const removeInput = imageContainer.querySelector('.remove-input');
+
+                // Marquer l'image pour suppression
+                removeInput.value = pictureIdToDelete;
+                imageContainer.classList.add('removing');
+
+                // Ajouter un badge "À supprimer"
+                const badge = document.createElement('div');
+                badge.className = 'absolute bottom-2 left-2 bg-red-500 text-white text-xs px-2 py-1 rounded font-medium';
+                badge.textContent = 'À supprimer';
+                imageContainer.appendChild(badge);
+
+                // Désactiver le bouton de suppression
+                const removeButton = imageContainer.querySelector('.remove-existing-image');
+                removeButton.style.display = 'none';
+            }
+            hideDeleteConfirmationModal();
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
             const dropzone = document.getElementById('dropzone');
             const fileUpload = document.getElementById('file-upload');
@@ -308,40 +370,19 @@
                 reader.readAsDataURL(file);
             }
 
-            // Gestion de la suppression des images existantes
-            document.addEventListener('click', function(e) {
-                if (e.target.closest('.remove-existing-image')) {
-                    e.preventDefault();
-                    e.stopPropagation();
-
-                    const button = e.target.closest('.remove-existing-image');
-                    const pictureId = button.dataset.pictureId;
-                    const imageContainer = button.closest('.image-preview');
-                    const removeInput = imageContainer.querySelector('.remove-input');
-
-                    if (confirm('Êtes-vous sûr de vouloir supprimer cette image ?')) {
-                        // Marquer l'image pour suppression
-                        removeInput.value = pictureId;
-                        imageContainer.classList.add('removing');
-
-                        // Ajouter un badge "À supprimer"
-                        const badge = document.createElement('div');
-                        badge.className = 'absolute bottom-2 left-2 bg-red-500 text-white text-xs px-2 py-1 rounded font-medium';
-                        badge.textContent = 'À supprimer';
-                        imageContainer.appendChild(badge);
-
-                        // Désactiver le bouton de suppression
-                        button.style.display = 'none';
-                    }
-                }
-            });
-
             // Cliquer sur le dropzone pour ouvrir le sélecteur de fichiers
             dropzone.addEventListener('click', function(e) {
                 if (e.target === dropzone || e.target.closest('.space-y-2')) {
                     fileUpload.click();
                 }
             });
+        });
+
+        // Fermer le modal en cliquant à l'extérieur
+        document.getElementById('deleteConfirmationModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                hideDeleteConfirmationModal();
+            }
         });
     </script>
 {% endblock %}

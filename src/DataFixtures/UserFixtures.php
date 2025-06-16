@@ -58,6 +58,7 @@ class UserFixtures extends Fixture
                 ->setRoles(['ROLE_USER'])
                 ->setIsDisabled(0)
                 ->setIsAnonymized(0)
+                ->setIsVerified(true)
                 ->setPhoneNumber($faker->regexify('\0 4\d{2} \d{2} \d{2} \d{2}'));
 
             $manager->persist($user);
@@ -73,6 +74,7 @@ class UserFixtures extends Fixture
             ->setCreatedAt(new \DateTimeImmutable())
             ->setUpdatedAt(new \DateTimeImmutable())
             ->setIsAnonymized(0)
+            ->setIsVerified(true)
             ->setRoles(['ROLE_ADMIN'])
             ->setPassword($this->hasher->hashPassword($admin, 'password'))
             ->setPhoneNumber($faker->regexify('\+32 4\d{2} \d{2} \d{2} \d{2}'));
@@ -90,6 +92,7 @@ class UserFixtures extends Fixture
             ->setUpdatedAt(new \DateTimeImmutable())
             ->setIsAnonymized(0)
             ->setRoles(['ROLE_SUPER_ADMIN'])
+            ->setIsVerified(true)
             ->setPassword($this->hasher->hashPassword($superAdmin, 'password'))
             ->setPhoneNumber($faker->regexify('\+32 4\d{2} \d{2} \d{2} \d{2}'));
         $manager->persist($superAdmin);

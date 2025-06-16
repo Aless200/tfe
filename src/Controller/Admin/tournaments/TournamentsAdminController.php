@@ -278,34 +278,32 @@ class TournamentsAdminController extends AbstractController
             throw $this->createNotFoundException("Tournoi introuvable !");
         }
 
-        // Récupérer tous les matchs du tournoi, triés par round
         $allMatches = $manager->getRepository(Game::class)->findBy(
             ['tournament' => $tournament],
             ['roundT' => 'ASC']
         );
 
-        // Regrouper les matchs par tour
         $matchesByRound = [];
         foreach ($allMatches as $match) {
             $round = $match->getRoundT();
             $matchesByRound[$round][] = $match;
         }
 
-        // Récupérer le round actuel depuis la session
         $currentRound = $this->getRoundFromSession($session, $id);
+        if (empty($matchesByRound)) {
+            $currentRound = 1;
+            $session->set('tournament_round_' . $id, $currentRound);
+        }
 
-        $activeTeams = $manager->getRepository(Team::class)->findBy([
-            'tournament' => $tournament,
-            'round' => $currentRound
-        ]);
+        $showNextRoundButton = $this->shouldShowNextRoundButton($tournament, $currentRound, $manager);
 
         return $this->render('admin/tournaments/showTournament.html.twig', [
             'tournamentId' => $id,
+            'tournament' => $tournament,
             'matchesByRound' => $matchesByRound,
-            'allMatches' => $allMatches,
             'currentRound' => $currentRound,
-            'activeTeams' => $activeTeams,
             'isShuffled' => !empty($allMatches),
+            'showNextRoundButton' => $showNextRoundButton,
         ]);
     }
 
@@ -350,8 +348,6 @@ class TournamentsAdminController extends AbstractController
             }
             $this->addFlash('admin_warning', "$byeCount équipe(s) BYE ajoutée(s) pour compléter à $nextPowerOfTwo équipes.");
         }
-//        dd($teams);
-//        dd($tournament->getTeams()->toArray());
 
         // Mélanger les équipes
         shuffle($teams);
@@ -393,15 +389,6 @@ class TournamentsAdminController extends AbstractController
 
         return $this->redirectToRoute('app_admin_showTournament', ['id' => $id]);
     }
-//    private function createByeTeam(EntityManagerInterface $manager): Team
-//    {
-//        $byeTeam = new Team();
-//        $byeTeam->setTeamName('BYE (Exempt)')
-//            ->setIsBye(true);
-//
-//        $manager->persist($byeTeam);
-//        return $byeTeam;
-//    }
 
     private function getRoundFromSession(SessionInterface $session, int $tournamentId): int
     {
@@ -425,15 +412,12 @@ class TournamentsAdminController extends AbstractController
                 if (!isset($data[$field]) || $data[$field] === '') {
                     return new JsonResponse([
                         'status' => 'error',
-                        'message' => "Le champ $field est manquant ou vide",
-                        'receivedData' => $data
+                        'message' => "Le champ $field est manquant ou vide"
                     ], 400);
                 }
             }
 
             $gameId = (int)$data['gameId'];
-            $tournamentId = (int)$data['tournamentId'];
-            $round = (int)$data['round'];
             $scoreTeam1 = (int)$data['scoreTeam1'];
             $scoreTeam2 = (int)$data['scoreTeam2'];
 
@@ -443,7 +427,15 @@ class TournamentsAdminController extends AbstractController
             }
 
             if ($scoreTeam1 === $scoreTeam2) {
-                return new JsonResponse(['status' => 'error', 'message' => 'Les scores ne peuvent pas être égaux'], 400);
+                return new JsonResponse(['status' => 'error', 'message' => 'Les scores ne peuvent pas être égaux en pétanque'], 400);
+            }
+
+            if (($scoreTeam1 == 13 && $scoreTeam2 > 11) || ($scoreTeam2 == 13 && $scoreTeam1 > 11)) {
+                return new JsonResponse(['status' => 'error', 'message' => 'Score invalide - quand une équipe atteint 13, l\'autre ne peut pas dépasser 11'], 400);
+            }
+
+            if ($scoreTeam1 > 13 || $scoreTeam2 > 13) {
+                return new JsonResponse(['status' => 'error', 'message' => 'Le score maximum est 13'], 400);
             }
 
             // Récupérer le match
@@ -456,27 +448,14 @@ class TournamentsAdminController extends AbstractController
             $game->setScoreTeam1($scoreTeam1);
             $game->setScoreTeam2($scoreTeam2);
 
-            // Déterminer l'équipe gagnante si le match est terminé
-            $winner = null;
-            if ($scoreTeam1 >= 13 || $scoreTeam2 >= 13) {
-                $winner = $scoreTeam1 >= 13 ? $game->getTeam1() : $game->getTeam2();
-                $winner->setRound($round + 1);
-                $manager->persist($winner);
-            }
-
             $manager->flush();
 
-            $isTournamentCompleted = $this->isTournamentCompleted($tournamentId, $manager);
             return new JsonResponse([
                 'status' => 'success',
+                'message' => 'Scores enregistrés avec succès',
                 'gameId' => $game->getId(),
                 'scoreTeam1' => $game->getScoreTeam1(),
-                'scoreTeam2' => $game->getScoreTeam2(),
-                'isCompleted' => ($game->getScoreTeam1() >= 13 || $game->getScoreTeam2() >= 13),
-                'winnerTeamId' => $winner ? $winner->getId() : null,
-                'nextRound' => $winner ? ($isTournamentCompleted ? null : $round + 1) : $round,
-                'message' => 'Scores enregistrés avec succès',
-                'tournamentCompleted' => $isTournamentCompleted
+                'scoreTeam2' => $game->getScoreTeam2()
             ]);
 
         } catch (\Exception $e) {
@@ -563,7 +542,6 @@ class TournamentsAdminController extends AbstractController
         }
     }
 
-
     #[Route('/admin/next_round/{id}', name: 'app_admin_next_round', methods: ['GET'])]
     public function nextRound(int $id, TournamentRepository $repository, EntityManagerInterface $manager, SessionInterface $session): Response
     {
@@ -574,13 +552,16 @@ class TournamentsAdminController extends AbstractController
 
         $currentRound = $this->getRoundFromSession($session, $id);
 
-        // Correction : On retire "tournament" et on cherche juste par "roundT"
+        // CORRECTION : Filtrer par tournoi ET par round
         $matches = $manager->getRepository(Game::class)->findBy([
+            'tournament' => $tournament,
             'roundT' => $currentRound
         ]);
 
+        // Vérifier que tous les matchs du tour actuel sont terminés
         foreach ($matches as $match) {
-            if ($match->getScoreTeam1() === null || $match->getScoreTeam2() === null) {
+            if ($match->getScoreTeam1() === null || $match->getScoreTeam2() === null ||
+                ($match->getScoreTeam1() < 13 && $match->getScoreTeam2() < 13)) {
                 $this->addFlash('admin_error', 'Tous les matchs doivent être terminés avant de passer au tour suivant');
                 return $this->redirectToRoute('app_admin_showTournament', ['id' => $id]);
             }
@@ -589,6 +570,8 @@ class TournamentsAdminController extends AbstractController
         $this->generateNextRoundMatches($tournament, $currentRound, $manager);
 
         $session->set('tournament_round_' . $id, $currentRound + 1);
+
+        $this->addFlash('admin_success', 'Tour suivant généré avec succès !');
 
         return $this->redirectToRoute('app_admin_showTournament', ['id' => $id]);
     }
@@ -745,6 +728,85 @@ class TournamentsAdminController extends AbstractController
         return 0;
     }
 
+    /**
+     * CORRECTION : Nouvelle méthode pour vérifier si le bouton "Tour suivant" doit être affiché
+     */
+    private function shouldShowNextRoundButton(Tournament $tournament, int $currentRound, EntityManagerInterface $manager): bool
+    {
+        // Récupérer tous les matchs du tour actuel pour ce tournoi
+        $currentRoundMatches = $manager->getRepository(Game::class)->findBy([
+            'tournament' => $tournament,
+            'roundT' => $currentRound
+        ]);
 
+        // Si aucun match n'existe pour le tour actuel, pas de bouton
+        if (empty($currentRoundMatches)) {
+            return false;
+        }
 
+        // Vérifier que tous les matchs du tour actuel sont terminés
+        foreach ($currentRoundMatches as $match) {
+            // Un match est terminé si les deux scores sont renseignés ET qu'une équipe a atteint 13
+            if ($match->getScoreTeam1() === null || $match->getScoreTeam2() === null) {
+                return false; // Score manquant
+            }
+
+            if ($match->getScoreTeam1() < 13 && $match->getScoreTeam2() < 13) {
+                return false; // Aucune équipe n'a gagné
+            }
+        }
+
+        // Vérifier s'il reste plus d'une équipe gagnante (sinon c'est la finale)
+        $winners = [];
+        foreach ($currentRoundMatches as $match) {
+            if ($match->getScoreTeam1() >= 13) {
+                $winners[] = $match->getTeam1();
+            } elseif ($match->getScoreTeam2() >= 13) {
+                $winners[] = $match->getTeam2();
+            }
+        }
+
+        // S'il reste plus d'une équipe, on peut faire un tour suivant
+        return count($winners) > 1;
+    }
+
+    #[Route('/check-matches-completed', name: 'app_admin_check_matches_completed', methods: ['GET'])]
+    public function checkMatchesCompleted(Request $request, EntityManagerInterface $manager, SessionInterface $session): JsonResponse
+    {
+        $tournamentId = $request->query->get('tournamentId');
+        $tournament = $manager->getRepository(Tournament::class)->find($tournamentId);
+
+        if (!$tournament) {
+            return new JsonResponse(['status' => 'error', 'message' => 'Tournoi introuvable'], 404);
+        }
+
+        $currentRound = $this->getRoundFromSession($session, $tournamentId);
+
+        // CORRECTION : Utiliser la nouvelle méthode
+        $showNextRoundButton = $this->shouldShowNextRoundButton($tournament, $currentRound, $manager);
+
+        // Récupérer les informations sur les matchs du tour actuel
+        $currentRoundMatches = $manager->getRepository(Game::class)->findBy([
+            'tournament' => $tournament,
+            'roundT' => $currentRound
+        ]);
+
+        $completedMatches = 0;
+        $totalMatches = count($currentRoundMatches);
+
+        foreach ($currentRoundMatches as $match) {
+            if ($match->getScoreTeam1() !== null && $match->getScoreTeam2() !== null &&
+                ($match->getScoreTeam1() >= 13 || $match->getScoreTeam2() >= 13)) {
+                $completedMatches++;
+            }
+        }
+
+        return new JsonResponse([
+            'showNextRoundButton' => $showNextRoundButton,
+            'currentRound' => $currentRound,
+            'completedMatches' => $completedMatches,
+            'totalMatches' => $totalMatches,
+            'allMatchesCompleted' => $completedMatches === $totalMatches && $totalMatches > 0
+        ]);
+    }
 }
