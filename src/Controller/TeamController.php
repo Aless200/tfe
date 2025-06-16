@@ -233,7 +233,8 @@ class TeamController extends AbstractController
                     'tournamentName' => $tournament->getName(),
                     'date' => $tournament->getDateTournament()->format('d/m/Y'),
                     'address' => $tournament->getAdresse(),
-                    'type' => $typeDisplay
+                    'type' => $typeDisplay,
+                    'price' => $tournament->getPrice(),
                 ]));
 
             $mailer->send($emailMessage);

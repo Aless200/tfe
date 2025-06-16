@@ -11,11 +11,12 @@
                 {# Logo circle #}
                 <div style="position: relative; z-index: 10; height: 4rem; width: 4rem; overflow: hidden; border-radius: 9999px; border: 2px solid white; background-color: white; display: flex; align-items: center; justify-content: center;">
                     <div style="color: #0d079f; font-weight: bold; font-size: 1.5rem;">
-                        <img src="{{ absolute_url(asset('images/logoPcm.png')) }}" class="mt-2" alt="boule de pétanque" style="max-width: 100%; max-height: 100%;">                    </div>
+                        <img src="{{ absolute_url(asset('images/logoPcm.png')) }}" class="mt-2" alt="boule de pétanque" style="max-width: 100%; max-height: 100%;">
+                    </div>
                 </div>
 
                 {# Title #}
-                <h1 style="margin-left: 1rem; font-size: 1.25rem; font-weight: bold; color: white;">Confirmation de participation à l'équipe</h1>
+                <h1 style="margin-left: 1rem; font-size: 1.25rem; font-weight: bold; color: white;">Bienvenue dans l'équipe !</h1>
             </div>
 
             {# Bottom white line #}
@@ -24,38 +25,158 @@
 
         {# Email Body #}
         <div style="background-color: white; border-radius: 0.5rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); margin-left: 1rem; margin-right: 1rem; margin-top: 1.5rem; margin-bottom: 1.5rem; overflow: hidden;">
+            {# Welcome Badge #}
+            <div style="background: linear-gradient(135deg, #059669 0%, #10b981 100%); padding: 1.5rem; text-align: center;">
+                <div style="background-color: white; border-radius: 9999px; width: 4rem; height: 4rem; margin: 0 auto 1rem auto; display: flex; align-items: center; justify-content: center;">
+                    <svg style="width: 2rem; height: 2rem; color: #059669;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+                <h2 style="color: white; font-size: 1.5rem; font-weight: bold; margin: 0;">Félicitations !</h2>
+                <p style="color: rgba(255, 255, 255, 0.9); margin: 0.5rem 0 0 0; font-size: 1rem;">Vous faites maintenant partie de l'équipe</p>
+            </div>
+
             {# Content #}
-            <div style="padding: 1.5rem;">
-                <p style="color: #1f2937; margin-bottom: 1rem;">
+            <div style="padding: 2rem 1.5rem;">
+                <p style="color: #1f2937; margin-bottom: 1.5rem; font-size: 1rem; line-height: 1.6;">
                     Bonjour,
                 </p>
 
-                <p style="color: #1f2937; margin-bottom: 1rem;">
-                    Vous faites maintenant partie de l'équipe <strong>{{ teamName }}</strong>.
-                </p>
+                <div style="background-color: #ecfdf5; border: 1px solid #10b981; border-radius: 0.75rem; padding: 1.5rem; margin-bottom: 1.5rem;">
+                    <div style="display: flex; align-items: center; margin-bottom: 1rem;">
+                        <div style="flex-shrink: 0; width: 3rem; height: 3rem; background-color: #10b981; border-radius: 9999px; display: flex; align-items: center; justify-content: center; margin-right: 1rem;">
+                            <svg style="width: 1.5rem; height: 1.5rem; color: white;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <p style="color: #065f46; font-size: 1.125rem; font-weight: 600; margin: 0;">Équipe {{ teamName }}</p>
+                            <p style="color: #047857; font-size: 0.875rem; margin: 0;">Votre participation est confirmée</p>
+                        </div>
+                    </div>
+                    <p style="color: #065f46; margin: 0; font-size: 1rem; line-height: 1.5;">
+                        🎉 <strong>Excellente nouvelle !</strong> Vous faites maintenant officiellement partie de l'équipe <strong style="color: #0d079f;">{{ teamName }}</strong> et vous êtes prêt à participer au tournoi.
+                    </p>
+                </div>
 
-                <p style="color: #1f2937; margin-bottom: 1rem;">
-                    Tournoi: <strong>{{ tournamentName }}</strong>
-                </p>
+                {# Tournament Details Card #}
+                <div style="background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); border: 1px solid #cbd5e1; border-radius: 0.75rem; padding: 1.5rem; margin-bottom: 1.5rem;">
+                    <h3 style="color: #1e293b; font-size: 1.125rem; font-weight: 600; margin: 0 0 1rem 0; display: flex; align-items: center;">
+                        <svg style="width: 1.25rem; height: 1.25rem; color: #0d079f; margin-right: 0.5rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                        </svg>
+                        Détails du tournoi
+                    </h3>
+                    <div style="space-y: 0.75rem;">
+                        <div style="display: flex; align-items: center; margin-bottom: 0.75rem;">
+                            <div style="flex-shrink: 0; width: 2rem; height: 2rem; background-color: #0d079f; border-radius: 0.375rem; display: flex; align-items: center; justify-content: center; margin-right: 0.75rem;">
+                                <svg style="width: 1rem; height: 1rem; color: white;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <p style="color: #475569; font-size: 0.875rem; margin: 0; font-weight: 500;">Tournoi</p>
+                                <p style="color: #1e293b; font-size: 1rem; margin: 0; font-weight: 600;">{{ tournamentName }}</p>
+                            </div>
+                        </div>
+                        <div style="display: flex; align-items: center; margin-bottom: 0.75rem;">
+                            <div style="flex-shrink: 0; width: 2rem; height: 2rem; background-color: #0d079f; border-radius: 0.375rem; display: flex; align-items: center; justify-content: center; margin-right: 0.75rem;">
+                                <svg style="width: 1rem; height: 1rem; color: white;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <p style="color: #475569; font-size: 0.875rem; margin: 0; font-weight: 500;">Date</p>
+                                <p style="color: #1e293b; font-size: 1rem; margin: 0; font-weight: 600;">{{ date }}</p>
+                            </div>
+                        </div>
+                        <div style="display: flex; align-items: center; margin-bottom: 0.75rem;">
+                            <div style="flex-shrink: 0; width: 2rem; height: 2rem; background-color: #0d079f; border-radius: 0.375rem; display: flex; align-items: center; justify-content: center; margin-right: 0.75rem;">
+                                <svg style="width: 1rem; height: 1rem; color: white;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <p style="color: #475569; font-size: 0.875rem; margin: 0; font-weight: 500;">Lieu</p>
+                                <p style="color: #1e293b; font-size: 1rem; margin: 0; font-weight: 600;">{{ address }}</p>
+                            </div>
+                        </div>
+                        <div style="display: flex; align-items: center;">
+                            <div style="flex-shrink: 0; width: 2rem; height: 2rem; background-color: #0d079f; border-radius: 0.375rem; display: flex; align-items: center; justify-content: center; margin-right: 0.75rem;">
+                                <svg style="width: 1rem; height: 1rem; color: white;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <p style="color: #475569; font-size: 0.875rem; margin: 0; font-weight: 500;">Format</p>
+                                <p style="color: #1e293b; font-size: 1rem; margin: 0; font-weight: 600;">{{ type }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-                <p style="color: #1f2937; margin-bottom: 1rem;">
-                    Date: {{ date }}
-                </p>
+                {# Next Steps #}
+                <div style="background-color: #dbeafe; border-left: 4px solid #3b82f6; padding: 1rem; margin-bottom: 1.5rem; border-radius: 0 0.375rem 0.375rem 0;">
+                    <p style="color: #1e40af; margin: 0; font-weight: 500;">
+                        <strong>Préparez-vous pour le grand jour !</strong> 🎉 Pour une expérience sans tracas, arrivez 30 à 45 minutes plus tôt pour finaliser votre inscription en réglant votre participation en liquide sur place. Le tarif est de {{ price }}€ par équipe. Soyez prêts à jouer et à gagner !
+                    </p>
+                </div>
+            </div>
+        </div>
 
-                <p style="color: #1f2937; margin-bottom: 1rem;">
-                    Adresse: {{ address }}
-                </p>
-
-                <p style="color: #1f2937; margin-bottom: 1rem;">
-                    Type: {{ type }}
-                </p>
+        {# Preparation Tips Section #}
+        <div style="background-color: white; border-radius: 0.5rem; box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06); margin-left: 1rem; margin-right: 1rem; margin-bottom: 1.5rem; overflow: hidden;">
+            <div style="padding: 1.5rem;">
+                <h3 style="color: #1f2937; font-size: 1.125rem; font-weight: 600; margin-bottom: 1rem; display: flex; align-items: center;">
+                    <svg style="width: 1.25rem; height: 1.25rem; color: #0d079f; margin-right: 0.5rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                    </svg>
+                    Conseils de préparation
+                </h3>
+                <div style="display: flex; align-items: flex-start; margin-bottom: 0.75rem;">
+                    <div style="flex-shrink: 0; margin-right: 0.75rem;">
+                        <div style="width: 1.5rem; height: 1.5rem; background-color: #0d079f; color: white; border-radius: 9999px; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: bold;">🎯</div>
+                    </div>
+                    <p style="color: #4b5563; font-size: 0.875rem; margin: 0;">
+                        <strong>Entraînement :</strong> Profitez du temps restant pour vous entraîner et affiner votre technique de lancer.
+                    </p>
+                </div>
+                <div style="display: flex; align-items: flex-start; margin-bottom: 0.75rem;">
+                    <div style="flex-shrink: 0; margin-right: 0.75rem;">
+                        <div style="width: 1.5rem; height: 1.5rem; background-color: #0d079f; color: white; border-radius: 9999px; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: bold;">🎒</div>
+                    </div>
+                    <p style="color: #4b5563; font-size: 0.875rem; margin: 0;">
+                        <strong>Équipement :</strong> Vérifiez que vous avez tout le matériel nécessaire (boules, chiffon, etc.).
+                    </p>
+                </div>
+                <div style="display: flex; align-items: flex-start; margin-bottom: 0.75rem;">
+                    <div style="flex-shrink: 0; margin-right: 0.75rem;">
+                        <div style="width: 1.5rem; height: 1.5rem; background-color: #0d079f; color: white; border-radius: 9999px; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: bold;">👥</div>
+                    </div>
+                    <p style="color: #4b5563; font-size: 0.875rem; margin: 0;">
+                        <strong>Cohésion d'équipe :</strong> N'hésitez pas à contacter vos coéquipiers pour faire connaissance avant le tournoi.
+                    </p>
+                </div>
+                <div style="display: flex; align-items: flex-start;">
+                    <div style="flex-shrink: 0; margin-right: 0.75rem;">
+                        <div style="width: 1.5rem; height: 1.5rem; background-color: #0d079f; color: white; border-radius: 9999px; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: bold;">📍</div>
+                    </div>
+                    <p style="color: #4b5563; font-size: 0.875rem; margin: 0;">
+                        <strong>Repérage :</strong> Si possible, visitez le lieu du tournoi à l'avance pour vous familiariser avec le terrain.
+                    </p>
+                </div>
             </div>
         </div>
 
         {# Footer #}
         <div style="text-align: center; font-size: 0.75rem; color: #6b7280; padding-left: 1rem; padding-right: 1rem; padding-bottom: 1.5rem;">
-            <p style="margin-bottom: 0.5rem;">© {{ "now"|date("Y") }} Votre Site. Tous droits réservés.</p>
-            <p>Cet email a été envoyé automatiquement, merci de ne pas y répondre directement.</p>
+            <p style="margin-bottom: 0.5rem;">© {{ "now"|date("Y") }} Votre Site de Pétanque. Tous droits réservés.</p>
+            <p style="margin-bottom: 0.5rem;">Cet email a été envoyé automatiquement, merci de ne pas y répondre directement.</p>
+            <p style="color: #9ca3af;">
+                Bonne chance pour le tournoi ! 🏆<br>
+                <strong>L'équipe d'organisation</strong>
+            </p>
         </div>
     </div>
 {% endblock %}

@@ -20,11 +20,16 @@ class Team
         message: 'le nom de l\'équipe ne peux pas être vide.',
     )]
     #[Assert\Length(
-        min: 3,
+        min: 2,
         max: 255,
-        minMessage: 'Le nom de votre équipe doit au moins faire { limit } caractères.',
-        maxMessage: 'Le nom de votre équipe ne peux pas dépasser { limit } caractères.',
+        minMessage: 'Le nom de votre équipe doit au moins contenir {{ limit }} caractères.',
+        maxMessage: 'Le nom de votre équipe ne peux pas dépasser {{ limit }} caractères.',
 
+    )]
+    #[Assert\Regex(
+        pattern: '/\b[bB][yY][eE](-\d+)?\b/',
+        match: false,
+        message: 'Le nom de l\'équipe ne peut pas contenir de variantes de "bye" comme "ByE", "bYe", "BYE", "bye-1", etc.'
     )]
     #[ORM\Column(length: 255)]
     private ?string $teamName = null;

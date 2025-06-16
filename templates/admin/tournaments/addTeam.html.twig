@@ -17,39 +17,93 @@
 
                 {{ form_start(form) }}
                 <div class="space-y-4">
-                    {{ form_row(form.teamName, {
-                        'attr': {'class': 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'}
-                    }) }}
+                    <!-- Team Name -->
+                    <div>
+                        {{ form_label(form.teamName, 'Nom de l\'équipe', {
+                            'label_attr': {
+                                'class': 'block text-sm font-medium ' ~ (form.teamName.vars.errors|length ? 'text-red-700' : 'text-gray-700') ~ ' mb-1'
+                            }
+                        }) }}
+                        {{ form_widget(form.teamName, {
+                            'attr': {
+                                'class': 'mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm ' ~
+                                (form.teamName.vars.errors|length ? 'border-red-500 text-red-900 placeholder-red-700 bg-red-50 focus:ring-red-500 focus:border-red-500' : 'border-gray-300')
+                            }
+                        }) }}
+                        {% if form.teamName.vars.errors|length %}
+                            {% for error in form.teamName.vars.errors %}
+                                <p class="mt-2 text-sm text-red-600">
+                                    <span class="font-medium">Erreur !</span> {{ error.message }}
+                                </p>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
 
-                    <div class="form-group">
+                    <!-- Player 1 -->
+                    <div>
                         {{ form_label(form.player1, 'Joueur 1', {
-                            'label_attr': {'class': 'block text-sm font-medium text-gray-700'}
+                            'label_attr': {
+                                'class': 'block text-sm font-medium ' ~ (form.player1.vars.errors|length ? 'text-red-700' : 'text-gray-700') ~ ' mb-1'
+                            }
                         }) }}
                         {{ form_widget(form.player1, {
-                            'attr': {'class': 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'}
+                            'attr': {
+                                'class': 'mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm ' ~
+                                (form.player1.vars.errors|length ? 'border-red-500 text-red-900 placeholder-red-700 bg-red-50 focus:ring-red-500 focus:border-red-500' : 'border-gray-300')
+                            }
                         }) }}
-                        {{ form_errors(form.player1) }}
+                        {% if form.player1.vars.errors|length %}
+                            {% for error in form.player1.vars.errors %}
+                                <p class="mt-2 text-sm text-red-600">
+                                    <span class="font-medium">Erreur !</span> {{ error.message }}
+                                </p>
+                            {% endfor %}
+                        {% endif %}
                     </div>
 
-                    <div class="form-group">
+                    <!-- Player 2 -->
+                    <div>
                         {{ form_label(form.player2, 'Joueur 2', {
-                            'label_attr': {'class': 'block text-sm font-medium text-gray-700'}
+                            'label_attr': {
+                                'class': 'block text-sm font-medium ' ~ (form.player2.vars.errors|length ? 'text-red-700' : 'text-gray-700') ~ ' mb-1'
+                            }
                         }) }}
                         {{ form_widget(form.player2, {
-                            'attr': {'class': 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'}
+                            'attr': {
+                                'class': 'mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm ' ~
+                                (form.player2.vars.errors|length ? 'border-red-500 text-red-900 placeholder-red-700 bg-red-50 focus:ring-red-500 focus:border-red-500' : 'border-gray-300')
+                            }
                         }) }}
-                        {{ form_errors(form.player2) }}
+                        {% if form.player2.vars.errors|length %}
+                            {% for error in form.player2.vars.errors %}
+                                <p class="mt-2 text-sm text-red-600">
+                                    <span class="font-medium">Erreur !</span> {{ error.message }}
+                                </p>
+                            {% endfor %}
+                        {% endif %}
                     </div>
 
+                    <!-- Player 3 (if not doublette) -->
                     {% if not isDoublette %}
-                        <div class="form-group">
+                        <div>
                             {{ form_label(form.player3, 'Joueur 3', {
-                                'label_attr': {'class': 'block text-sm font-medium text-gray-700'}
+                                'label_attr': {
+                                    'class': 'block text-sm font-medium ' ~ (form.player3.vars.errors|length ? 'text-red-700' : 'text-gray-700') ~ ' mb-1'
+                                }
                             }) }}
                             {{ form_widget(form.player3, {
-                                'attr': {'class': 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'}
+                                'attr': {
+                                    'class': 'mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm ' ~
+                                    (form.player3.vars.errors|length ? 'border-red-500 text-red-900 placeholder-red-700 bg-red-50 focus:ring-red-500 focus:border-red-500' : 'border-gray-300')
+                                }
                             }) }}
-                            {{ form_errors(form.player3) }}
+                            {% if form.player3.vars.errors|length %}
+                                {% for error in form.player3.vars.errors %}
+                                    <p class="mt-2 text-sm text-red-600">
+                                        <span class="font-medium">Erreur !</span> {{ error.message }}
+                                    </p>
+                                {% endfor %}
+                            {% endif %}
                         </div>
                     {% endif %}
                 </div>
@@ -60,7 +114,7 @@
                         Annuler
                     </a>
                     <button type="submit"
-                            class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" data-turbo="false">
                         Ajouter l'équipe
                     </button>
                 </div>

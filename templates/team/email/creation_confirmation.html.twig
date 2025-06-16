@@ -1,25 +1,162 @@
 {% block body %}
-        <head>
-            <meta charset="UTF-8">
-            <title>Confirmation de création d'équipe</title>
-        </head>
-        <body>
-        <p>Bonjour {{ creatorName }},</p>
+    {# Email Container #}
+    <div style="font-family: sans-serif; max-width: 42rem; margin-left: auto; margin-right: auto; background-color: #f9fafb;">
+        {# Header #}
+        <div style="width: 100%; background-color: #0d079f;">
+            {# Top white line #}
+            <div style="height: 0.5rem; width: 100%; background-color: white;"></div>
 
-        <p>Nous confirmons la création de votre équipe <strong>{{ teamName }}</strong> pour le tournoi <strong>{{ tournamentName }}</strong>.</p>
+            {# Main header content #}
+            <div style="position: relative; display: flex; align-items: center; padding-left: 1.5rem; padding-right: 1.5rem; padding-top: 1rem; padding-bottom: 1rem;">
+                {# Logo circle #}
+                <div style="position: relative; z-index: 10; height: 4rem; width: 4rem; overflow: hidden; border-radius: 9999px; border: 2px solid white; background-color: white; display: flex; align-items: center; justify-content: center;">
+                    <div style="color: #0d079f; font-weight: bold; font-size: 1.5rem;">
+                        <img src="{{ absolute_url(asset('images/logoPcm.png')) }}" class="mt-2" alt="boule de pétanque" style="max-width: 100%; max-height: 100%;">
+                    </div>
+                </div>
 
-        <p><strong>Détails du tournoi :</strong></p>
-        <ul>
-            <li>Date : {{ date }}</li>
-            <li>Lieu : {{ address }}</li>
-            <li>Format : {{ type }}</li>
-        </ul>
+                {# Title #}
+                <h1 style="margin-left: 1rem; font-size: 1.25rem; font-weight: bold; color: white;">Équipe créée avec succès !</h1>
+            </div>
 
-        <p>Vous avez invité {{ invitedCount }} personne(s) à rejoindre votre équipe.</p>
+            {# Bottom white line #}
+            <div style="height: 0.5rem; width: 100%; background-color: white;"></div>
+        </div>
 
-        <p>Vous recevrez une nouvelle confirmation lorsque tous les membres auront accepté leur invitation.</p>
+        {# Email Body #}
+        <div style="background-color: white; border-radius: 0.5rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); margin-left: 1rem; margin-right: 1rem; margin-top: 1.5rem; margin-bottom: 1.5rem; overflow: hidden;">
+            {# Success Badge #}
+            <div style="background: linear-gradient(135deg, #059669 0%, #10b981 100%); padding: 1.5rem; text-align: center;">
+                <div style="background-color: white; border-radius: 9999px; width: 4rem; height: 4rem; margin: 0 auto 1rem auto; display: flex; align-items: center; justify-content: center;">
+                    <svg style="width: 2rem; height: 2rem; color: #059669;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                    </svg>
+                </div>
+                <h2 style="color: white; font-size: 1.5rem; font-weight: bold; margin: 0;">Bonjour {{ creatorName }} !</h2>
+                <p style="color: rgba(255, 255, 255, 0.9); margin: 0.5rem 0 0 0; font-size: 1rem;">Votre équipe a été créée avec succès</p>
+            </div>
 
-        <p>Cordialement,<br>L'équipe d'organisation</p>
-        </body>
+            {# Content #}
+            <div style="padding: 2rem 1.5rem;">
+                <p style="color: #1f2937; margin-bottom: 1.5rem; font-size: 1rem; line-height: 1.6;">
+                    Nous confirmons la création de votre équipe <strong style="color: #0d079f;">{{ teamName }}</strong> pour le tournoi <strong style="color: #0d079f;">{{ tournamentName }}</strong>.
+                </p>
+
+                {# Tournament Details Card #}
+                <div style="background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); border: 1px solid #cbd5e1; border-radius: 0.75rem; padding: 1.5rem; margin-bottom: 1.5rem;">
+                    <h3 style="color: #1e293b; font-size: 1.125rem; font-weight: 600; margin: 0 0 1rem 0; display: flex; align-items: center;">
+                        <svg style="width: 1.25rem; height: 1.25rem; color: #0d079f; margin-right: 0.5rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        Détails du tournoi
+                    </h3>
+                    <div style="space-y: 0.75rem;">
+                        <div style="display: flex; align-items: center; margin-bottom: 0.75rem;">
+                            <div style="flex-shrink: 0; width: 2rem; height: 2rem; background-color: #0d079f; border-radius: 0.375rem; display: flex; align-items: center; justify-content: center; margin-right: 0.75rem;">
+                                <svg style="width: 1rem; height: 1rem; color: white;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <p style="color: #475569; font-size: 0.875rem; margin: 0; font-weight: 500;">Date</p>
+                                <p style="color: #1e293b; font-size: 1rem; margin: 0; font-weight: 600;">{{ date }}</p>
+                            </div>
+                        </div>
+                        <div style="display: flex; align-items: center; margin-bottom: 0.75rem;">
+                            <div style="flex-shrink: 0; width: 2rem; height: 2rem; background-color: #0d079f; border-radius: 0.375rem; display: flex; align-items: center; justify-content: center; margin-right: 0.75rem;">
+                                <svg style="width: 1rem; height: 1rem; color: white;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <p style="color: #475569; font-size: 0.875rem; margin: 0; font-weight: 500;">Lieu</p>
+                                <p style="color: #1e293b; font-size: 1rem; margin: 0; font-weight: 600;">{{ address }}</p>
+                            </div>
+                        </div>
+                        <div style="display: flex; align-items: center;">
+                            <div style="flex-shrink: 0; width: 2rem; height: 2rem; background-color: #0d079f; border-radius: 0.375rem; display: flex; align-items: center; justify-content: center; margin-right: 0.75rem;">
+                                <svg style="width: 1rem; height: 1rem; color: white;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <p style="color: #475569; font-size: 0.875rem; margin: 0; font-weight: 500;">Format</p>
+                                <p style="color: #1e293b; font-size: 1rem; margin: 0; font-weight: 600;">{{ type }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {# Team Status #}
+                <div style="background-color: #dbeafe; border: 1px solid #3b82f6; border-radius: 0.375rem; padding: 1rem; margin-bottom: 1.5rem;">
+                    <div style="display: flex; align-items: flex-start;">
+                        <div style="flex-shrink: 0; margin-right: 0.75rem;">
+                            <svg style="width: 1.25rem; height: 1.25rem; color: #2563eb;" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <p style="color: #1e40af; margin: 0; font-size: 0.875rem; font-weight: 500;">
+                                <strong>État de l'équipe :</strong> Vous avez invité <strong>{{ invitedCount }} personne(s)</strong> à rejoindre votre équipe.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                {# Next Steps #}
+                <div style="background-color: #f0fdf4; border-left: 4px solid #22c55e; padding: 1rem; margin-bottom: 1.5rem; border-radius: 0 0.375rem 0.375rem 0;">
+                    <p style="color: #166534; margin: 0; font-weight: 500;">
+                        <strong>Prochaines étapes :</strong> Vous recevrez une nouvelle confirmation par email lorsque tous les membres auront accepté leur invitation et que votre équipe sera complète.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        {# Additional Info Section #}
+        <div style="background-color: white; border-radius: 0.5rem; box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06); margin-left: 1rem; margin-right: 1rem; margin-bottom: 1.5rem; overflow: hidden;">
+            <div style="padding: 1.5rem;">
+                <h3 style="color: #1f2937; font-size: 1.125rem; font-weight: 600; margin-bottom: 1rem; display: flex; align-items: center;">
+                    <svg style="width: 1.25rem; height: 1.25rem; color: #0d079f; margin-right: 0.5rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    Informations utiles
+                </h3>
+                <div style="display: flex; align-items: flex-start; margin-bottom: 0.75rem;">
+                    <div style="flex-shrink: 0; margin-right: 0.75rem;">
+                        <div style="width: 1.5rem; height: 1.5rem; background-color: #0d079f; color: white; border-radius: 9999px; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: bold;">✓</div>
+                    </div>
+                    <p style="color: #4b5563; font-size: 0.875rem; margin: 0;">
+                        <strong>Invitations envoyées :</strong> Vos coéquipiers ont reçu un email d'invitation avec toutes les informations nécessaires.
+                    </p>
+                </div>
+                <div style="display: flex; align-items: flex-start; margin-bottom: 0.75rem;">
+                    <div style="flex-shrink: 0; margin-right: 0.75rem;">
+                        <div style="width: 1.5rem; height: 1.5rem; background-color: #0d079f; color: white; border-radius: 9999px; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: bold;">📧</div>
+                    </div>
+                    <p style="color: #4b5563; font-size: 0.875rem; margin: 0;">
+                        <strong>Suivi automatique :</strong> Vous serez notifié dès qu'un membre accepte ou refuse l'invitation.
+                    </p>
+                </div>
+                <div style="display: flex; align-items: flex-start;">
+                    <div style="flex-shrink: 0; margin-right: 0.75rem;">
+                        <div style="width: 1.5rem; height: 1.5rem; background-color: #0d079f; color: white; border-radius: 9999px; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: bold;">⏰</div>
+                    </div>
+                    <p style="color: #4b5563; font-size: 0.875rem; margin: 0;">
+                        <strong>Rappel automatique :</strong> Un rappel sera envoyé aux membres qui n'ont pas encore répondu.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        {# Footer #}
+        <div style="text-align: center; font-size: 0.75rem; color: #6b7280; padding-left: 1rem; padding-right: 1rem; padding-bottom: 1.5rem;">
+            <p style="margin-bottom: 0.5rem;">© {{ "now"|date("Y") }} Votre Site de Pétanque. Tous droits réservés.</p>
+            <p style="margin-bottom: 0.5rem;">Cet email a été envoyé automatiquement, merci de ne pas y répondre directement.</p>
+            <p style="color: #9ca3af;">
+                Cordialement,<br>
+                <strong>L'équipe d'organisation</strong>
+            </p>
+        </div>
+    </div>
 {% endblock %}
-

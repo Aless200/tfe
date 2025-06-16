@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\TeamUserRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: TeamUserRepository::class)]
 class TeamUser
@@ -34,9 +35,24 @@ class TeamUser
     #[ORM\Column]
     private ?bool $invited = null;
 
+//    #[Assert\NotBlank(
+//        message: 'Veuillez rentrer l\'email d\'invitation.'
+//    )]
+//    #[Assert\Email(
+//        message: 'Veuillez rentrer une adresse email valide.'
+//    )]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $email_guest = null;
 
+    #[Assert\NotBlank(
+        message: 'Veuillez remplir le nom des joueurs.'
+    )]
+    #[Assert\Length(
+        min: 2,
+        max: 255,
+        minMessage: 'Le nom doit contenir au minimum {{ limit }} caractères.',
+        maxMessage: 'Le nom ne doit pas dépasser {{ limit }} caractères.'
+    )]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $playerName = null;
 
