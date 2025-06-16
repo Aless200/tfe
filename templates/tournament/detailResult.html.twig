@@ -4,9 +4,6 @@
 
 {% block body %}
     <div class="w-full bg-[#0d079f]">
-        <!-- Top white line -->
-        {#        <div class="h-2 w-full bg-white"></div>#}
-
         <!-- Main content section between the white lines -->
         <div class="relative flex items-center justify-between px-4 py-2">
             <!-- Logo circle -->
@@ -35,9 +32,6 @@
                 </a>
             </div>
         </div>
-
-        <!-- Bottom white line -->
-        {#        <div class="h-2 w-full bg-white"></div>#}
     </div>
 
     <main class="min-h-[calc(100vh-120px)] bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
@@ -61,14 +55,25 @@
                     <p class="text-xl text-gray-600 max-w-3xl mx-auto">Suivez l'évolution du tournoi tour par tour et découvrez les résultats de chaque match.</p>
                 </div>
 
+                <!-- Bannière de tournoi terminé -->
+                <div id="tournament-completed-banner" class="mb-6 bg-gradient-to-r from-green-500 to-green-600 rounded-lg shadow-md p-4 text-white hidden">
+                    <div class="flex items-center justify-center">
+                        <span class="text-2xl mr-3">🏆</span>
+                        <div class="text-center">
+                            <h3 class="text-lg font-bold">Tournoi Terminé !</h3>
+                            <p id="tournament-winner-banner" class="text-sm opacity-90"></p>
+                        </div>
+                    </div>
+                </div>
+
                 {% for roundT, games in gamesByRound|sort|reverse %}
-                    <div class="mb-10">
+                    <div class="mb-10" id="round-{{ roundT + 1 }}">
                         <div class="flex items-center mb-4">
                             <div class="flex items-center">
                                 <div class="h-10 w-10 rounded-full bg-[#0d079f] flex items-center justify-center mr-3 shadow-md">
                                     <span class="text-white font-bold">{{ roundT + 1 }}</span>
                                 </div>
-                                <h3 class="text-2xl font-semibold text-gray-800">Matchs du Tour {{ roundT + 1 }}</h3>
+                                <h3 class="text-2xl font-semibold text-gray-800">Tour {{ roundT + 1 }}</h3>
                             </div>
                         </div>
 
@@ -76,36 +81,40 @@
                             <table class="min-w-full divide-y divide-gray-200">
                                 <thead class="bg-gradient-to-r from-[#0d079f]/5 to-white">
                                 <tr>
-                                    <th class="px-3 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Équipe A</th>
-                                    <th class="px-3 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Équipe B</th>
-                                    <th class="px-3 py-3 text-center text-xs font-medium text-gray-700 uppercase tracking-wider">Score</th>
+                                    <th class="px-6 py-4 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Équipe A</th>
+                                    <th class="px-6 py-4 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Équipe B</th>
+                                    <th class="px-6 py-4 text-center text-xs font-medium text-gray-700 uppercase tracking-wider">Score</th>
                                 </tr>
                                 </thead>
                                 <tbody class="bg-white divide-y divide-gray-100">
                                 {% for game in games %}
-                                    {% set team1Win = game.scoreTeam1 > game.scoreTeam2 %}
-                                    {% set team2Win = game.scoreTeam2 > game.scoreTeam1 %}
-                                    <tr class="hover:bg-gray-50 transition-colors duration-150">
-                                        <td class="px-3 py-4 text-sm whitespace-nowrap {% if team1Win %}font-bold text-green-600{% elseif team2Win %}text-red-500 opacity-75{% endif %}">
+                                    {% set team1Win = game.scoreTeam1 >= 13 %}
+                                    {% set team2Win = game.scoreTeam2 >= 13 %}
+                                    {% set isMatchCompleted = team1Win or team2Win %}
+
+                                    <tr class="hover:bg-gray-50 transition-colors duration-150 {{ isMatchCompleted ? 'bg-green-50' : '' }}" id="match-row-{{ game.id }}">
+                                        <td class="px-6 py-4 text-sm font-medium {{ team1Win ? 'text-green-600 font-bold' : (team2Win ? 'text-gray-500' : '') }}" data-team-id="{{ game.team1.id }}">
                                             {{ game.team1.teamName }}
                                             {% if team1Win %}
-                                                <span class="ml-2 text-xs">🏆</span>
-                                            {% elseif team2Win %}
-                                                <span class="ml-2 text-xs">❌</span>
+                                                <span class="ml-2 text-green-600 trophy-bounce">🏆</span>
                                             {% endif %}
                                         </td>
-                                        <td class="px-3 py-4 text-sm whitespace-nowrap {% if team2Win %}font-bold text-green-600{% elseif team1Win %}text-red-500 opacity-75{% endif %}">
+                                        <td class="px-6 py-4 text-sm font-medium {{ team2Win ? 'text-green-600 font-bold' : (team1Win ? 'text-gray-500' : '') }}" data-team-id="{{ game.team2.id }}">
                                             {{ game.team2.teamName }}
                                             {% if team2Win %}
-                                                <span class="ml-2 text-xs">🏆</span>
-                                            {% elseif team1Win %}
-                                                <span class="ml-2 text-xs">❌</span>
+                                                <span class="ml-2 text-green-600 trophy-bounce">🏆</span>
                                             {% endif %}
                                         </td>
-                                        <td class="px-3 py-4 text-center">
-                                            <span class="inline-flex items-center justify-center min-w-[80px] bg-gray-100 text-gray-800 py-1 px-3 rounded-full text-sm font-medium">
-                                                {{ game.scoreTeam1 }} - {{ game.scoreTeam2 }}
-                                            </span>
+                                        <td class="px-6 py-4 text-center">
+                                            {% if game.scoreTeam1 is not null and game.scoreTeam2 is not null %}
+                                                <span class="inline-flex items-center justify-center min-w-[100px] {{ isMatchCompleted ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800' }} py-2 px-4 rounded-full text-sm font-medium shadow-sm">
+                                                    {{ game.scoreTeam1 }} - {{ game.scoreTeam2 }}
+                                                </span>
+                                            {% else %}
+                                                <span class="inline-flex items-center justify-center min-w-[100px] bg-yellow-100 text-yellow-800 py-2 px-4 rounded-full text-sm font-medium">
+                                                    En attente
+                                                </span>
+                                            {% endif %}
                                         </td>
                                     </tr>
                                 {% endfor %}
@@ -134,4 +143,429 @@
             {% endif %}
         </div>
     </main>
+
+    <!-- Modal de victoire -->
+    <div id="victory-modal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-2xl p-8 max-w-md w-full mx-4 text-center relative overflow-hidden">
+            <!-- Confettis animés -->
+            <div id="confetti-container" class="absolute inset-0 pointer-events-none"></div>
+
+            <!-- Contenu du modal -->
+            <div class="relative z-10">
+                <div class="mb-6">
+                    <div class="w-24 h-24 bg-gradient-to-r from-yellow-400 to-yellow-600 rounded-full mx-auto flex items-center justify-center mb-4 animate-bounce">
+                        <span class="text-4xl">🏆</span>
+                    </div>
+                    <h2 class="text-3xl font-bold text-gray-800 mb-2">Félicitations !</h2>
+                    <p class="text-lg text-gray-600">Le tournoi est terminé !</p>
+                </div>
+
+                <div class="bg-gradient-to-r from-[#0d079f] to-purple-600 rounded-xl p-6 mb-6 text-white">
+                    <h3 class="text-xl font-bold mb-2">🥇 Équipe Gagnante</h3>
+                    <p id="winner-name" class="text-2xl font-bold"></p>
+                </div>
+
+                <div class="space-y-3 mb-6">
+                    <div class="flex items-center justify-center space-x-2">
+                        <span class="text-2xl">🎉</span>
+                        <span class="text-gray-700">Tournoi terminé avec succès</span>
+                    </div>
+                    <div class="flex items-center justify-center space-x-2">
+                        <span class="text-2xl">⭐</span>
+                        <span class="text-gray-700">Bravo à tous les participants</span>
+                    </div>
+                </div>
+
+                <button onclick="closeVictoryModal()" class="bg-[#0d079f] hover:bg-[#0a0580] text-white px-6 py-3 rounded-lg font-medium transition-colors duration-200">
+                    Fermer
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Canvas pour les feux d'artifice -->
+    <canvas id="fireworks-canvas" class="fixed inset-0 pointer-events-none z-40 hidden"></canvas>
+
+    <style>
+        /* Animations CSS */
+        @keyframes confetti-fall {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        @keyframes winner-glow {
+            0%, 100% {
+                box-shadow: 0 0 20px rgba(13, 7, 159, 0.5);
+            }
+            50% {
+                box-shadow: 0 0 40px rgba(13, 7, 159, 0.8), 0 0 60px rgba(13, 7, 159, 0.6);
+            }
+        }
+
+        @keyframes trophy-bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0) scale(1);
+            }
+            40% {
+                transform: translateY(-20px) scale(1.1);
+            }
+            60% {
+                transform: translateY(-10px) scale(1.05);
+            }
+        }
+
+        .confetti-piece {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            animation: confetti-fall 3s linear infinite;
+        }
+
+        .winner-glow {
+            animation: winner-glow 2s ease-in-out infinite;
+        }
+
+        .trophy-bounce {
+            animation: trophy-bounce 2s ease-in-out infinite;
+        }
+
+        /* Styles pour les feux d'artifice */
+        .firework {
+            position: absolute;
+            border-radius: 50%;
+            animation: firework-explosion 1s ease-out forwards;
+        }
+
+        @keyframes firework-explosion {
+            0% {
+                transform: scale(0);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 0;
+            }
+        }
+    </style>
+
+    <script>
+        // Variables globales pour le contrôle de l'animation
+        let tournamentAnimationShown = false;
+        let tournamentWinner = null;
+        // Utiliser l'URL ou un identifiant unique pour ce tournoi
+        const tournamentId = window.location.pathname.split('/').pop() || 'current';
+        const STORAGE_KEY = `tournament_completed_${tournamentId}`;
+
+        function createConfetti() {
+            const container = document.getElementById('confetti-container');
+            const colors = ['#FFD700', '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7', '#DDA0DD', '#98D8C8'];
+
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti-piece';
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.animationDelay = Math.random() * 3 + 's';
+                confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                container.appendChild(confetti);
+            }
+
+            // Nettoyer les confettis après l'animation
+            setTimeout(() => {
+                container.innerHTML = '';
+            }, 6000);
+        }
+
+        function createFireworks() {
+            const canvas = document.getElementById('fireworks-canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            canvas.classList.remove('hidden');
+
+            const fireworks = [];
+
+            class Firework {
+                constructor(x, y) {
+                    this.x = x;
+                    this.y = y;
+                    this.particles = [];
+                    this.createParticles();
+                }
+
+                createParticles() {
+                    const colors = ['#FFD700', '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4'];
+                    for (let i = 0; i < 30; i++) {
+                        this.particles.push({
+                            x: this.x,
+                            y: this.y,
+                            vx: (Math.random() - 0.5) * 10,
+                            vy: (Math.random() - 0.5) * 10,
+                            life: 1,
+                            decay: Math.random() * 0.02 + 0.01,
+                            color: colors[Math.floor(Math.random() * colors.length)]
+                        });
+                    }
+                }
+
+                update() {
+                    this.particles.forEach((particle, index) => {
+                        particle.x += particle.vx;
+                        particle.y += particle.vy;
+                        particle.vy += 0.1; // gravity
+                        particle.life -= particle.decay;
+
+                        if (particle.life <= 0) {
+                            this.particles.splice(index, 1);
+                        }
+                    });
+                }
+
+                draw(ctx) {
+                    this.particles.forEach(particle => {
+                        ctx.save();
+                        ctx.globalAlpha = particle.life;
+                        ctx.fillStyle = particle.color;
+                        ctx.beginPath();
+                        ctx.arc(particle.x, particle.y, 3, 0, Math.PI * 2);
+                        ctx.fill();
+                        ctx.restore();
+                    });
+                }
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                fireworks.forEach((firework, index) => {
+                    firework.update();
+                    firework.draw(ctx);
+
+                    if (firework.particles.length === 0) {
+                        fireworks.splice(index, 1);
+                    }
+                });
+
+                if (fireworks.length > 0) {
+                    requestAnimationFrame(animate);
+                } else {
+                    canvas.classList.add('hidden');
+                }
+            }
+
+            // Créer plusieurs feux d'artifice
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => {
+                    fireworks.push(new Firework(
+                        Math.random() * canvas.width,
+                        Math.random() * canvas.height * 0.5
+                    ));
+                    if (i === 0) animate();
+                }, i * 500);
+            }
+        }
+
+        function showVictoryAnimation() {
+            // Marquer l'animation comme affichée dans le localStorage
+            localStorage.setItem(STORAGE_KEY, JSON.stringify({
+                completed: true,
+                winner: tournamentWinner,
+                timestamp: Date.now()
+            }));
+
+            // Afficher le modal
+            const modal = document.getElementById('victory-modal');
+            const winnerNameElement = document.getElementById('winner-name');
+
+            winnerNameElement.textContent = tournamentWinner;
+            modal.classList.remove('hidden');
+
+            // Créer les confettis
+            createConfetti();
+
+            // Créer les feux d'artifice
+            setTimeout(() => {
+                createFireworks();
+            }, 1000);
+
+            // Marquer que l'animation a été montrée
+            tournamentAnimationShown = true;
+
+            console.log('🏆 Animation de victoire affichée pour:', tournamentWinner);
+        }
+
+        function closeVictoryModal() {
+            const modal = document.getElementById('victory-modal');
+            modal.classList.add('hidden');
+
+            // Afficher la bannière de tournoi terminé
+            showCompletedTournamentBanner();
+        }
+
+        function showCompletedTournamentBanner() {
+            const banner = document.getElementById('tournament-completed-banner');
+            const winnerBanner = document.getElementById('tournament-winner-banner');
+
+            winnerBanner.textContent = `Gagnant: ${tournamentWinner}`;
+            banner.classList.remove('hidden');
+        }
+
+        function isTournamentCompleted() {
+            const tournamentData = localStorage.getItem(STORAGE_KEY);
+            if (tournamentData) {
+                const data = JSON.parse(tournamentData);
+                tournamentWinner = data.winner;
+                return true;
+            }
+            return false;
+        }
+
+        /**
+         * Détection du gagnant du tournoi
+         */
+        function findTournamentWinner() {
+            console.log('🔍 Recherche du gagnant du tournoi...');
+
+            // Récupérer tous les tours
+            const rounds = document.querySelectorAll('[id^="round-"]');
+            if (rounds.length === 0) {
+                console.log('❌ Aucun tour trouvé');
+                return null;
+            }
+
+            // Trouver le dernier tour (le plus haut numéro)
+            let lastRoundNumber = 0;
+            let lastRoundElement = null;
+
+            rounds.forEach(round => {
+                const roundNumber = parseInt(round.id.replace('round-', ''));
+                if (roundNumber > lastRoundNumber) {
+                    lastRoundNumber = roundNumber;
+                    lastRoundElement = round;
+                }
+            });
+
+            if (!lastRoundElement) {
+                console.log('❌ Dernier tour non trouvé');
+                return null;
+            }
+
+            console.log(`🎯 Analyse du dernier tour: ${lastRoundNumber}`);
+
+            // Récupérer tous les matchs du dernier tour
+            const lastRoundMatches = lastRoundElement.querySelectorAll('tr[id^="match-row-"]');
+            console.log(`📊 Matchs du dernier tour:`, lastRoundMatches.length);
+
+            // Vérifier que tous les matchs sont terminés
+            let allMatchesCompleted = true;
+            const winners = [];
+
+            lastRoundMatches.forEach((matchRow, index) => {
+                const team1Cell = matchRow.children[0];
+                const team2Cell = matchRow.children[1];
+                const scoreCell = matchRow.children[2];
+                const scoreText = scoreCell.textContent.trim();
+
+                // Vérifier si le match a un score
+                if (scoreText === 'En attente') {
+                    allMatchesCompleted = false;
+                    console.log(`⏳ Match ${index + 1} en attente`);
+                    return;
+                }
+
+                // Extraire les scores du texte
+                const scoreMatch = scoreText.match(/(\d+)\s*-\s*(\d+)/);
+                if (!scoreMatch) {
+                    console.log(`⚠️ Score invalide pour le match ${index + 1}: ${scoreText}`);
+                    return;
+                }
+
+                const score1 = parseInt(scoreMatch[1]);
+                const score2 = parseInt(scoreMatch[2]);
+
+                console.log(`🏓 Match ${index + 1}:`, {
+                    team1: team1Cell.textContent.replace('🏆', '').trim(),
+                    team2: team2Cell.textContent.replace('🏆', '').trim(),
+                    score1,
+                    score2
+                });
+
+                let winner = null;
+                let winnerCell = null;
+
+                if (score1 >= 13) {
+                    winner = team1Cell.textContent.replace('🏆', '').trim();
+                    winnerCell = team1Cell;
+                } else if (score2 >= 13) {
+                    winner = team2Cell.textContent.replace('🏆', '').trim();
+                    winnerCell = team2Cell;
+                }
+
+                if (winner && winnerCell) {
+                    winners.push({ name: winner, cell: winnerCell });
+                    console.log(`🏆 Gagnant du match ${index + 1}:`, winner);
+                }
+            });
+
+            if (!allMatchesCompleted) {
+                console.log('⏳ Tous les matchs ne sont pas encore terminés');
+                return null;
+            }
+
+            console.log('🏅 Tous les gagnants du dernier tour:', winners.map(w => w.name));
+
+            // Si il n'y a qu'un seul gagnant, c'est le champion du tournoi !
+            if (winners.length === 1) {
+                const champion = winners[0];
+                console.log('👑 CHAMPION DU TOURNOI:', champion.name);
+
+                // Ajouter l'effet visuel au gagnant
+                champion.cell.classList.add('winner-glow');
+
+                return champion.name;
+            } else if (winners.length === 0) {
+                console.error('❌ Aucun gagnant trouvé dans le dernier tour');
+                return null;
+            } else {
+                console.log(`🤔 Plusieurs gagnants (${winners.length}) - Le tournoi n'est peut-être pas vraiment terminé`);
+                return null;
+            }
+        }
+
+        function checkForTournamentEnd() {
+            // Vérifier si le tournoi est déjà marqué comme terminé
+            if (isTournamentCompleted()) {
+                console.log('🚫 Tournoi déjà terminé, animation déjà affichée');
+                showVictoryAnimation();
+                return;
+            }
+
+            // Utiliser la logique de détection du gagnant
+            tournamentWinner = findTournamentWinner();
+
+            if (tournamentWinner && !tournamentAnimationShown) {
+                console.log('🎉 Déclenchement de l\'animation de victoire pour:', tournamentWinner);
+                showVictoryAnimation();
+            }
+        }
+
+        // Initialisation des événements
+        document.addEventListener('DOMContentLoaded', function() {
+            // Vérifier si le tournoi est terminé
+            checkForTournamentEnd();
+
+            // Fermer le modal en cliquant à l'extérieur
+            document.getElementById('victory-modal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeVictoryModal();
+                }
+            });
+        });
+    </script>
 {% endblock %}
