@@ -16,6 +16,10 @@ class UserChecker implements UserCheckerInterface
             return;
         }
 
+        if (!$user->isVerified()){
+            throw new CustomUserMessageAccountStatusException('Votre compte n\'est pas encore vérifié.');
+        }
+
         if ($user->isAnonymized()) {
             throw new CustomUserMessageAccountStatusException('Ce compte a été anonymisé et n\'est plus accessible.');
         }

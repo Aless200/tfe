@@ -4,10 +4,9 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\RegistrationType;
+use App\Service\EmailVerifier;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -16,60 +15,65 @@ use Symfony\Component\Routing\Attribute\Route;
 class RegistrationController extends AbstractController
 {
     #[Route('/register', name: 'app_register')]
-    public function register(
-        Request $request,
-        UserPasswordHasherInterface $userPasswordHasher,
-        Security $security,
-        EntityManagerInterface $manager
-    ): Response {
+    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager, EmailVerifier $emailVerifier): Response
+    {
         $user = new User();
         $form = $this->createForm(RegistrationType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Encodez le mot de passe
             $user->setPassword(
-                $userPasswordHasher->hashPassword(
-                    $user,
-                    $form->get('password')->getData()
-                )
+                $userPasswordHasher->hashPassword($user, $form->get('password')->getData())
             )
+                ->setVerificationToken(bin2hex(random_bytes(32)))
+                ->setIsVerified(false)
                 ->setRoles(['ROLE_USER'])
-                ->setCreatedAt(new \DateTimeImmutable())
-                ->setUpdatedAt(new \DateTimeImmutable())
-                ->setIsDisabled(false)
-                ->setIsAnonymized(false);
+                ->setIsAnonymized(false)
+                ->setCreatedAt(new \DateTimeImmutable());
 
-            // Traitement de l'image
-            $imageFile = $form->get('imageFile')->getData();
+            $entityManager->persist($user);
+            $entityManager->flush();
 
-            if ($imageFile instanceof UploadedFile) {
-                $newFilename = $this->generateUniqueFileName().'.'.$imageFile->guessExtension();
+            // Envoyer l'email de vérification
+            $emailVerifier->sendEmailConfirmation($user);
 
-                // Déplacez le fichier
-                $imageFile->move(
-                    $this->getParameter('avatar_directory'),
-                    $newFilename
-                );
-
-                // Mettez à jour l'entité
-                $user->setImageAvatar($newFilename);
-            } else {
-                $user->setImageAvatar('default.jpg');
-            }
-
-            // Important: assurez-vous que imageFile est null
-            $user->setImageFile(null);
-
-            $manager->persist($user);
-            $manager->flush();
-
-            return $security->login($user, 'form_login', 'main');
+            // Redirigez l'utilisateur vers une page indiquant qu'un email de vérification a été envoyé
+            return $this->redirectToRoute('app_check_email_registration');
         }
 
         return $this->render('registration/register.html.twig', [
             'registrationForm' => $form->createView(),
         ]);
+    }
+
+    #[Route('/verify/email', name: 'app_verify_email')]
+    public function verifyUserEmail(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $id = $request->query->get('id');
+
+        if (null === $id) {
+            return $this->redirectToRoute('app_register');
+        }
+
+        $user = $entityManager->getRepository(User::class)->find($id);
+
+        if (null === $user) {
+            return $this->redirectToRoute('app_register');
+        }
+
+        // Vérifiez le jeton et activez l'utilisateur
+        $user->setIsVerified(true);
+        $user->setVerificationToken(null);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_login');
+    }
+
+    #[Route('/check-email-registration', name: 'app_check_email_registration')]
+    public function checkEmailRegistration(): Response
+    {
+        // Rendre une vue qui informe l'utilisateur de vérifier son email pour finaliser l'inscription
+        return $this->render('registration/check_email_registration.html.twig');
     }
 
     private function generateUniqueFileName(): string

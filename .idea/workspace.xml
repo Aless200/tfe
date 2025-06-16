@@ -5,13 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="99cee274-6e64-4b15-925c-b9f21b3544ee" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Service/EmailVerifier.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/registration/check_email_registration.html.twig" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/registration/confirmation_email.html.twig" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Class/Arbitrator.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Class/Arbitrator.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/Tournament.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Tournament.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/admin/gallery/editGallery.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/admin/gallery/editGallery.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/admin/tournaments/addTournament.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/admin/tournaments/addTournament.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/admin/tournaments/editTournament.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/admin/tournaments/editTournament.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/RegistrationController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/RegistrationController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/User.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Security/UserChecker.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Security/UserChecker.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/reset_password/check_email.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/reset_password/check_email.html.twig" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -315,7 +316,8 @@
       <workItem from="1749658307025" duration="3275000" />
       <workItem from="1749729302595" duration="4928000" />
       <workItem from="1749892409652" duration="12525000" />
-      <workItem from="1750014045542" duration="6000000" />
+      <workItem from="1750014045542" duration="6328000" />
+      <workItem from="1750067529627" duration="2190000" />
     </task>
     <servers />
   </component>

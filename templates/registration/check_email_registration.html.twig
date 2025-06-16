@@ -1,0 +1,137 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Vérifiez votre email{% endblock %}
+
+{% block body %}
+    <div class="w-full bg-[#0d079f]">
+        <!-- Main content section between the white lines -->
+        <div class="relative flex items-center justify-between px-4 py-2">
+            <!-- Logo circle -->
+            <div class="flex items-center">
+                <div class="relative z-10 h-24 w-24 overflow-hidden rounded-full border-4 border-white p-2">
+                    <img src="{{ asset('images/bouleHeader.png') }}" alt="boule de pétanque" class="h-full w-full object-cover mt-1"/>
+                </div>
+
+                <!-- Title -->
+                <h1 class="ml-4 text-3xl font-bold text-white">Vérifiez votre email</h1>
+            </div>
+
+            <!-- Social icons -->
+            <div class="flex items-center gap-4">
+                <!-- Facebook icon -->
+                <a href="#" class="text-white hover:text-gray-200 transition-colors duration-200">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z" />
+                    </svg>
+                </a>
+                <!-- Mail icon -->
+                <a href="{{ path('app_contact') }}" class="text-white hover:text-gray-200 transition-colors duration-200">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <main class="min-h-[calc(100vh-120px)] bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+        <!-- Éléments décoratifs -->
+        <div class="absolute inset-0 overflow-hidden pointer-events-none z-0">
+            <div class="absolute -top-20 -left-20 w-64 h-64 rounded-full bg-[#0d079f]/20"></div>
+            <div class="absolute top-1/3 right-10 w-96 h-96 rounded-full bg-[#0d079f]/30"></div>
+            <div class="absolute bottom-10 left-1/4 w-72 h-72 rounded-full bg-[#0d079f]/20"></div>
+
+            <!-- Silhouettes de boules de pétanque -->
+            <div class="absolute top-20 right-20 w-16 h-16 rounded-full border-2 border-gray-400/25"></div>
+            <div class="absolute bottom-40 left-20 w-12 h-12 rounded-full border-2 border-gray-400/25"></div>
+            <div class="absolute top-1/2 left-1/3 w-10 h-10 rounded-full border-2 border-gray-400/25"></div>
+        </div>
+
+        <div class="max-w-7xl mx-auto relative z-10">
+            <div class="max-w-md mx-auto">
+                <div class="bg-white py-8 px-6 shadow-xl rounded-xl border border-gray-100 w-full">
+                    <div class="flex justify-center mb-6">
+                        <div class="h-16 w-16 rounded-full bg-[#0d079f]/10 flex items-center justify-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-[#0d079f]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                            </svg>
+                        </div>
+                    </div>
+
+                    <h2 class="text-center text-2xl font-bold text-gray-900 mb-6">Email de vérification envoyé</h2>
+
+                    <div class="space-y-4 text-gray-700">
+                        <p class="text-center">
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800 mb-4">
+                                <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                </svg>
+                                Inscription réussie !
+                            </span>
+                        </p>
+                        <p>
+                            Un email de vérification a été envoyé à votre adresse email.
+                            <strong>Veuillez cliquer sur le lien dans cet email pour finaliser votre inscription</strong> et activer votre compte.
+                        </p>
+                        <p class="text-sm text-gray-600 bg-blue-50 p-3 rounded-lg border-l-4 border-blue-400">
+                            <svg class="w-4 h-4 inline mr-2 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                            </svg>
+                            <strong>Important :</strong> Vérifiez également votre dossier de courriers indésirables si vous ne recevez pas l'email dans les prochaines minutes.
+                        </p>
+                    </div>
+
+                    <div class="mt-6 pt-6 border-t border-gray-200">
+
+                    </div>
+                </div>
+
+                <!-- Aide supplémentaire -->
+                <div class="mt-8 bg-white rounded-xl shadow-md p-6">
+                    <h3 class="text-lg font-medium text-gray-900 mb-3 flex items-center">
+                        <svg class="w-5 h-5 text-[#0d079f] mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3 3.572v1m-9 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        Prochaines étapes
+                    </h3>
+                    <div class="space-y-4">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0">
+                                <div class="w-6 h-6 bg-[#0d079f] text-white rounded-full flex items-center justify-center text-xs font-bold">1</div>
+                            </div>
+                            <div class="ml-3">
+                                <p class="text-sm text-gray-700"><strong>Vérifiez votre boîte email</strong> - L'email peut prendre quelques minutes à arriver.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0">
+                                <div class="w-6 h-6 bg-[#0d079f] text-white rounded-full flex items-center justify-center text-xs font-bold">2</div>
+                            </div>
+                            <div class="ml-3">
+                                <p class="text-sm text-gray-700"><strong>Cliquez sur le lien de vérification</strong> - Cela activera votre compte immédiatement.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0">
+                                <div class="w-6 h-6 bg-[#0d079f] text-white rounded-full flex items-center justify-center text-xs font-bold">3</div>
+                            </div>
+                            <div class="ml-3">
+                                <p class="text-sm text-gray-700"><strong>Connectez-vous</strong> - Une fois vérifié, vous pourrez vous connecter à votre compte.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lien de retour -->
+                <div class="mt-6 text-center">
+                    <a href="{{ path('app_login') }}" class="inline-flex items-center text-[#0d079f] hover:text-[#0d079f]/80 font-medium">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                        </svg>
+                        Retour à la connexion
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}
