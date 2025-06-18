@@ -176,7 +176,7 @@
                     </div>
                 </div>
 
-                <button onclick="closeVictoryModal()" class="bg-[#0d079f] hover:bg-[#0a0580] text-white px-6 py-3 rounded-lg font-medium transition-colors duration-200">
+                <button onclick="TournamentResultsManager.closeVictoryModal()" class="bg-[#0d079f] hover:bg-[#0a0580] text-white px-6 py-3 rounded-lg font-medium transition-colors duration-200">
                     Fermer
                 </button>
             </div>
@@ -255,317 +255,357 @@
     </style>
 
     <script>
-        // Variables globales pour le contrôle de l'animation
-        let tournamentAnimationShown = false;
-        let tournamentWinner = null;
-        // Utiliser l'URL ou un identifiant unique pour ce tournoi
-        const tournamentId = window.location.pathname.split('/').pop() || 'current';
-        const STORAGE_KEY = `tournament_completed_${tournamentId}`;
+        // Gestionnaire global pour les résultats du tournoi - Compatible Turbo
+        window.TournamentResultsManager = {
+            // Variables globales
+            tournamentAnimationShown: false,
+            tournamentWinner: null,
+            tournamentId: null,
+            STORAGE_KEY: null,
 
-        function createConfetti() {
-            const container = document.getElementById('confetti-container');
-            const colors = ['#FFD700', '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7', '#DDA0DD', '#98D8C8'];
+            // Initialisation
+            init() {
+                // Utiliser l'URL ou un identifiant unique pour ce tournoi
+                this.tournamentId = window.location.pathname.split('/').pop() || 'current';
+                this.STORAGE_KEY = `tournament_completed_${this.tournamentId}`;
 
-            for (let i = 0; i < 50; i++) {
-                const confetti = document.createElement('div');
-                confetti.className = 'confetti-piece';
-                confetti.style.left = Math.random() * 100 + '%';
-                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                confetti.style.animationDelay = Math.random() * 3 + 's';
-                confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
-                container.appendChild(confetti);
-            }
+                this.attachEventListeners();
+                this.checkForTournamentEnd();
+            },
 
-            // Nettoyer les confettis après l'animation
-            setTimeout(() => {
-                container.innerHTML = '';
-            }, 6000);
-        }
+            // Attacher les event listeners
+            attachEventListeners() {
+                // Event listener pour le modal
+                const modal = document.getElementById('victory-modal');
+                if (modal) {
+                    // Supprimer l'ancien listener s'il existe
+                    const newModal = modal.cloneNode(true);
+                    modal.parentNode.replaceChild(newModal, modal);
 
-        function createFireworks() {
-            const canvas = document.getElementById('fireworks-canvas');
-            const ctx = canvas.getContext('2d');
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            canvas.classList.remove('hidden');
+                    // Attacher le nouveau listener
+                    newModal.addEventListener('click', (e) => {
+                        if (e.target === newModal) {
+                            this.closeVictoryModal();
+                        }
+                    });
+                }
+            },
 
-            const fireworks = [];
+            // Créer les confettis
+            createConfetti() {
+                const container = document.getElementById('confetti-container');
+                if (!container) return;
 
-            class Firework {
-                constructor(x, y) {
-                    this.x = x;
-                    this.y = y;
-                    this.particles = [];
-                    this.createParticles();
+                const colors = ['#FFD700', '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7', '#DDA0DD', '#98D8C8'];
+
+                for (let i = 0; i < 50; i++) {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti-piece';
+                    confetti.style.left = Math.random() * 100 + '%';
+                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.animationDelay = Math.random() * 3 + 's';
+                    confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                    container.appendChild(confetti);
                 }
 
-                createParticles() {
-                    const colors = ['#FFD700', '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4'];
-                    for (let i = 0; i < 30; i++) {
-                        this.particles.push({
-                            x: this.x,
-                            y: this.y,
-                            vx: (Math.random() - 0.5) * 10,
-                            vy: (Math.random() - 0.5) * 10,
-                            life: 1,
-                            decay: Math.random() * 0.02 + 0.01,
-                            color: colors[Math.floor(Math.random() * colors.length)]
+                // Nettoyer les confettis après l'animation
+                setTimeout(() => {
+                    container.innerHTML = '';
+                }, 6000);
+            },
+
+            // Créer les feux d'artifice
+            createFireworks() {
+                const canvas = document.getElementById('fireworks-canvas');
+                if (!canvas) return;
+
+                const ctx = canvas.getContext('2d');
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                canvas.classList.remove('hidden');
+
+                const fireworks = [];
+
+                class Firework {
+                    constructor(x, y) {
+                        this.x = x;
+                        this.y = y;
+                        this.particles = [];
+                        this.createParticles();
+                    }
+
+                    createParticles() {
+                        const colors = ['#FFD700', '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4'];
+                        for (let i = 0; i < 30; i++) {
+                            this.particles.push({
+                                x: this.x,
+                                y: this.y,
+                                vx: (Math.random() - 0.5) * 10,
+                                vy: (Math.random() - 0.5) * 10,
+                                life: 1,
+                                decay: Math.random() * 0.02 + 0.01,
+                                color: colors[Math.floor(Math.random() * colors.length)]
+                            });
+                        }
+                    }
+
+                    update() {
+                        this.particles.forEach((particle, index) => {
+                            particle.x += particle.vx;
+                            particle.y += particle.vy;
+                            particle.vy += 0.1; // gravity
+                            particle.life -= particle.decay;
+
+                            if (particle.life <= 0) {
+                                this.particles.splice(index, 1);
+                            }
+                        });
+                    }
+
+                    draw(ctx) {
+                        this.particles.forEach(particle => {
+                            ctx.save();
+                            ctx.globalAlpha = particle.life;
+                            ctx.fillStyle = particle.color;
+                            ctx.beginPath();
+                            ctx.arc(particle.x, particle.y, 3, 0, Math.PI * 2);
+                            ctx.fill();
+                            ctx.restore();
                         });
                     }
                 }
 
-                update() {
-                    this.particles.forEach((particle, index) => {
-                        particle.x += particle.vx;
-                        particle.y += particle.vy;
-                        particle.vy += 0.1; // gravity
-                        particle.life -= particle.decay;
+                function animate() {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-                        if (particle.life <= 0) {
-                            this.particles.splice(index, 1);
+                    fireworks.forEach((firework, index) => {
+                        firework.update();
+                        firework.draw(ctx);
+
+                        if (firework.particles.length === 0) {
+                            fireworks.splice(index, 1);
                         }
                     });
+
+                    if (fireworks.length > 0) {
+                        requestAnimationFrame(animate);
+                    } else {
+                        canvas.classList.add('hidden');
+                    }
                 }
 
-                draw(ctx) {
-                    this.particles.forEach(particle => {
-                        ctx.save();
-                        ctx.globalAlpha = particle.life;
-                        ctx.fillStyle = particle.color;
-                        ctx.beginPath();
-                        ctx.arc(particle.x, particle.y, 3, 0, Math.PI * 2);
-                        ctx.fill();
-                        ctx.restore();
-                    });
+                // Créer plusieurs feux d'artifice
+                for (let i = 0; i < 5; i++) {
+                    setTimeout(() => {
+                        fireworks.push(new Firework(
+                            Math.random() * canvas.width,
+                            Math.random() * canvas.height * 0.5
+                        ));
+                        if (i === 0) animate();
+                    }, i * 500);
                 }
-            }
+            },
 
-            function animate() {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
+            // Afficher l'animation de victoire
+            showVictoryAnimation() {
+                // Marquer l'animation comme affichée dans le localStorage
+                localStorage.setItem(this.STORAGE_KEY, JSON.stringify({
+                    completed: true,
+                    winner: this.tournamentWinner,
+                    timestamp: Date.now()
+                }));
 
-                fireworks.forEach((firework, index) => {
-                    firework.update();
-                    firework.draw(ctx);
+                // Afficher le modal
+                const modal = document.getElementById('victory-modal');
+                const winnerNameElement = document.getElementById('winner-name');
 
-                    if (firework.particles.length === 0) {
-                        fireworks.splice(index, 1);
+                if (winnerNameElement) winnerNameElement.textContent = this.tournamentWinner;
+                modal?.classList.remove('hidden');
+
+                // Créer les confettis
+                this.createConfetti();
+
+                // Créer les feux d'artifice
+                setTimeout(() => {
+                    this.createFireworks();
+                }, 1000);
+
+                // Marquer que l'animation a été montrée
+                this.tournamentAnimationShown = true;
+
+                console.log('🏆 Animation de victoire affichée pour:', this.tournamentWinner);
+            },
+
+            // Fermer le modal de victoire
+            closeVictoryModal() {
+                const modal = document.getElementById('victory-modal');
+                modal?.classList.add('hidden');
+
+                // Afficher la bannière de tournoi terminé
+                this.showCompletedTournamentBanner();
+            },
+
+            // Afficher la bannière de tournoi terminé
+            showCompletedTournamentBanner() {
+                const banner = document.getElementById('tournament-completed-banner');
+                const winnerBanner = document.getElementById('tournament-winner-banner');
+
+                if (winnerBanner) winnerBanner.textContent = `Gagnant: ${this.tournamentWinner}`;
+                banner?.classList.remove('hidden');
+            },
+
+            // Vérifier si le tournoi est terminé
+            isTournamentCompleted() {
+                const tournamentData = localStorage.getItem(this.STORAGE_KEY);
+                if (tournamentData) {
+                    const data = JSON.parse(tournamentData);
+                    this.tournamentWinner = data.winner;
+                    return true;
+                }
+                return false;
+            },
+
+            // Trouver le gagnant du tournoi
+            findTournamentWinner() {
+                console.log('🔍 Recherche du gagnant du tournoi...');
+
+                // Récupérer tous les tours
+                const rounds = document.querySelectorAll('[id^="round-"]');
+                if (rounds.length === 0) {
+                    console.log('❌ Aucun tour trouvé');
+                    return null;
+                }
+
+                // Trouver le dernier tour (le plus haut numéro)
+                let lastRoundNumber = 0;
+                let lastRoundElement = null;
+
+                rounds.forEach(round => {
+                    const roundNumber = parseInt(round.id.replace('round-', ''));
+                    if (roundNumber > lastRoundNumber) {
+                        lastRoundNumber = roundNumber;
+                        lastRoundElement = round;
                     }
                 });
 
-                if (fireworks.length > 0) {
-                    requestAnimationFrame(animate);
-                } else {
-                    canvas.classList.add('hidden');
-                }
-            }
-
-            // Créer plusieurs feux d'artifice
-            for (let i = 0; i < 5; i++) {
-                setTimeout(() => {
-                    fireworks.push(new Firework(
-                        Math.random() * canvas.width,
-                        Math.random() * canvas.height * 0.5
-                    ));
-                    if (i === 0) animate();
-                }, i * 500);
-            }
-        }
-
-        function showVictoryAnimation() {
-            // Marquer l'animation comme affichée dans le localStorage
-            localStorage.setItem(STORAGE_KEY, JSON.stringify({
-                completed: true,
-                winner: tournamentWinner,
-                timestamp: Date.now()
-            }));
-
-            // Afficher le modal
-            const modal = document.getElementById('victory-modal');
-            const winnerNameElement = document.getElementById('winner-name');
-
-            winnerNameElement.textContent = tournamentWinner;
-            modal.classList.remove('hidden');
-
-            // Créer les confettis
-            createConfetti();
-
-            // Créer les feux d'artifice
-            setTimeout(() => {
-                createFireworks();
-            }, 1000);
-
-            // Marquer que l'animation a été montrée
-            tournamentAnimationShown = true;
-
-            console.log('🏆 Animation de victoire affichée pour:', tournamentWinner);
-        }
-
-        function closeVictoryModal() {
-            const modal = document.getElementById('victory-modal');
-            modal.classList.add('hidden');
-
-            // Afficher la bannière de tournoi terminé
-            showCompletedTournamentBanner();
-        }
-
-        function showCompletedTournamentBanner() {
-            const banner = document.getElementById('tournament-completed-banner');
-            const winnerBanner = document.getElementById('tournament-winner-banner');
-
-            winnerBanner.textContent = `Gagnant: ${tournamentWinner}`;
-            banner.classList.remove('hidden');
-        }
-
-        function isTournamentCompleted() {
-            const tournamentData = localStorage.getItem(STORAGE_KEY);
-            if (tournamentData) {
-                const data = JSON.parse(tournamentData);
-                tournamentWinner = data.winner;
-                return true;
-            }
-            return false;
-        }
-
-        /**
-         * Détection du gagnant du tournoi
-         */
-        function findTournamentWinner() {
-            console.log('🔍 Recherche du gagnant du tournoi...');
-
-            // Récupérer tous les tours
-            const rounds = document.querySelectorAll('[id^="round-"]');
-            if (rounds.length === 0) {
-                console.log('❌ Aucun tour trouvé');
-                return null;
-            }
-
-            // Trouver le dernier tour (le plus haut numéro)
-            let lastRoundNumber = 0;
-            let lastRoundElement = null;
-
-            rounds.forEach(round => {
-                const roundNumber = parseInt(round.id.replace('round-', ''));
-                if (roundNumber > lastRoundNumber) {
-                    lastRoundNumber = roundNumber;
-                    lastRoundElement = round;
-                }
-            });
-
-            if (!lastRoundElement) {
-                console.log('❌ Dernier tour non trouvé');
-                return null;
-            }
-
-            console.log(`🎯 Analyse du dernier tour: ${lastRoundNumber}`);
-
-            // Récupérer tous les matchs du dernier tour
-            const lastRoundMatches = lastRoundElement.querySelectorAll('tr[id^="match-row-"]');
-            console.log(`📊 Matchs du dernier tour:`, lastRoundMatches.length);
-
-            // Vérifier que tous les matchs sont terminés
-            let allMatchesCompleted = true;
-            const winners = [];
-
-            lastRoundMatches.forEach((matchRow, index) => {
-                const team1Cell = matchRow.children[0];
-                const team2Cell = matchRow.children[1];
-                const scoreCell = matchRow.children[2];
-                const scoreText = scoreCell.textContent.trim();
-
-                // Vérifier si le match a un score
-                if (scoreText === 'En attente') {
-                    allMatchesCompleted = false;
-                    console.log(`⏳ Match ${index + 1} en attente`);
-                    return;
+                if (!lastRoundElement) {
+                    console.log('❌ Dernier tour non trouvé');
+                    return null;
                 }
 
-                // Extraire les scores du texte
-                const scoreMatch = scoreText.match(/(\d+)\s*-\s*(\d+)/);
-                if (!scoreMatch) {
-                    console.log(`⚠️ Score invalide pour le match ${index + 1}: ${scoreText}`);
-                    return;
-                }
+                console.log(`🎯 Analyse du dernier tour: ${lastRoundNumber}`);
 
-                const score1 = parseInt(scoreMatch[1]);
-                const score2 = parseInt(scoreMatch[2]);
+                // Récupérer tous les matchs du dernier tour
+                const lastRoundMatches = lastRoundElement.querySelectorAll('tr[id^="match-row-"]');
+                console.log(`📊 Matchs du dernier tour:`, lastRoundMatches.length);
 
-                console.log(`🏓 Match ${index + 1}:`, {
-                    team1: team1Cell.textContent.replace('🏆', '').trim(),
-                    team2: team2Cell.textContent.replace('🏆', '').trim(),
-                    score1,
-                    score2
+                // Vérifier que tous les matchs sont terminés
+                let allMatchesCompleted = true;
+                const winners = [];
+
+                lastRoundMatches.forEach((matchRow, index) => {
+                    const team1Cell = matchRow.children[0];
+                    const team2Cell = matchRow.children[1];
+                    const scoreCell = matchRow.children[2];
+                    const scoreText = scoreCell.textContent.trim();
+
+                    // Vérifier si le match a un score
+                    if (scoreText === 'En attente') {
+                        allMatchesCompleted = false;
+                        console.log(`⏳ Match ${index + 1} en attente`);
+                        return;
+                    }
+
+                    // Extraire les scores du texte
+                    const scoreMatch = scoreText.match(/(\d+)\s*-\s*(\d+)/);
+                    if (!scoreMatch) {
+                        console.log(`⚠️ Score invalide pour le match ${index + 1}: ${scoreText}`);
+                        return;
+                    }
+
+                    const score1 = parseInt(scoreMatch[1]);
+                    const score2 = parseInt(scoreMatch[2]);
+
+                    console.log(`🏓 Match ${index + 1}:`, {
+                        team1: team1Cell.textContent.replace('🏆', '').trim(),
+                        team2: team2Cell.textContent.replace('🏆', '').trim(),
+                        score1,
+                        score2
+                    });
+
+                    let winner = null;
+                    let winnerCell = null;
+
+                    if (score1 >= 13) {
+                        winner = team1Cell.textContent.replace('🏆', '').trim();
+                        winnerCell = team1Cell;
+                    } else if (score2 >= 13) {
+                        winner = team2Cell.textContent.replace('🏆', '').trim();
+                        winnerCell = team2Cell;
+                    }
+
+                    if (winner && winnerCell) {
+                        winners.push({ name: winner, cell: winnerCell });
+                        console.log(`🏆 Gagnant du match ${index + 1}:`, winner);
+                    }
                 });
 
-                let winner = null;
-                let winnerCell = null;
-
-                if (score1 >= 13) {
-                    winner = team1Cell.textContent.replace('🏆', '').trim();
-                    winnerCell = team1Cell;
-                } else if (score2 >= 13) {
-                    winner = team2Cell.textContent.replace('🏆', '').trim();
-                    winnerCell = team2Cell;
+                if (!allMatchesCompleted) {
+                    console.log('⏳ Tous les matchs ne sont pas encore terminés');
+                    return null;
                 }
 
-                if (winner && winnerCell) {
-                    winners.push({ name: winner, cell: winnerCell });
-                    console.log(`🏆 Gagnant du match ${index + 1}:`, winner);
+                console.log('🏅 Tous les gagnants du dernier tour:', winners.map(w => w.name));
+
+                // Si il n'y a qu'un seul gagnant, c'est le champion du tournoi !
+                if (winners.length === 1) {
+                    const champion = winners[0];
+                    console.log('👑 CHAMPION DU TOURNOI:', champion.name);
+
+                    // Ajouter l'effet visuel au gagnant
+                    champion.cell.classList.add('winner-glow');
+
+                    return champion.name;
+                } else if (winners.length === 0) {
+                    console.error('❌ Aucun gagnant trouvé dans le dernier tour');
+                    return null;
+                } else {
+                    console.log(`🤔 Plusieurs gagnants (${winners.length}) - Le tournoi n'est peut-être pas vraiment terminé`);
+                    return null;
                 }
-            });
+            },
 
-            if (!allMatchesCompleted) {
-                console.log('⏳ Tous les matchs ne sont pas encore terminés');
-                return null;
-            }
-
-            console.log('🏅 Tous les gagnants du dernier tour:', winners.map(w => w.name));
-
-            // Si il n'y a qu'un seul gagnant, c'est le champion du tournoi !
-            if (winners.length === 1) {
-                const champion = winners[0];
-                console.log('👑 CHAMPION DU TOURNOI:', champion.name);
-
-                // Ajouter l'effet visuel au gagnant
-                champion.cell.classList.add('winner-glow');
-
-                return champion.name;
-            } else if (winners.length === 0) {
-                console.error('❌ Aucun gagnant trouvé dans le dernier tour');
-                return null;
-            } else {
-                console.log(`🤔 Plusieurs gagnants (${winners.length}) - Le tournoi n'est peut-être pas vraiment terminé`);
-                return null;
-            }
-        }
-
-        function checkForTournamentEnd() {
-            // Vérifier si le tournoi est déjà marqué comme terminé
-            if (isTournamentCompleted()) {
-                console.log('🚫 Tournoi déjà terminé, animation déjà affichée');
-                showVictoryAnimation();
-                return;
-            }
-
-            // Utiliser la logique de détection du gagnant
-            tournamentWinner = findTournamentWinner();
-
-            if (tournamentWinner && !tournamentAnimationShown) {
-                console.log('🎉 Déclenchement de l\'animation de victoire pour:', tournamentWinner);
-                showVictoryAnimation();
-            }
-        }
-
-        // Initialisation des événements
-        document.addEventListener('DOMContentLoaded', function() {
             // Vérifier si le tournoi est terminé
-            checkForTournamentEnd();
-
-            // Fermer le modal en cliquant à l'extérieur
-            document.getElementById('victory-modal').addEventListener('click', function(e) {
-                if (e.target === this) {
-                    closeVictoryModal();
+            checkForTournamentEnd() {
+                // Vérifier si le tournoi est déjà marqué comme terminé
+                if (this.isTournamentCompleted()) {
+                    console.log('🚫 Tournoi déjà terminé, affichage de la bannière');
+                    this.showCompletedTournamentBanner();
+                    return;
                 }
-            });
+
+                // Utiliser la logique de détection du gagnant
+                this.tournamentWinner = this.findTournamentWinner();
+
+                if (this.tournamentWinner && !this.tournamentAnimationShown) {
+                    console.log('🎉 Déclenchement de l\'animation de victoire pour:', this.tournamentWinner);
+                    this.showVictoryAnimation();
+                }
+            }
+        };
+
+        // Gestion des événements Turbo
+        document.addEventListener('turbo:load', () => {
+            TournamentResultsManager.init();
+        });
+
+        document.addEventListener('turbo:render', () => {
+            TournamentResultsManager.init();
+        });
+
+        // Fallback pour les navigateurs sans Turbo
+        document.addEventListener('DOMContentLoaded', () => {
+            TournamentResultsManager.init();
         });
     </script>
 {% endblock %}

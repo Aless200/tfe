@@ -4,9 +4,6 @@
 
 {% block body %}
     <div class="w-full bg-[#0d079f]">
-        <!-- Top white line -->
-        {#        <div class="h-2 w-full bg-white"></div>#}
-
         <!-- Main content section between the white lines -->
         <div class="relative flex items-center justify-between px-4 py-2">
             <!-- Logo circle -->
@@ -35,9 +32,6 @@
                 </a>
             </div>
         </div>
-
-        <!-- Bottom white line -->
-        {#        <div class="h-2 w-full bg-white"></div>#}
     </div>
 
     <main class="min-h-[calc(100vh-120px)] bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
@@ -64,6 +58,12 @@
                 <!-- Tournaments grid -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-10">
                     {% for tournament in tournaments %}
+                        {# Récupération du statut depuis le JSON #}
+                        {% set tournamentStatus = tournament.status is iterable ? tournament.status|first : tournament.status %}
+                        {% set isStatusBlocked = tournamentStatus in ['en cours', 'terminé', 'annulé'] %}
+                        {% set isTeamsFull = tournament.teams|length >= tournament.teamsMax %}
+                        {% set canRegister = not isStatusBlocked and not isTeamsFull %}
+
                         <div class="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-all duration-300 border border-gray-100 flex flex-col h-full">
                             <!-- Featured image with overlay -->
                             <div class="relative h-56 overflow-hidden group">
@@ -76,6 +76,17 @@
                                 <div class="absolute top-0 right-0 bg-[#0d079f] text-white px-3 py-1 rounded-bl-lg text-sm font-medium">
                                     {{ tournament.price }}€
                                 </div>
+
+                                {# Badge de statut si le tournoi n'est pas ouvert #}
+                                {% if not canRegister %}
+                                    <div class="absolute top-0 left-0 bg-red-500 text-white px-3 py-1 rounded-br-lg text-sm font-medium">
+                                        {% if isTeamsFull %}
+                                            Complet
+                                        {% else %}
+                                            {{ tournamentStatus|capitalize }}
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
                             </div>
 
                             <!-- Tournament content -->
@@ -103,7 +114,9 @@
                                         <svg class="w-4 h-4 mr-2 text-[#0d079f] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M7 20H2v-2a3 3 0 015.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
                                         </svg>
-                                        <span>{{ tournament.teams|length }}/{{ tournament.teamsMax }} équipes</span>
+                                        <span class="{{ isTeamsFull ? 'text-red-600 font-semibold' : '' }}">
+                                            {{ tournament.teams|length }}/{{ tournament.teamsMax }} équipes
+                                        </span>
                                     </div>
 
                                     <div class="flex items-center">
@@ -111,6 +124,16 @@
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                                         </svg>
                                         <span class="truncate">Type : {{ tournament.typeTournament|join(', ') }}</span>
+                                    </div>
+
+                                    {# Affichage du statut #}
+                                    <div class="flex items-center">
+                                        <svg class="w-4 h-4 mr-2 text-[#0d079f] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                        <span class="truncate {{ isStatusBlocked ? 'text-red-600 font-semibold' : 'text-green-600' }}">
+                                            Statut : {{ tournamentStatus|capitalize }}
+                                        </span>
                                     </div>
                                 </div>
 
@@ -124,18 +147,30 @@
                                         Détails
                                     </a>
 
-                                    {% if tournament.teams|length >= tournament.teamsMax %}
+                                    {% if not canRegister %}
                                         <button class="flex-1 min-w-[100px] inline-flex items-center justify-center px-3 py-1.5 bg-gray-300 text-gray-600 rounded-lg cursor-not-allowed text-sm font-medium"
-                                                disabled>
+                                                disabled
+                                                title="{% if isTeamsFull %}Tournoi complet{% else %}Tournoi {{ tournamentStatus }}{% endif %}">
                                             <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728L5.636 5.636m12.728 12.728L18.364 5.636M5.636 18.364l12.728-12.728" />
                                             </svg>
-                                            Complet
+                                            {% if isTeamsFull %}
+                                                Complet
+                                            {% elseif tournamentStatus == 'en cours' %}
+                                                En cours
+                                            {% elseif tournamentStatus == 'terminé' %}
+                                                Terminé
+                                            {% elseif tournamentStatus == 'annulé' %}
+                                                Annulé
+                                            {% else %}
+                                                Indisponible
+                                            {% endif %}
                                         </button>
                                     {% else %}
                                         <a href="{{ path('app_create_team', {'slug': tournament.slug}) }}"
                                            class="flex-1 min-w-[100px] inline-flex items-center justify-center px-3 py-1.5 bg-[#0d079f] text-white rounded-lg hover:bg-[#0a0580] transition-colors duration-200 text-sm font-medium"
-                                           data-date="{{ tournament.dateTournament.format('Y-m-d H:i:s') }}">
+                                           data-date="{{ tournament.dateTournament.format('Y-m-d H:i:s') }}"
+                                           title="S'inscrire au tournoi">
                                             <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                                             </svg>
