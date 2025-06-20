@@ -13,11 +13,59 @@
                     <!-- Sidebar content here -->
                 </div>
                 <div class="flex-1 p-6 overflow-hidden">
-                    <h1 class="text-2xl font-bold mb-4">Tournoi de Pétanque</h1>
+                    <div class="flex justify-between items-center mb-4">
+                        <h1 class="text-2xl font-bold">Tournoi de Pétanque</h1>
+
+                        <!-- Bouton Clôturer le tournoi -->
+                        {% if tournamentStatus != 'terminer' %}
+                            <div class="flex gap-2">
+                                <a href="{{ path('app_admin_close_tournament', {id: tournamentId}) }}"
+                                   class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg shadow-md transition-colors duration-200"
+                                   onclick="return confirm('Êtes-vous sûr de vouloir clôturer ce tournoi ? Cette action est irréversible.')">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                                    </svg>
+                                    Clôturer le tournoi
+                                </a>
+                            </div>
+                        {% else %}
+                            <div class="bg-gray-100 text-gray-600 px-4 py-2 rounded-lg">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                Tournoi clôturé
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Statut du tournoi -->
+                    <div class="mb-4">
+                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium
+                            {% if tournamentStatus == 'prochainement' %}
+                                bg-blue-100 text-blue-800
+                            {% elseif tournamentStatus == 'en_cours' %}
+                                bg-green-100 text-green-800
+                            {% elseif tournamentStatus == 'terminer' %}
+                                bg-gray-100 text-gray-800
+                            {% else %}
+                                bg-yellow-100 text-yellow-800
+                            {% endif %}">
+                            Statut:
+                            {% if tournamentStatus == 'prochainement' %}
+                                Prochainement
+                            {% elseif tournamentStatus == 'en_cours' %}
+                                En cours
+                            {% elseif tournamentStatus == 'terminer' %}
+                                Terminé
+                            {% else %}
+                                {{ tournamentStatus }}
+                            {% endif %}
+                        </span>
+                    </div>
 
                     <!-- Bouton Mélanger les équipes -->
                     <div class="flex justify-center mb-6">
-                        {% if not isShuffled %}
+                        {% if not isShuffled and tournamentStatus != 'terminer' %}
                             <div class="mb-4">
                                 <a href="{{ path('app_admin_add_bye_teams', {id: tournamentId}) }}"
                                    class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded">
@@ -28,6 +76,10 @@
                                     Effectuer le tirage au sort
                                 </a>
                             </div>
+                        {% elseif tournamentStatus == 'terminer' %}
+                            <button class="bg-gray-400 text-white py-2 px-4 rounded-lg shadow-md cursor-not-allowed"
+                                    disabled>Tournoi terminé
+                            </button>
                         {% else %}
                             <button class="bg-gray-400 text-white py-2 px-4 rounded-lg shadow-md cursor-not-allowed"
                                     disabled>Équipes mélangées
@@ -91,6 +143,7 @@
                                     {% for match in roundMatches %}
                                         {% set isMatchCompleted = match.scoreTeam1 is not null and match.scoreTeam2 is not null and (match.scoreTeam1 >= 13 or match.scoreTeam2 >= 13) %}
                                         {% set isCurrentRoundMatch = roundNumber == currentRound %}
+                                        {% set isTournamentClosed = tournamentStatus == 'terminer' %}
 
                                         <tr class="hover:bg-gray-100 {{ isMatchCompleted ? 'bg-green-50' : '' }}" id="match-row-{{ match.id }}"
                                             data-match-completed="{{ isMatchCompleted ? 'true' : 'false' }}"
@@ -110,20 +163,20 @@
                                             <td class="px-3 py-4">
                                                 <input type="number"
                                                        name="scoreTeam1"
-                                                       class="score-input w-full px-2 py-1 rounded border focus:ring-[#0d079f] focus:border-[#0d079f] {{ isMatchCompleted ? 'bg-gray-100' : '' }}"
+                                                       class="score-input w-full px-2 py-1 rounded border focus:ring-[#0d079f] focus:border-[#0d079f] {{ isMatchCompleted or isTournamentClosed ? 'bg-gray-100' : '' }}"
                                                        min="0"
                                                        max="13"
                                                        value="{{ match.scoreTeam1 ?? '' }}"
-                                                        {{ isMatchCompleted or not isCurrentRoundMatch ? 'readonly' : '' }}>
+                                                        {{ isMatchCompleted or not isCurrentRoundMatch or isTournamentClosed ? 'readonly' : '' }}>
                                             </td>
                                             <td class="px-3 py-4">
                                                 <input type="number"
                                                        name="scoreTeam2"
-                                                       class="score-input w-full px-2 py-1 rounded border focus:ring-[#0d079f] focus:border-[#0d079f] {{ isMatchCompleted ? 'bg-gray-100' : '' }}"
+                                                       class="score-input w-full px-2 py-1 rounded border focus:ring-[#0d079f] focus:border-[#0d079f] {{ isMatchCompleted or isTournamentClosed ? 'bg-gray-100' : '' }}"
                                                        min="0"
                                                        max="13"
                                                        value="{{ match.scoreTeam2 ?? '' }}"
-                                                        {{ isMatchCompleted or not isCurrentRoundMatch ? 'readonly' : '' }}>
+                                                        {{ isMatchCompleted or not isCurrentRoundMatch or isTournamentClosed ? 'readonly' : '' }}>
                                             </td>
                                             <td class="px-3 py-4 text-center">
                                                 <form class="score-form" action="{{ path('app_admin_update_score') }}" method="POST" data-match-id="{{ match.id }}">
@@ -135,7 +188,11 @@
                                                     <input type="hidden" name="team2Id" value="{{ match.team2.id }}">
 
                                                     <div class="action-buttons" data-match-id="{{ match.id }}">
-                                                        {% if isMatchCompleted %}
+                                                        {% if isTournamentClosed %}
+                                                            <button type="button" class="inline-flex items-center justify-center px-3 py-1.5 rounded-md text-sm font-medium bg-gray-200 text-gray-500 cursor-not-allowed">
+                                                                Tournoi terminé
+                                                            </button>
+                                                        {% elseif isMatchCompleted %}
                                                             <button type="button" class="completed-btn inline-flex items-center justify-center px-3 py-1.5 rounded-md text-sm font-medium bg-green-100 text-green-800 cursor-default">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
@@ -171,19 +228,27 @@
                     {% endfor %}
 
                     <!-- Bouton Tour Suivant -->
-                    <div id="next-round-container" class="flex justify-center mt-8 {% if not showNextRoundButton %}hidden{% endif %}">
-                        <a href="{{ path('app_admin_next_round', {'id': tournamentId}) }}"
-                           class="inline-flex items-center px-6 py-3 bg-[#0d079f] text-white font-medium rounded-lg shadow-md hover:bg-[#0a0580] transition-colors duration-200 transform hover:scale-105">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7" />
-                            </svg>
-                            Générer le Tour Suivant
-                        </a>
-                    </div>
+                    {% if tournamentStatus != 'terminer' %}
+                        <div id="next-round-container" class="flex justify-center mt-8 {% if not showNextRoundButton %}hidden{% endif %}">
+                            <a href="{{ path('app_admin_next_round', {'id': tournamentId}) }}"
+                               class="inline-flex items-center px-6 py-3 bg-[#0d079f] text-white font-medium rounded-lg shadow-md hover:bg-[#0a0580] transition-colors duration-200 transform hover:scale-105">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7" />
+                                </svg>
+                                Générer le Tour Suivant
+                            </a>
+                        </div>
+                    {% endif %}
 
                     <!-- Message d'information -->
-                    <div id="info-message" class="mt-4 text-center text-gray-600 {% if showNextRoundButton %}hidden{% endif %}">
-                        <p>Tous les matchs du tour actuel doivent être terminés pour passer au tour suivant.</p>
+                    <div id="info-message" class="mt-4 text-center text-gray-600 {% if showNextRoundButton or tournamentStatus == 'terminer' %}hidden{% endif %}">
+                        <p>
+                            {% if tournamentStatus == 'terminer' %}
+                                Le tournoi est terminé.
+                            {% else %}
+                                Tous les matchs du tour actuel doivent être terminés pour passer au tour suivant.
+                            {% endif %}
+                        </p>
                     </div>
                 </div>
             </div>

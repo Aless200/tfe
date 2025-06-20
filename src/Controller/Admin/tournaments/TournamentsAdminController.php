@@ -297,14 +297,43 @@ class TournamentsAdminController extends AbstractController
 
         $showNextRoundButton = $this->shouldShowNextRoundButton($tournament, $currentRound, $manager);
 
+        // SOLUTION : Extraire le statut ici et le passer à la vue
+        $tournamentStatus = $this->extractStatusValue($tournament->getStatus());
+
         return $this->render('admin/tournaments/showTournament.html.twig', [
             'tournamentId' => $id,
             'tournament' => $tournament,
+            'tournamentStatus' => $tournamentStatus, // Ajouter cette ligne
             'matchesByRound' => $matchesByRound,
             'currentRound' => $currentRound,
             'isShuffled' => !empty($allMatches),
             'showNextRoundButton' => $showNextRoundButton,
         ]);
+    }
+
+    #[Route('/admin/close-tournament/{id}', name: 'app_admin_close_tournament')]
+    public function closeTournament(int $id, TournamentRepository $repository, EntityManagerInterface $manager): Response
+    {
+        $tournament = $repository->find($id);
+        if (!$tournament) {
+            throw $this->createNotFoundException("Tournoi introuvable !");
+        }
+
+        // Vérifier que le tournoi n'est pas déjà terminé
+        if ($this->extractStatusValue($tournament->getStatus()) === 'terminer') {
+            $this->addFlash('admin_warning', 'Ce tournoi est déjà clôturé.');
+            return $this->redirectToRoute('app_admin_showTournament', ['id' => $id]);
+        }
+
+        // Changer le statut du tournoi à "terminé"
+        $tournament->setStatus(['terminer']);
+        $tournament->setUpdatedAt(new \DateTimeImmutable());
+
+        $manager->flush();
+
+        $this->addFlash('admin_success', 'Le tournoi a été clôturé avec succès.');
+
+        return $this->redirectToRoute('app_admin_showTournament', ['id' => $id]);
     }
 
     #[Route('/admin/shuffleTeams/{id}', name: 'app_admin_shuffleTeams')]
@@ -379,13 +408,20 @@ class TournamentsAdminController extends AbstractController
             $groundIndex++;
         }
 
+        // Changer le statut du tournoi de "prochainement" à "en_cours"
+        $currentStatus = $this->extractStatusValue($tournament->getStatus());
+        if ($currentStatus === 'prochainement') {
+            $tournament->setStatus(['en_cours']);
+            $tournament->setUpdatedAt(new \DateTimeImmutable());
+        }
+
         $manager->flush();
 
         // Mettre à jour la session
         $session->set('tournament_shuffled_' . $id, true);
         $session->set('tournament_round_' . $id, 1);
 
-        $this->addFlash('admin_success', 'Le tirage au sort du premier tour a été effectué avec succès !');
+        $this->addFlash('admin_success', 'Le tirage au sort du premier tour a été effectué avec succès ! Le tournoi est maintenant en cours.');
 
         return $this->redirectToRoute('app_admin_showTournament', ['id' => $id]);
     }
@@ -418,8 +454,19 @@ class TournamentsAdminController extends AbstractController
             }
 
             $gameId = (int)$data['gameId'];
+            $tournamentId = (int)$data['tournamentId'];
             $scoreTeam1 = (int)$data['scoreTeam1'];
             $scoreTeam2 = (int)$data['scoreTeam2'];
+
+            // Vérifier que le tournoi n'est pas terminé
+            $tournament = $manager->getRepository(Tournament::class)->find($tournamentId);
+            if (!$tournament) {
+                return new JsonResponse(['status' => 'error', 'message' => 'Tournoi introuvable'], 404);
+            }
+
+            if ($this->extractStatusValue($tournament->getStatus()) === 'terminer') {
+                return new JsonResponse(['status' => 'error', 'message' => 'Le tournoi est terminé, impossible de modifier les scores'], 400);
+            }
 
             // Validation des scores
             if ($scoreTeam1 < 0 || $scoreTeam2 < 0) {
@@ -548,6 +595,12 @@ class TournamentsAdminController extends AbstractController
         $tournament = $repository->find($id);
         if (!$tournament) {
             throw $this->createNotFoundException("Tournoi introuvable !");
+        }
+
+        // Vérifier que le tournoi n'est pas terminé
+        if ($this->extractStatusValue($tournament->getStatus()) === 'terminer') {
+            $this->addFlash('admin_error', 'Le tournoi est terminé, impossible de générer un nouveau tour');
+            return $this->redirectToRoute('app_admin_showTournament', ['id' => $id]);
         }
 
         $currentRound = $this->getRoundFromSession($session, $id);
@@ -733,6 +786,11 @@ class TournamentsAdminController extends AbstractController
      */
     private function shouldShowNextRoundButton(Tournament $tournament, int $currentRound, EntityManagerInterface $manager): bool
     {
+        // Si le tournoi est terminé, pas de bouton
+        if ($this->extractStatusValue($tournament->getStatus()) === 'terminer') {
+            return false;
+        }
+
         // Récupérer tous les matchs du tour actuel pour ce tournoi
         $currentRoundMatches = $manager->getRepository(Game::class)->findBy([
             'tournament' => $tournament,

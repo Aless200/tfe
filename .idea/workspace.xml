@@ -6,10 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="99cee274-6e64-4b15-925c-b9f21b3544ee" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/Admin/tournaments/TournamentsAdminController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/Admin/tournaments/TournamentsAdminController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/admin/tournaments/showTournament.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/admin/tournaments/showTournament.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/partials/navbar.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/partials/navbar.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/tournament/detailResult.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/tournament/detailResult.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/tournament/tournaments.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/tournament/tournaments.html.twig" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -315,7 +313,8 @@
       <workItem from="1749892409652" duration="12525000" />
       <workItem from="1750014045542" duration="6328000" />
       <workItem from="1750067529627" duration="19093000" />
-      <workItem from="1750248276889" duration="4225000" />
+      <workItem from="1750248276889" duration="4766000" />
+      <workItem from="1750410939748" duration="1312000" />
     </task>
     <servers />
   </component>
