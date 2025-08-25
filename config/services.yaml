@@ -25,10 +25,16 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
 
-
     App\Service\ArbitratorStorage:
         arguments:
             $projectDir: '%kernel.project_dir%'
 
-    # add more service definitions when explicit configuration is needed
-    # please note that last definitions always *replace* previous ones
+    # These are your explicit configurations for the fixtures.
+    # They MUST be placed AFTER the App\ resource definition to override it.
+    App\DataFixtures\NewsFixtures:
+        arguments:
+            $kernelProjectDir: '%kernel.project_dir%'
+
+    App\DataFixtures\GalleryFixtures:
+        arguments:
+            $kernelProjectDir: '%kernel.project_dir%'

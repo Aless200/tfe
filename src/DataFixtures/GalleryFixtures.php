@@ -10,69 +10,74 @@ use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Symfony\Component\String\Slugger\SluggerInterface;
-use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+
 class GalleryFixtures extends Fixture implements DependentFixtureInterface
 {
-
-    public function __construct(private readonly sluggerInterface $slugger)
-    {
-
+    public function __construct(
+        private readonly SluggerInterface $slugger,
+        private readonly string $kernelProjectDir
+    ) {
     }
 
     public function load(ObjectManager $manager): void
     {
-        $faker = Factory::create('fr_BE'); // Utilisation du locale belge
+        $faker = Factory::create('fr_BE');
         $userRepository = $manager->getRepository(User::class);
-        $allUsers = $userRepository->findAll();
+        $adminUsers = array_filter($userRepository->findAll(), fn (User $user) => in_array('ROLE_ADMIN', $user->getRoles()) || in_array('ROLE_SUPER_ADMIN', $user->getRoles()));
 
-        // Filtrer les utilisateurs avec les rôles souhaités
-        $adminUsers = array_filter($allUsers, function (User $user) {
-            return in_array('ROLE_ADMIN', $user->getRoles()) || in_array('ROLE_SUPER_ADMIN', $user->getRoles());
-        });
+        if (empty($adminUsers)) {
+            echo "Attention: Aucun utilisateur administrateur trouvé. Les galeries ne seront pas créées.\n";
+            return;
+        }
 
-        // Nombre de galeries souhaitées
+        $fixtureDir = $this->kernelProjectDir . '/assets/images/fixtures/';
+        $targetDir = $this->kernelProjectDir . '/public/uploads/images/gallery/';
+
+        if (!is_dir($targetDir)) {
+            mkdir($targetDir, 0777, true);
+        }
+
         $numberOfGalleries = 4;
         $imagesPerGallery = 6;
 
-        // Créer des galeries
         for ($i = 0; $i < $numberOfGalleries; $i++) {
             $gallery = new Gallery();
             $randomAdmin = $adminUsers[array_rand($adminUsers)];
-            $gallery->setTitle($faker->words(2, true))
+            $galleryTitle = $faker->words(2, true);
+
+            $gallery->setTitle($galleryTitle)
                 ->setDescription($faker->paragraphs(2, true))
                 ->setCreatedAt(new \DateTimeImmutable())
-                ->setIsPublished(1)
+                ->setIsPublished(true)
                 ->setSlug($this->slugger->slug($gallery->getTitle()))
                 ->setDatePublished(new \DateTimeImmutable())
                 ->setAuthor($randomAdmin);
 
             $manager->persist($gallery);
 
-            // Créer des images pour chaque galerie
             for ($j = 0; $j < $imagesPerGallery; $j++) {
                 $picture = new Pictures();
-                $imageNumber = ($i * $imagesPerGallery + $j) % 16; // Cycle à travers les images 0 à 15
+                $imageNumber = ($i * $imagesPerGallery + $j) + 1;
+                $imageName = "petanque-" . $imageNumber . ".jpg";
+                $fixtureImagePath = $fixtureDir . $imageName;
+                $targetImagePath = $targetDir . $imageName;
 
-                // Mettre à jour le chemin pour pointer vers assets/images/gallery/
-                $imagePath = __DIR__ . '/../../assets/images/gallery/' . $imageNumber . '.jpg';
-
-                // Vérifiez si le fichier existe avant de créer l'objet File
-                if (file_exists($imagePath)) {
-                    $imageFile = new File($imagePath);
-                    $picture->setImageFile($imageFile);
-                    $picture->setGallery($gallery); // Associer l'image à la galerie actuelle
+                if (file_exists($fixtureImagePath)) {
+                    copy($fixtureImagePath, $targetImagePath);
+                    $uploadedFile = new UploadedFile($targetImagePath, $imageName, null, null, true);
+                    $picture->setImageFile($uploadedFile);
+                    $picture->setGallery($gallery);
 
                     $manager->persist($picture);
                 } else {
-                    // Gérer le cas où le fichier n'existe pas
-                    echo "Le fichier $imagePath n'existe pas.\n";
+                    echo "Le fichier $fixtureImagePath n'existe pas. Veuillez le placer dans le dossier des fixtures.\n";
                 }
             }
         }
 
         $manager->flush();
     }
-
 
     public function getDependencies(): array
     {
