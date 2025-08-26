@@ -106,6 +106,8 @@ class ArbitratorController extends AbstractController
             return $this->redirectToRoute('app_arbitrator_login');
         }
 
+        $currentRound = $this->getRoundFromSession($session, $tournamentId);
+
         // Récupérer le tournoi
         $tournament = $entityManager->getRepository(Tournament::class)->find($tournamentId);
         if (!$tournament) {
@@ -118,6 +120,7 @@ class ArbitratorController extends AbstractController
             'tournament' => $tournament,
             'team1' => $team1Id,
             'team2' => $team2Id,
+            'roundT' => $currentRound,
         ]);
 
         if (!$game) {
@@ -125,6 +128,7 @@ class ArbitratorController extends AbstractController
             $game->setTournament($tournament);
             $game->setTeam1($entityManager->getReference('App\Entity\Team', $team1Id));
             $game->setTeam2($entityManager->getReference('App\Entity\Team', $team2Id));
+            $game->setRoundT($currentRound); // 💡 NOUVEAU : On définit le round ici !
         }
 
         // Mettre à jour les scores
