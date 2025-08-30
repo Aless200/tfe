@@ -20,16 +20,30 @@ class ContactController extends AbstractController
         $contact = new Contact();
         $formContact = $this->createForm(ContactType::class, $contact);
         $formContact->handleRequest($request);
+
         if ($formContact->isSubmitted() && $formContact->isValid()) {
+            // Remplacez 'votre_adresse@example.com' par votre propre adresse.
+            $destinataire = 'Pcm.2025@petanque.eu';
+
+            // Rendre le template Twig pour créer le corps HTML de l'email
+            $htmlBody = $this->renderView('contact/email_template.html.twig', [
+                'contact' => $contact,
+                'subject' => $contact->getSubject(), // Passer le sujet au template
+            ]);
+
             $email = (new Email())
-                ->from($contact->getEmail())
-                ->to($contact->getEmail())
+                ->from('contact@votresite.com') // Une adresse de votre site
+                ->to($destinataire) // Vous êtes le destinataire
+                ->replyTo($contact->getEmail()) // Permet de répondre directement à l'expéditeur du formulaire
                 ->subject($contact->getSubject())
-                ->text($contact->getMessage());
+                ->html($htmlBody); // Le contenu HTML stylisé
+
             $mailer->send($email);
-            $this->addFlash('success', 'Votre message a bien été envoyer');
+
+            $this->addFlash('success', 'Votre message a bien été envoyé.');
             return $this->redirectToRoute('app_home');
         }
+
         return $this->render('contact/contact.html.twig', [
             'formContact' => $formContact,
         ]);

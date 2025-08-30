@@ -5,28 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="99cee274-6e64-4b15-925c-b9f21b3544ee" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/contact/email_template.html.twig" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/news/petanque-1-68add05277213449251502.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Repository/UserRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/UserRepository.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/admin/tournaments/showTournament.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/admin/tournaments/showTournament.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/admin/tournaments/tournaments.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/admin/tournaments/tournaments.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/admin/user/users.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/admin/user/users.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/contact/contact.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/contact/contact.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/gallery/detailGallery.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/gallery/detailGallery.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/gallery/gallery.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/gallery/gallery.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/news/detailNews.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/news/detailNews.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/news/news.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/news/news.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/partials/footer.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/partials/footer.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/profile/editPassword.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/profile/editPassword.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/profile/editProfile.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/profile/editProfile.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/profile/profile.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/profile/profile.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/registration/check_email_registration.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/registration/check_email_registration.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/registration/register.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/registration/register.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/team/index.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/team/index.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/tournament/detailResult.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/tournament/detailResult.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/tournament/detailTournament.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/tournament/detailTournament.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/tournament/tournaments.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/tournament/tournaments.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/ContactController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/ContactController.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -339,7 +320,7 @@
       <workItem from="1755243905412" duration="302000" />
       <workItem from="1756138798588" duration="3899000" />
       <workItem from="1756220287085" duration="2694000" />
-      <workItem from="1756561335688" duration="6383000" />
+      <workItem from="1756561335688" duration="8846000" />
     </task>
     <servers />
   </component>

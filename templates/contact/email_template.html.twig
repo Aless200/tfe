@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ subject }}</title>
+</head>
+<body style="font-family: sans-serif; background-color: #f9fafb; margin: 0; padding: 0;">
+{# Email Container #}
+<div style="font-family: sans-serif; max-width: 42rem; margin-left: auto; margin-right: auto; background-color: #f9fafb;">
+    {# Header #}
+    <div style="width: 100%; background-color: #0d079f;">
+        {# Top white line #}
+        <div style="height: 0.5rem; width: 100%; background-color: white;"></div>
+
+        {# Main header content #}
+        <div style="position: relative; display: flex; align-items: center; padding-left: 1.5rem; padding-right: 1.5rem; padding-top: 1rem; padding-bottom: 1rem;">
+            {# Logo circle #}
+            <div style="position: relative; z-index: 10; height: 4rem; width: 4rem; overflow: hidden; border-radius: 9999px; border: 2px solid white; background-color: white; display: flex; align-items: center; justify-content: center;">
+                <img src="{{ absolute_url(asset('images/logoPcm.png')) }}" class="mt-2" alt="boule de pétanque" style="max-width: 100%; max-height: 100%;">
+            </div>
+
+            {# Title #}
+            <h1 style="margin-left: 1rem; font-size: 1.25rem; font-weight: bold; color: white;">Nouveau message de contact</h1>
+        </div>
+
+        {# Bottom white line #}
+        <div style="height: 0.5rem; width: 100%; background-color: white;"></div>
+    </div>
+
+    {# Email Body #}
+    <div style="background-color: white; border-radius: 0.5rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); margin-left: 1rem; margin-right: 1rem; margin-top: 1.5rem; margin-bottom: 1.5rem; overflow: hidden;">
+        {# Contact Badge #}
+        <div style="background: linear-gradient(135deg, #059669 0%, #10b981 100%); padding: 1.5rem; text-align: center;">
+            <div style="background-color: white; border-radius: 9999px; width: 4rem; height: 4rem; margin: 0 auto 1rem auto; display: flex; align-items: center; justify-content: center;">
+                <svg style="width: 2rem; height: 2rem; color: #059669;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                </svg>
+            </div>
+            <h2 style="color: white; font-size: 1.5rem; font-weight: bold; margin: 0;">Nouveau Contact !</h2>
+            <p style="color: rgba(255, 255, 255, 0.9); margin: 0.5rem 0 0 0; font-size: 1rem;">Message reçu de <strong>{{ contact.firstName }} {{ contact.lastName }}</strong></p>
+        </div>
+
+        {# Content #}
+        <div style="padding: 2rem 1.5rem;">
+            <p style="color: #1f2937; margin-bottom: 1.5rem; font-size: 1rem; line-height: 1.6;">
+                Bonjour, vous avez reçu un nouveau message via le formulaire de contact.
+            </p>
+
+            {# Contact Details Card #}
+            <div style="background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); border: 1px solid #cbd5e1; border-radius: 0.75rem; padding: 1.5rem; margin-bottom: 1.5rem;">
+                <h3 style="color: #1e293b; font-size: 1.125rem; font-weight: 600; margin: 0 0 1rem 0; display: flex; align-items: center;">
+                    <svg style="width: 1.25rem; height: 1.25rem; color: #0d079f; margin-right: 0.5rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    Informations du contact
+                </h3>
+                <div style="space-y: 0.75rem;">
+                    <div style="display: flex; align-items: center; margin-bottom: 0.75rem;">
+                        <div style="flex-shrink: 0; width: 2rem; height: 2rem; background-color: #0d079f; border-radius: 0.375rem; display: flex; align-items: center; justify-content: center; margin-right: 0.75rem;">
+                            <svg style="width: 1rem; height: 1rem; color: white;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <p style="color: #475569; font-size: 0.875rem; margin: 0; font-weight: 500;">Nom complet</p>
+                            <p style="color: #1e293b; font-size: 1rem; margin: 0; font-weight: 600;">{{ contact.firstName }} {{ contact.lastName }}</p>
+                        </div>
+                    </div>
+                    <div style="display: flex; align-items: center; margin-bottom: 0.75rem;">
+                        <div style="flex-shrink: 0; width: 2rem; height: 2rem; background-color: #0d079f; border-radius: 0.375rem; display: flex; align-items: center; justify-content: center; margin-right: 0.75rem;">
+                            <svg style="width: 1rem; height: 1rem; color: white;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <p style="color: #475569; font-size: 0.875rem; margin: 0; font-weight: 500;">Email</p>
+                            <p style="color: #1e293b; font-size: 1rem; margin: 0; font-weight: 600;">{{ contact.email }}</p>
+                        </div>
+                    </div>
+                    <div style="display: flex; align-items: center;">
+                        <div style="flex-shrink: 0; width: 2rem; height: 2rem; background-color: #0d079f; border-radius: 0.375rem; display: flex; align-items: center; justify-content: center; margin-right: 0.75rem;">
+                            <svg style="width: 1rem; height: 1rem; color: white;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <p style="color: #475569; font-size: 0.875rem; margin: 0; font-weight: 500;">Sujet</p>
+                            <p style="color: #1e293b; font-size: 1rem; margin: 0; font-weight: 600;">{{ contact.subject }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {# Message Content #}
+            <div style="background-color: #ecfdf5; border: 1px solid #10b981; border-radius: 0.75rem; padding: 1.5rem; margin-bottom: 1.5rem;">
+                <div style="display: flex; align-items: center; margin-bottom: 1rem;">
+                    <div style="flex-shrink: 0; width: 3rem; height: 3rem; background-color: #10b981; border-radius: 9999px; display: flex; align-items: center; justify-content: center; margin-right: 1rem;">
+                        <svg style="width: 1.5rem; height: 1.5rem; color: white;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <p style="color: #065f46; font-size: 1.125rem; font-weight: 600; margin: 0;">Message</p>
+                        <p style="color: #047857; font-size: 0.875rem; margin: 0;">Contenu du formulaire de contact</p>
+                    </div>
+                </div>
+                <div style="background-color: white; border-radius: 0.5rem; padding: 1rem; border-left: 4px solid #10b981;">
+                    <p style="color: #065f46; margin: 0; font-size: 1rem; line-height: 1.5; white-space: pre-wrap;">{{ contact.message|nl2br }}</p>
+                </div>
+            </div>
+
+            {# Action Required #}
+{#            <div style="background-color: #dbeafe; border-left: 4px solid #3b82f6; padding: 1rem; margin-bottom: 1.5rem; border-radius: 0 0.375rem 0.375rem 0;">#}
+{#                <p style="color: #1e40af; margin: 0; font-weight: 500;">#}
+{#                    <strong>Action requise :</strong> 📧 N'oubliez pas de répondre à ce message dans les plus brefs délais pour maintenir une bonne relation client.#}
+{#                </p>#}
+{#            </div>#}
+        </div>
+    </div>
+
+    {# Quick Actions Section #}
+{#    <div style="background-color: white; border-radius: 0.5rem; box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06); margin-left: 1rem; margin-right: 1rem; margin-bottom: 1.5rem; overflow: hidden;">#}
+{#        <div style="padding: 1.5rem;">#}
+{#            <h3 style="color: #1f2937; font-size: 1.125rem; font-weight: 600; margin-bottom: 1rem; display: flex; align-items: center;">#}
+{#                <svg style="width: 1.25rem; height: 1.25rem; color: #0d079f; margin-right: 0.5rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">#}
+{#                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>#}
+{#                </svg>#}
+{#                Actions rapides#}
+{#            </h3>#}
+{#            <div style="display: flex; gap: 1rem;">#}
+{#                <a href="mailto:{{ contact.email }}?subject=Re: {{ contact.subject }}" style="flex: 1; background-color: #0d079f; color: white; text-decoration: none; padding: 0.75rem 1rem; border-radius: 0.5rem; text-align: center; font-weight: 500; display: block;">#}
+{#                    📧 Répondre par email#}
+{#                </a>#}
+{#                <div style="flex: 1; background-color: #f3f4f6; color: #374151; padding: 0.75rem 1rem; border-radius: 0.5rem; text-align: center; font-weight: 500;">#}
+{#                    📞 Programmer un appel#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
+
+    {# Footer #}
+    <div style="text-align: center; font-size: 0.75rem; color: #6b7280; padding-left: 1rem; padding-right: 1rem; padding-bottom: 1.5rem;">
+        <p style="margin-bottom: 0.5rem;">© {{ "now"|date("Y") }} Votre Site de Pétanque. Tous droits réservés.</p>
+        <p style="margin-bottom: 0.5rem;">Cet email a été envoyé automatiquement, merci de ne pas y répondre directement.</p>
+        <p style="color: #9ca3af;">
+            📧 Nouveau message de contact reçu<br>
+            <strong>Système de notification automatique</strong>
+        </p>
+    </div>
+</div>
+</body>
+</html>
