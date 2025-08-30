@@ -5,8 +5,28 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="99cee274-6e64-4b15-925c-b9f21b3544ee" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/ArbitratorController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/ArbitratorController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/news/petanque-1-68add05277213449251502.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Repository/UserRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/UserRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/admin/tournaments/showTournament.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/admin/tournaments/showTournament.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/admin/tournaments/tournaments.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/admin/tournaments/tournaments.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/admin/user/users.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/admin/user/users.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/contact/contact.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/contact/contact.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/gallery/detailGallery.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/gallery/detailGallery.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/gallery/gallery.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/gallery/gallery.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/news/detailNews.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/news/detailNews.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/news/news.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/news/news.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/partials/footer.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/partials/footer.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/profile/editPassword.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/profile/editPassword.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/profile/editProfile.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/profile/editProfile.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/profile/profile.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/profile/profile.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/registration/check_email_registration.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/registration/check_email_registration.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/registration/register.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/registration/register.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/team/index.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/team/index.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/tournament/detailResult.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/tournament/detailResult.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/tournament/detailTournament.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/tournament/detailTournament.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/tournament/tournaments.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/tournament/tournaments.html.twig" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -198,27 +218,28 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/wamp64/www/ANNEE2/FrameworkServeur/tfePcm/bin&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;php.override.implement.member.chooser.php.doc&quot;: &quot;NONE&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "C:/wamp64/www/ANNEE2/FrameworkServeur/tfePcm/bin",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "php.override.implement.member.chooser.php.doc": "NONE",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;mysql&quot;
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "mysql"
     ]
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\wamp64\www\ANNEE2\FrameworkServeur\tfePcm\bin" />
@@ -239,8 +260,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-d6986cc7102b-b26f3e71634d-JavaScript-PS-251.26094.133" />
-        <option value="bundled-php-predefined-a98d8de5180a-c5828cf854d9-com.jetbrains.php.sharedIndexes-PS-251.26094.133" />
+        <option value="bundled-js-predefined-d6986cc7102b-e03c56caf84a-JavaScript-PS-252.23892.419" />
+        <option value="bundled-php-predefined-a98d8de5180a-c72577f2c82f-com.jetbrains.php.sharedIndexes-PS-252.23892.419" />
       </set>
     </attachedChunks>
   </component>
@@ -317,7 +338,8 @@
       <workItem from="1750861626250" duration="771000" />
       <workItem from="1755243905412" duration="302000" />
       <workItem from="1756138798588" duration="3899000" />
-      <workItem from="1756220287085" duration="2372000" />
+      <workItem from="1756220287085" duration="2694000" />
+      <workItem from="1756561335688" duration="6383000" />
     </task>
     <servers />
   </component>

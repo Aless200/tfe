@@ -44,14 +44,16 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->getResult();
     }
 
-    public function findUser(): array
+    public function findUser(): \Doctrine\ORM\Query
     {
+        // Les noms des paramètres (`roleUser` et `roleAnonymized`) correspondent maintenant à ceux de la requête.
+        // De plus, la méthode retourne une `Query`, ce qui est nécessaire pour la pagination.
         return $this->createQueryBuilder('u')
-            ->where('u.roles LIKE :role')
-            ->andWhere('u.isAnonymized = false')
-            ->setParameter('role', '%ROLE_USER%')
-            ->getQuery()
-            ->getResult();
+            ->where('u.roles LIKE :roleUser')
+            ->orWhere('u.roles LIKE :roleAnonymized')
+            ->setParameter('roleUser', '%ROLE_USER%')
+            ->setParameter('roleAnonymized', '%ROLE_ANONYMIZED%')
+            ->getQuery();
     }
     //    /**
     //     * @return User[] Returns an array of User objects

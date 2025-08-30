@@ -4,23 +4,21 @@
 
 {% block body %}
     <main>
-        <!-- Div pour stocker l'ID du tournoi -->
         <div id="tournament-data" data-tournament-id="{{ tournamentId }}"></div>
 
         <section>
             <div class="flex">
                 <div class="w-64 h-screen bg-gray-100">
-                    <!-- Sidebar content here -->
                 </div>
                 <div class="flex-1 p-6 overflow-hidden">
                     <div class="flex justify-between items-center mb-4">
                         <h1 class="text-2xl font-bold">Tournoi de Pétanque</h1>
 
-                        <!-- Bouton Clôturer le tournoi -->
                         {% if tournamentStatus != 'terminer' %}
                             <div class="flex gap-2">
                                 <a href="{{ path('app_admin_close_tournament', {id: tournamentId}) }}"
-                                   class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg shadow-md transition-colors duration-200"
+                                   id="close-tournament-btn"
+                                   class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg shadow-md transition-colors duration-200 cursor-not-allowed opacity-50"
                                    onclick="return confirm('Êtes-vous sûr de vouloir clôturer ce tournoi ? Cette action est irréversible.')">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
@@ -38,7 +36,6 @@
                         {% endif %}
                     </div>
 
-                    <!-- Statut du tournoi -->
                     <div class="mb-4">
                         <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium
                             {% if tournamentStatus == 'prochainement' %}
@@ -63,7 +60,6 @@
                         </span>
                     </div>
 
-                    <!-- Bouton Mélanger les équipes -->
                     <div class="flex justify-center mb-6">
                         {% if not isShuffled and tournamentStatus != 'terminer' %}
                             <div class="mb-4">
@@ -87,7 +83,6 @@
                         {% endif %}
                     </div>
 
-                    <!-- Indicateur de progression -->
                     <div id="progress-indicator" class="mb-6 bg-white rounded-lg shadow-md p-4 hidden">
                         <div class="flex items-center justify-between mb-2">
                             <span class="text-sm font-medium text-gray-700">Progression du tour actuel</span>
@@ -98,7 +93,6 @@
                         </div>
                     </div>
 
-                    <!-- Bannière de tournoi terminé -->
                     <div id="tournament-completed-banner" class="mb-6 bg-gradient-to-r from-green-500 to-green-600 rounded-lg shadow-md p-4 text-white hidden">
                         <div class="flex items-center justify-center">
                             <span class="text-2xl mr-3">🏆</span>
@@ -109,7 +103,6 @@
                         </div>
                     </div>
 
-                    <!-- Tableaux des matchs par tour -->
                     {% for roundNumber, roundMatches in matchesByRound %}
                         <div class="mb-8" id="round-{{ roundNumber }}">
                             <div class="flex items-center mb-4">
@@ -227,7 +220,6 @@
                         </div>
                     {% endfor %}
 
-                    <!-- Bouton Tour Suivant -->
                     {% if tournamentStatus != 'terminer' %}
                         <div id="next-round-container" class="flex justify-center mt-8 {% if not showNextRoundButton %}hidden{% endif %}">
                             <a href="{{ path('app_admin_next_round', {'id': tournamentId}) }}"
@@ -240,7 +232,6 @@
                         </div>
                     {% endif %}
 
-                    <!-- Message d'information -->
                     <div id="info-message" class="mt-4 text-center text-gray-600 {% if showNextRoundButton or tournamentStatus == 'terminer' %}hidden{% endif %}">
                         <p>
                             {% if tournamentStatus == 'terminer' %}
@@ -255,13 +246,10 @@
         </section>
     </main>
 
-    <!-- Modal de victoire -->
     <div id="victory-modal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 hidden">
         <div class="bg-white rounded-2xl p-8 max-w-md w-full mx-4 text-center relative overflow-hidden">
-            <!-- Confettis animés -->
             <div id="confetti-container" class="absolute inset-0 pointer-events-none"></div>
 
-            <!-- Contenu du modal -->
             <div class="relative z-10">
                 <div class="mb-6">
                     <div class="w-24 h-24 bg-gradient-to-r from-yellow-400 to-yellow-600 rounded-full mx-auto flex items-center justify-center mb-4 animate-bounce">
@@ -294,10 +282,8 @@
         </div>
     </div>
 
-    <!-- Canvas pour les feux d'artifice -->
     <canvas id="fireworks-canvas" class="fixed inset-0 pointer-events-none z-40 hidden"></canvas>
 
-    <!-- Notifications -->
     <div id="error-message" class="fixed top-4 right-4 bg-red-500 text-white px-4 py-2 rounded shadow-lg hidden z-50"></div>
     <div id="success-message" class="fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded shadow-lg hidden z-50"></div>
 
@@ -719,12 +705,29 @@
                         // Mise à jour de l'indicateur de progression
                         this.updateProgressIndicator(data.completedMatches, data.totalMatches);
 
-                        // Vérifier si le tournoi est terminé
-                        this.checkForTournamentEnd(data, isFromScoreSubmission);
+                        // Vérifier si le tournoi est terminé et mettre à jour le bouton de clôture
+                        const isFinalMatchCompleted = this.checkForTournamentEnd(data, isFromScoreSubmission);
+                        this.updateCloseButtonStatus(isFinalMatchCompleted);
                     })
                     .catch(error => {
                         console.error('Error checking matches:', error);
                     });
+            },
+
+            // Nouvelle méthode pour mettre à jour le bouton de clôture
+            updateCloseButtonStatus(isFinalMatchCompleted) {
+                const closeButton = document.getElementById('close-tournament-btn');
+                if (!closeButton) return;
+
+                if (isFinalMatchCompleted) {
+                    closeButton.classList.remove('cursor-not-allowed', 'opacity-50');
+                    closeButton.classList.add('hover:bg-red-600');
+                    closeButton.disabled = false;
+                } else {
+                    closeButton.classList.add('cursor-not-allowed', 'opacity-50');
+                    closeButton.classList.remove('hover:bg-red-600');
+                    closeButton.disabled = true;
+                }
             },
 
             // Autres méthodes (updateProgressIndicator, createConfetti, etc.)
@@ -900,45 +903,53 @@
             },
 
             checkForTournamentEnd(data, isFromScoreSubmission = false) {
+                // Si le tournoi est déjà terminé, pas besoin d'aller plus loin
                 if (this.isTournamentCompleted()) {
-                    console.log('🚫 Tournoi déjà terminé, animation déjà affichée');
                     this.showCompletedTournamentBanner();
-                    return;
+                    return true; // Le tournoi est terminé, le bouton de clôture doit être actif
                 }
 
+                // Vérifie si c'est le dernier tour et si le dernier match est terminé
                 if (!data.showNextRoundButton && data.allMatchesCompleted && data.totalMatches > 0) {
                     const lastRoundMatches = document.querySelectorAll(`#round-${data.currentRound} tr[id^="match-row-"]`);
 
+                    // S'il n'y a qu'un seul match dans le dernier tour (la finale)
                     if (lastRoundMatches.length === 1) {
                         const finalMatch = lastRoundMatches[0];
-                        const team1Cell = finalMatch.children[0];
-                        const team2Cell = finalMatch.children[1];
                         const score1Input = finalMatch.querySelector('input[name="scoreTeam1"]');
                         const score2Input = finalMatch.querySelector('input[name="scoreTeam2"]');
 
-                        const score1 = parseInt(score1Input.value);
-                        const score2 = parseInt(score2Input.value);
+                        // Vérifie si le score du dernier match est entré
+                        if (score1Input.value && score2Input.value) {
+                            // Déclencher l'animation et tout le reste
+                            const team1Cell = finalMatch.children[0];
+                            const team2Cell = finalMatch.children[1];
+                            const score1 = parseInt(score1Input.value);
+                            const score2 = parseInt(score2Input.value);
+                            let winnerName = '';
 
-                        let winnerName = '';
-                        if (score1 >= 13) {
-                            winnerName = team1Cell.textContent.replace('🏆', '').trim();
-                            team1Cell.classList.add('winner-glow');
-                        } else if (score2 >= 13) {
-                            winnerName = team2Cell.textContent.replace('🏆', '').trim();
-                            team2Cell.classList.add('winner-glow');
-                        }
+                            if (score1 >= 13) {
+                                winnerName = team1Cell.textContent.replace('🏆', '').trim();
+                                team1Cell.classList.add('winner-glow');
+                            } else if (score2 >= 13) {
+                                winnerName = team2Cell.textContent.replace('🏆', '').trim();
+                                team2Cell.classList.add('winner-glow');
+                            }
 
-                        if (winnerName && isFromScoreSubmission && !this.tournamentAnimationShown) {
-                            console.log('🎉 Déclenchement de l\'animation de victoire pour:', winnerName);
-                            setTimeout(() => {
-                                this.showVictoryAnimation(winnerName);
-                            }, 1500);
-                        } else if (winnerName && !isFromScoreSubmission) {
-                            console.log('📋 Tournoi terminé détecté au chargement, affichage de la bannière');
-                            this.showCompletedTournamentBanner();
+                            if (winnerName && isFromScoreSubmission && !this.tournamentAnimationShown) {
+                                setTimeout(() => {
+                                    this.showVictoryAnimation(winnerName);
+                                }, 1500);
+                            } else if (winnerName && !isFromScoreSubmission) {
+                                this.showCompletedTournamentBanner();
+                            }
+
+                            return true; // Le dernier match est terminé, le bouton de clôture doit être actif
                         }
                     }
                 }
+
+                return false; // Le dernier match n'est pas encore terminé
             },
 
             showSuccess(message) {
