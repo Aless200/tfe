@@ -659,7 +659,6 @@ class TournamentsAdminController extends AbstractController
 
         $team = new Team();
         $isDoublette = in_array('doublette', $tournament->getTypeTournament());
-
         $form = $this->createForm(TeamType::class, $team, [
             'isDoublette' => $isDoublette,
             'is_admin' => true
@@ -684,26 +683,24 @@ class TournamentsAdminController extends AbstractController
 
             foreach ($players as $playerName) {
                 if (empty($playerName)) continue;
-
                 $teamUser = new TeamUser();
                 $teamUser->setTeam($team)
                     ->setTournament($tournament)
                     ->setCreatedAt(new \DateTimeImmutable())
                     ->setInvited(0)
-                    ->setPlayerName($playerName); // Nouvelle propriété à ajouter dans TeamUser
-
+                    ->setPlayerName($playerName);
                 $manager->persist($teamUser);
             }
 
             $manager->flush();
-            $this->addFlash('admin_success', 'L\'équipe a été ajouté avec succès.');
+            $this->addFlash('admin_success', 'L\'équipe a été ajoutée avec succès.');
 
-            // Récupérer les paramètres de la requête
+            // Récupérer les paramètres de pagination depuis la session ou la requête
             $page = $request->query->getInt('page', 1);
             $sort = $request->query->get('sort');
             $direction = $request->query->get('direction');
 
-            // Rediriger en conservant les paramètres
+            // Rediriger en conservant les paramètres de pagination
             return $this->redirectToRoute('app_admin_tournaments', [
                 'page' => $page,
                 'sort' => $sort,
@@ -717,6 +714,8 @@ class TournamentsAdminController extends AbstractController
             'isDoublette' => $isDoublette
         ]);
     }
+
+
 
     #[Route('/admin/add-bye-teams/{id}', name: 'app_admin_add_bye_teams')]
     public function addByeTeams(int $id, TournamentRepository $repository, EntityManagerInterface $manager): Response

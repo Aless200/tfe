@@ -5,9 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="99cee274-6e64-4b15-925c-b9f21b3544ee" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/Admin/tournaments/TournamentsAdminController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/Admin/tournaments/TournamentsAdminController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Controller/ArbitratorController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/ArbitratorController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/admin/tournaments/tournaments.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/admin/tournaments/tournaments.html.twig" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/arbitration/entryScore.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/arbitration/entryScore.html.twig" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -324,11 +325,22 @@
       <workItem from="1756561335688" duration="9024000" />
       <workItem from="1756833149994" duration="743000" />
       <workItem from="1756834134083" duration="39000" />
-      <workItem from="1757247143382" duration="3560000" />
+      <workItem from="1757247143382" duration="14037000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>

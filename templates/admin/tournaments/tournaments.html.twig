@@ -34,7 +34,7 @@
                         <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                             {{ knp_pagination_sortable(tournaments, 'Publié', 'isPublished') }}
                         </th>
-                        <th class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                             Équipes Inscrites
                         </th>
                         <th class="px-3 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -130,7 +130,7 @@
                                             </svg>
                                         </span>
                                     {% else %}
-                                        <a href="{{ path('app_admin_add_team_manual', {'id': t.id}) }}"
+                                        <a href="{{ path('app_admin_add_team_manual', {'id': t.id, 'page': app.request.query.get('page', 1), 'sort': app.request.query.get('sort'), 'direction': app.request.query.get('direction')}) }}"
                                            class="text-indigo-600 hover:text-indigo-900"
                                            title="Ajouter une équipe">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
@@ -138,6 +138,7 @@
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
                                             </svg>
                                         </a>
+
                                     {% endif %}
                                 </div>
                             </td>
