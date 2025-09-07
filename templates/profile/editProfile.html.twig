@@ -163,7 +163,7 @@
                                 Retour au profil
                             </a>
 
-                            <button type="submit" class="w-full sm:w-auto inline-flex items-center justify-center px-5 py-2.5 bg-[#0d079f] text-white font-medium rounded-lg hover:bg-[#0a0580] transition-colors duration-200 shadow-md">
+                            <button type="submit" class="w-full sm:w-auto inline-flex items-center justify-center px-5 py-2.5 bg-[#0d079f] text-white font-medium rounded-lg hover:bg-[#0a0580] transition-colors duration-200 shadow-md" data-turbo="false">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                                 </svg>
@@ -177,9 +177,12 @@
             </div>
         </div>
     </main>
+{% endblock %}
 
+{% block javascripts %}
+    {{ parent() }}
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('turbo:load', function() {
             // Gestion de l'upload d'image avec prévisualisation
             const fileInput = document.getElementById('avatar-upload');
             const fileNameSpan = document.getElementById('file-name');
