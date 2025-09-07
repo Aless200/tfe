@@ -17,16 +17,26 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class UserAdminController extends AbstractController
 {
     #[Route('/admin/users', name: 'app_user_admin')]
-    public function users(UserRepository $repository, PaginatorInterface $paginator, Request $request): Response
+    public function users(EntityManagerInterface $entityManager, PaginatorInterface $paginator, Request $request): Response
     {
-        $users = $repository->findUser();
+        // Utilisez l'EntityManager pour créer une requête qui récupère tous les utilisateurs
+        $queryBuilder = $entityManager->getRepository(User::class)->createQueryBuilder('u');
 
-        $pagination = $paginator->paginate($users, $request->query->getInt('page', 1), 10);
-        return $this->render('admin/user/users.html.twig', [
-            'users' => $pagination,
+        $pagination = $paginator->paginate(
+            $queryBuilder,
+            $request->query->getInt('page', 1),
+            10,
+            [
+                'defaultSortFieldName' => 'u.email', // Champ par défaut pour le tri
+                'defaultSortDirection' => 'asc',      // Direction par défaut pour le tri
             ]
         );
+
+        return $this->render('admin/user/users.html.twig', [
+            'users' => $pagination,
+        ]);
     }
+
 
     #[Route('/admin/eyesuser/{id}', name: 'app_eyesuser_admin')]
     public function eyeUser(User $user, EntityManagerInterface $manager): Response
@@ -35,7 +45,7 @@ class UserAdminController extends AbstractController
         $manager->persist($user);
         $manager->flush();
         return $this->render('admin/user/_userStatut.html.twig', [
-            'user' => $user,
+                'user' => $user,
             ]
         );
     }

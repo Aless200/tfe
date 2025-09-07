@@ -8,6 +8,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
+use Doctrine\ORM\QueryBuilder;
 
 /**
  * @extends ServiceEntityRepository<User>
@@ -44,16 +45,18 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->getResult();
     }
 
-    public function findUser(): \Doctrine\ORM\Query
+    /**
+     * @return QueryBuilder
+     */
+    public function findUser(): QueryBuilder
     {
-        // Les noms des paramètres (`roleUser` et `roleAnonymized`) correspondent maintenant à ceux de la requête.
-        // De plus, la méthode retourne une `Query`, ce qui est nécessaire pour la pagination.
+        // 🏆 Correction : On sélectionne l'entité complète 'u' et ses champs
+        // pour permettre à la fois le tri et l'accès à toutes les propriétés
         return $this->createQueryBuilder('u')
             ->where('u.roles LIKE :roleUser')
             ->orWhere('u.roles LIKE :roleAnonymized')
             ->setParameter('roleUser', '%ROLE_USER%')
-            ->setParameter('roleAnonymized', '%ROLE_ANONYMIZED%')
-            ->getQuery();
+            ->setParameter('roleAnonymized', '%ROLE_ANONYMIZED%');
     }
     //    /**
     //     * @return User[] Returns an array of User objects

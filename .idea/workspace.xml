@@ -6,10 +6,11 @@
   <component name="ChangeListManager">
     <list default="true" id="99cee274-6e64-4b15-925c-b9f21b3544ee" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/Admin/tournaments/TournamentsAdminController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/Admin/tournaments/TournamentsAdminController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/ArbitratorController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/ArbitratorController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/admin/tournaments/tournaments.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/admin/tournaments/tournaments.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/arbitration/entryScore.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/arbitration/entryScore.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/Admin/user/UserAdminController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/Admin/user/UserAdminController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Repository/UserRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/UserRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/admin/gallery/_galleryStatut.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/admin/gallery/_galleryStatut.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/admin/news/_statut.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/admin/news/_statut.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/admin/user/_userStatut.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/admin/user/_userStatut.html.twig" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -325,7 +326,7 @@
       <workItem from="1756561335688" duration="9024000" />
       <workItem from="1756833149994" duration="743000" />
       <workItem from="1756834134083" duration="39000" />
-      <workItem from="1757247143382" duration="14037000" />
+      <workItem from="1757247143382" duration="16299000" />
     </task>
     <servers />
   </component>

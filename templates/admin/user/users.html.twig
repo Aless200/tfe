@@ -16,20 +16,20 @@
                     <tr>
                         <th class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Avatar</th>
                         <th class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            {{ knp_pagination_sortable(users, 'Email', 'email') }}
+                            {{ knp_pagination_sortable(users, 'Email', 'u.email') }}
                         </th>
                         <th class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Roles</th>
                         <th class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            {{ knp_pagination_sortable(users, 'Prénom', 'firstName') }}
+                            {{ knp_pagination_sortable(users, 'Prénom', 'u.firstName') }}
                         </th>
                         <th class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            {{ knp_pagination_sortable(users, 'Nom', 'lastName') }}
+                            {{ knp_pagination_sortable(users, 'Nom', 'u.lastName') }}
                         </th>
                         <th class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            {{ knp_pagination_sortable(users, 'Date création', 'createdAt') }}
+                            {{ knp_pagination_sortable(users, 'Date création', 'u.createdAt') }}
                         </th>
                         <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            {{ knp_pagination_sortable(users, 'Statut', 'isDisabled') }}
+                            {{ knp_pagination_sortable(users, 'Statut', 'u.isDisabled') }}
                         </th>
                         <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Élever</th>
                         <th class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Téléphone</th>
