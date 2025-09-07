@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Controller;
 
 use App\Entity\Game;
@@ -21,24 +20,19 @@ class ArbitratorController extends AbstractController
         if ($request->isMethod('POST')) {
             $username = $request->request->get('username');
             $password = $request->request->get('password');
-
             $arbitrator = $arbitratorStorage->findArbitrator($username);
-
             if ($arbitrator && $arbitrator['password'] === $password) {
                 $session->set('arbitrator_logged_in', true);
                 $session->set('arbitrator_tournament_id', $arbitrator['tournamentId']);
                 $this->addFlash('success', 'Connexion réussie !');
                 return $this->redirectToRoute('app_arbitrator_score_entry');
             }
-
             $this->addFlash('error', 'Identifiants invalides.');
             return $this->redirectToRoute('app_arbitrator_login');
         }
-
         return $this->render('arbitration/loginArbitrator.html.twig');
     }
 
-    // Au début de la classe
     private function getRoundFromSession(SessionInterface $session, int $tournamentId): int
     {
         return $session->get('tournament_round_' . $tournamentId, 1);
@@ -51,32 +45,38 @@ class ArbitratorController extends AbstractController
             return $this->redirectToRoute('app_arbitrator_login');
         }
 
-        // Récupérer l'ID du tournoi depuis la session
         $tournamentId = $session->get('arbitrator_tournament_id');
         if (!$tournamentId) {
             $this->addFlash('error', 'Aucun tournoi associé à cet arbitre.');
             return $this->redirectToRoute('app_arbitrator_login');
         }
 
-        // Récupérer le tournoi
         $tournament = $entityManager->getRepository(Tournament::class)->find($tournamentId);
         if (!$tournament) {
             $this->addFlash('error', 'Tournoi introuvable.');
             return $this->redirectToRoute('app_arbitrator_login');
         }
 
-        // Récupérer le round actuel (vous devrez peut-être stocker cette info en session)
-        $currentRound = $this->getRoundFromSession($session, $tournamentId);
+        // Vérifier si le tournoi est terminé en utilisant l'attribut status
+        $tournamentStatus = $tournament->getStatus();
+        $tournamentFinished = in_array('terminé', $tournamentStatus);
 
-        // Récupérer les équipes actives du tournoi (celles du round actuel)
+        if ($tournamentFinished) {
+            return $this->render('arbitration/entryScore.html.twig', [
+                'tournamentFinished' => true,
+            ]);
+        }
+
+        $currentRound = $this->getRoundFromSession($session, $tournamentId);
         $activeTeams = $entityManager->getRepository(Team::class)->findBy([
             'tournament' => $tournament,
             'round' => $currentRound
         ]);
 
         return $this->render('arbitration/entryScore.html.twig', [
-            'teams' => $activeTeams, // On envoie les équipes actives
-            'currentRound' => $currentRound // On envoie aussi le round actuel
+            'teams' => $activeTeams,
+            'currentRound' => $currentRound,
+            'tournamentFinished' => false,
         ]);
     }
 
@@ -99,23 +99,28 @@ class ArbitratorController extends AbstractController
         $scoreTeam1 = $request->request->get('scoreTeam1');
         $scoreTeam2 = $request->request->get('scoreTeam2');
 
-        // Récupérer l'ID du tournoi depuis la session
         $tournamentId = $session->get('arbitrator_tournament_id');
         if (!$tournamentId) {
             $this->addFlash('error', 'Aucun tournoi associé à cet arbitre.');
             return $this->redirectToRoute('app_arbitrator_login');
         }
 
-        $currentRound = $this->getRoundFromSession($session, $tournamentId);
-
-        // Récupérer le tournoi
         $tournament = $entityManager->getRepository(Tournament::class)->find($tournamentId);
         if (!$tournament) {
             $this->addFlash('error', 'Tournoi introuvable.');
             return $this->redirectToRoute('app_arbitrator_login');
         }
 
-        // Récupérer ou créer un match
+        // Vérifier si le tournoi est terminé en utilisant l'attribut status
+        $tournamentStatus = $tournament->getStatus();
+        if (in_array('terminé', $tournamentStatus)) {
+            $this->addFlash('error', 'Ce tournoi est terminé. Vous ne pouvez plus entrer de scores.');
+            return $this->redirectToRoute('app_arbitrator_score_entry');
+        }
+
+        $currentRound = $this->getRoundFromSession($session, $tournamentId);
+
+        // Recherche ou création de l'entité Game
         $game = $entityManager->getRepository(Game::class)->findOneBy([
             'tournament' => $tournament,
             'team1' => $team1Id,
@@ -126,12 +131,12 @@ class ArbitratorController extends AbstractController
         if (!$game) {
             $game = new Game();
             $game->setTournament($tournament);
-            $game->setTeam1($entityManager->getReference('App\Entity\Team', $team1Id));
-            $game->setTeam2($entityManager->getReference('App\Entity\Team', $team2Id));
-            $game->setRoundT($currentRound); // 💡 NOUVEAU : On définit le round ici !
+            $game->setTeam1($entityManager->getReference(Team::class, $team1Id));
+            $game->setTeam2($entityManager->getReference(Team::class, $team2Id));
+            $game->setRoundT($currentRound);
         }
 
-        // Mettre à jour les scores
+        // Mise à jour des scores
         $game->setScoreTeam1($scoreTeam1);
         $game->setScoreTeam2($scoreTeam2);
 
