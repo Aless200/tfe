@@ -24,7 +24,7 @@ class AdminCommentController extends AbstractController
         $comments = $repository->findAll();
 
         $page = $request->query->getInt('page', 1);
-        $paginator = $paginator->paginate($comments, $page, 6);
+        $paginator = $paginator->paginate($comments, $page, 10);
         return $this->render('admin/comment/comments.html.twig', [
             'comments' => $paginator,
         ]);
