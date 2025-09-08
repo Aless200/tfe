@@ -642,8 +642,14 @@ class TournamentsAdminController extends AbstractController
             return $this->redirectToRoute('app_admin_tournaments');
         }
 
-        // Récupérer les tournois pour le formulaire
-        $tournaments = $manager->getRepository(Tournament::class)->findAll();
+        // Utilisation du QueryBuilder pour filtrer les tournois avec le statut 'prochainement'
+        $tournaments = $manager->getRepository(Tournament::class)
+            ->createQueryBuilder('t')
+            ->where("t.status LIKE :status") // Utilisation de LIKE pour une recherche plus flexible, au cas où le statut est un tableau sérialisé
+            ->setParameter('status', '%prochainement%')
+            ->getQuery()
+            ->getResult();
+
         return $this->render('admin/tournaments/add_arbitrator.html.twig', [
             'tournaments' => $tournaments,
         ]);
