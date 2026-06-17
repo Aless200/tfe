@@ -15,8 +15,11 @@ class TournamentController extends AbstractController
     #[Route('/tournoi', name: 'app_tournament')]
     public function allTournaments(TournamentRepository $repository, PaginatorInterface $paginator, Request $request): Response
     {
-        $tournaments = $repository->findBy(['isPublished' => 1]);
+        // On ajoute le tableau de tri en 2ème argument : ['nomDuChamp' => 'DESC']
+        $tournaments = $repository->findBy(['isPublished' => 1], ['CreatedAt' => 'DESC']);
+
         $pagination = $paginator->paginate($tournaments, $request->query->getInt('page', 1), 3);
+
         return $this->render('tournament/tournaments.html.twig', [
             'tournaments' => $pagination,
         ]);

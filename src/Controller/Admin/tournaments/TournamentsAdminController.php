@@ -55,7 +55,7 @@ class TournamentsAdminController extends AbstractController
         $pagination = $paginator->paginate(
             $query,
             $request->query->getInt('page', 1),
-            3
+            6
         );
 
         return $this->render('admin/tournaments/tournaments.html.twig', [
